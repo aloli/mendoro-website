@@ -89,6 +89,22 @@ module Mendoro
     texte.gsub('&', "&amp;").gsub('<', "&lt;").gsub('>', "&gt;").gsub('"', "&quot;")
   end
 
+  # Un lien s'ouvrant dans un nouvel onglet est signalé par un picto CSS,
+  # décoratif et donc muet pour un lecteur d'écran. On y adjoint une mention
+  # masquée à l'œil mais lue à voix haute.
+  #
+  # L'ajout est fait ici plutôt que dans les contenus : compter sur le
+  # rédacteur pour l'écrire à chaque lien, c'est accepter qu'il l'oublie.
+  LIEN_NOUVEL_ONGLET = /(<a\b[^>]*\btarget="_blank"[^>]*>)(.*?)(<\/a>)/m
+  MENTION_MASQUEE    = %(<span class="visually-hidden"> (nouvelle fenêtre)</span>)
+
+  def self.signaler_liens_externes(html : String) : String
+    html.gsub(LIEN_NOUVEL_ONGLET) do |entier, m|
+      # Ne pas doubler la mention si le rédacteur l'a déjà écrite lui-même.
+      m[2].includes?("visually-hidden") ? entier : "#{m[1]}#{m[2]}#{MENTION_MASQUEE}#{m[3]}"
+    end
+  end
+
   # ---------------------------------------------------------------- génération
 
   def self.generer
@@ -205,8 +221,10 @@ module Mendoro
     end
   end
 
+  # Le traitement est appliqué à la page entière, et non au seul contenu
+  # converti : il couvre ainsi les liens écrits directement dans les gabarits.
   def self.ecrire(nom : String, contenu : String)
-    File.write(SORTIE / nom, contenu)
+    File.write(SORTIE / nom, signaler_liens_externes(contenu))
     puts "   #{nom}"
   end
 
