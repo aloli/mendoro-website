@@ -11,7 +11,7 @@ Informations légales relatives au site *mendoro.fr*.
 * Forme juridique : Entreprise individuelle
 * Adresse du cabinet : 12 rue de la république 71600 Paray-le-Monial
 * Téléphone : 06 71 14 42 76
-* Courriel : erik.pain@geometre-expert.fr
+* Contact : par téléphone, par courrier, ou via link:contact.html[le formulaire de contact]
 * SIRET : 10180724600018
 * TVA intracommunautaire : FR81 101807246
 * Directeur de la publication : Erik Pain
@@ -63,8 +63,8 @@ demande. Durée de conservation : Deux ans.
 Conformément au règlement (UE) 2016/679 et à la loi « Informatique et Libertés »,
 vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation
 et d'opposition sur les données vous concernant. Pour l'exercer, écrivez à
-erik.pain@geometre-expert.fr. Vous pouvez également introduire une
-réclamation auprès de la CNIL.
+dpo@mendoro.fr, ou utilisez link:contact.html[le formulaire de contact]. Vous
+pouvez également introduire une réclamation auprès de la CNIL.
 
 == Cookies
 
