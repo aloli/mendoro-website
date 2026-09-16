@@ -2,7 +2,7 @@ version: 2.0
 shards:
   asciicrystal:
     git: https://github.com/aloli-crystal/asciicrystal.git
-    version: 2.0.26.15
+    version: 2.0.26.16
 
   rouge:
     git: https://github.com/aloli-crystal/rouge.git

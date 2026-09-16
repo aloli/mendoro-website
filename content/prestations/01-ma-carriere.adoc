@@ -1,6 +1,11 @@
 = Ma carrière
 :menu: pied
 
+// Portrait cadré en portrait (600 × 970). Le rôle « portrait » le fait
+// flotter à droite du texte sur écran large, et repasser au-dessus en
+// pleine largeur sur mobile.
+image::images/erik-pain.jpg["Portrait d'Erik Pain",600,970,role="portrait"]
+
 Inscrit au tableau de l'Ordre des Géomètre Expert.
 Je suis à votre disposition pour réaliser vos bornages, vos divisions foncières, l'implantation de votre bâtiment, délimiter vos servitudes.
 Membre de la profession depuis 28 ans, je mets toutes mon expertise à concilier les parties en présence et je garantis un résultat satisfaisant.

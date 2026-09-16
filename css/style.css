@@ -171,6 +171,35 @@ a[target="_blank"]::after {
 /* --- Contenu -------------------------------------------------------------- */
 .page { padding: 2.5rem 0 4rem; }
 
+/* Portrait de présentation. Il flotte à droite du texte, qui l'habille ;
+   « flow-root » sur la page empêche le flottant de déborder sous le pied
+   quand le texte est plus court que l'image. */
+.page { display: flow-root; }
+
+.imageblock.portrait {
+  float: right;
+  width: min(16rem, 42%);
+  margin: 0.3rem 0 1.4rem 2rem;
+}
+
+.imageblock.portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+/* Sous la largeur d'un habillage lisible, le texte passerait en colonnes
+   de quelques mots : le portrait reprend sa place dans le fil. */
+@media (max-width: 34rem) {
+  .imageblock.portrait {
+    float: none;
+    width: min(14rem, 65%);
+    margin: 0 auto 1.6rem;
+  }
+}
+
 /* Lien d'évitement : invisible jusqu'à ce qu'il reçoive le focus clavier. */
 .saut-contenu {
   position: absolute;
