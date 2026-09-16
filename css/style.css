@@ -187,6 +187,9 @@ img, svg { max-width: 100%; height: auto; }
   max-width: 62ch;
 }
 
+.page-intro p { margin: 0; }
+.page-intro:empty { margin-bottom: 0; }
+
 /* --- Prestations grid ----------------------------------------------------- */
 .prestations {
   display: grid;
@@ -249,7 +252,9 @@ img, svg { max-width: 100%; height: auto; }
   font-size: 0.95rem;
 }
 
-.card-body p + p { margin-top: 0.75rem; }
+/* Asciidoctor enveloppe chaque paragraphe dans <div class="paragraph">. */
+.card-body .paragraph + .paragraph { margin-top: 0.75rem; }
+.card-body p { margin: 0; }
 
 .card-note {
   margin-top: 0.9rem;
@@ -431,11 +436,18 @@ img, svg { max-width: 100%; height: auto; }
   margin: 2rem 0 0.6rem;
 }
 
-.legal h2:first-of-type { margin-top: 0; }
+.legal .sect1:first-child h2 { margin-top: 0; }
 
 .legal p, .legal ul { color: var(--text-muted); font-size: 0.95rem; }
 .legal ul { margin-left: 1.2rem; }
 .legal li { margin-bottom: 0.3rem; }
+
+/* Balisage Asciidoctor : sections, paragraphes et listes enveloppés. */
+.legal .paragraph + .paragraph,
+.legal .paragraph + .ulist,
+.legal .ulist + .paragraph { margin-top: 0.75rem; }
+.legal li > p { margin: 0; }
+.legal .sectionbody > :first-child { margin-top: 0; }
 
 /* Marks content still awaiting the real figures. */
 .todo {

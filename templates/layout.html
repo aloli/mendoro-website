@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{page-title}}</title>
+  <meta name="description" content="{{page-description}}">
+  <meta name="author" content="{{nom}}">
+  <meta name="robots" content="{{page-robots}}">
+  <meta property="og:title" content="{{page-title}}">
+  <meta property="og:description" content="{{og-description}}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://{{domaine}}/{{chemin}}">
+  <link rel="canonical" href="https://{{domaine}}/{{chemin}}">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ====== En-tête — reste en haut de l'écran ====== -->
+<header class="site-header">
+  <div class="container">
+    <!-- TODO : remplacer par l'emblème officiel de l'Ordre des géomètres-experts
+         (déposer le fichier dans images/ puis utiliser <img src="images/ordre-ge.svg" alt="{{ordre-libelle}}">) -->
+    <div class="ordre-logo" role="img" aria-label="{{ordre-libelle}}">Ordre des GE</div>
+    <div class="brand">
+      <div class="brand-name"><a href="index.html">{{nom}}</a></div>
+      <div class="brand-title">{{fonction}}</div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== Contenu — seule zone défilante ====== -->
+<main class="site-main" id="contenu">
+  <div class="container page">
+    <h1 class="page-title">{{titre}}</h1>
+    <div class="page-intro">{{intro}}</div>
+{{corps}}
+  </div>
+</main>
+
+<!-- ====== Pied de page — reste en bas de l'écran ====== -->
+<footer class="site-footer">
+  <div class="container">
+    <a href="{{pied-gauche-url}}" class="footer-cta">{{pied-gauche-libelle}}</a>
+    <a href="{{pied-droit-url}}" class="footer-legal">{{pied-droit-libelle}}</a>
+  </div>
+</footer>
+{{scripts}}
+</body>
+</html>

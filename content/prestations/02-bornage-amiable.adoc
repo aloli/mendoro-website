@@ -1,0 +1,13 @@
+= Bornage amiable
+
+Le bornage fixe définitivement la limite séparant deux propriétés privées
+contiguës. Après recherche des titres, analyse du cadastre et relevé sur
+le terrain, la limite est matérialisée par des bornes.
+
+L'opération se conclut par un procès-verbal de bornage signé par les
+propriétaires concernés : c'est cette signature qui rend la limite
+définitive et opposable.
+
+[.card-note]
+*Compétence exclusive.* Seul un géomètre-expert inscrit à l'Ordre peut
+réaliser un bornage délimitant la propriété foncière.

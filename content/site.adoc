@@ -1,0 +1,5 @@
+// Attributs globaux du site. Modifiez-les ici : ils sont repris sur toutes les pages.
+:nom: Erik Pain
+:fonction: Géomètre-expert
+:domaine: mendoro.fr
+:ordre-libelle: Ordre des géomètres-experts

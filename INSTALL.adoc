@@ -1,0 +1,294 @@
+= Installer le poste de travail sous Windows
+:toc: macro
+:toclevels: 2
+:experimental:
+
+Procédure d'installation sur un ordinateur *Windows 10 ou 11 (64 bits)* de tout
+ce qui est nécessaire pour modifier le site https://mendoro.fr[mendoro.fr].
+
+toc::[]
+
+== Deux niveaux d'installation
+
+Choisissez selon ce que vous voulez faire.
+
+[cols="1,3a,2a"]
+|===
+| | Ce que vous pouvez faire | À installer
+
+| *Minimal*
+|
+Corriger un texte, ajouter une prestation, compléter les mentions légales.
+Le site est reconstruit automatiquement par GitHub à chaque envoi.
+|
+. Git
+. Visual Studio Code
+
+| *Complet*
+|
+Tout ce qui précède, **plus** la possibilité de reconstruire le site sur votre
+machine et de le visualiser avant publication.
+|
+. Git
+. Visual Studio Code
+. Outils de compilation Microsoft
+. Crystal
+|===
+
+NOTE: Commencez par l'installation minimale. Elle suffit dans la grande
+majorité des cas, et vous pourrez compléter plus tard.
+
+== Installation minimale
+
+=== 1. Git
+
+Git assure le suivi des versions et l'envoi des modifications vers GitHub.
+
+. Téléchargez https://git-scm.com/download/win[Git pour Windows].
+. Lancez l'installateur. Les options par défaut conviennent, à deux exceptions près :
+ ** *Choosing the default editor used by Git* → choisissez
+    `Use Visual Studio Code as Git's default editor`
+    (ou laissez Vim si vous n'installez pas VS Code).
+ ** *Adjusting the name of the initial branch* → cochez
+    `Override the default branch name for new repositories` et saisissez `main`.
+. Terminez l'installation.
+
+Vérifiez dans un terminal (menu Démarrer → `Terminal`) :
+
+[source,powershell]
+----
+git --version
+----
+
+=== 2. Visual Studio Code
+
+L'éditeur dans lequel vous rédigerez les textes.
+
+. Téléchargez https://code.visualstudio.com/download[Visual Studio Code].
+. Pendant l'installation, cochez *Add "Open with Code" action to Windows
+  Explorer file context menu* et *Add to PATH*.
+. Une fois VS Code ouvert, installez l'extension *AsciiDoc* : kbd:[Ctrl+Maj+X],
+  cherchez `AsciiDoc` (éditeur : _asciidoctor_), cliquez sur *Install*.
+
+[TIP]
+====
+Cette extension affiche un aperçu du texte AsciiDoc en cours de rédaction :
+kbd:[Ctrl+Maj+V]. C'est un aperçu du *texte seul*, pas du site mis en forme —
+pour ce dernier, il faut l'installation complète.
+====
+
+=== 3. S'identifier auprès de GitHub
+
+Dans un terminal, indiquez votre identité (elle apparaîtra dans l'historique) :
+
+[source,powershell]
+----
+git config --global user.name "Erik Pain"
+git config --global user.email "votre.adresse@exemple.fr"
+----
+
+La première fois que vous enverrez des modifications, une fenêtre
+*Git Credential Manager* s'ouvrira et vous proposera de vous connecter à
+GitHub dans votre navigateur. Acceptez : vos identifiants seront mémorisés
+dans le gestionnaire d'identification de Windows, il n'y a rien d'autre à faire.
+
+=== 4. Récupérer le site
+
+Choisissez un dossier de travail, par exemple `C:\Users\<vous>\Documents` :
+
+[source,powershell]
+----
+cd $HOME\Documents
+git clone https://github.com/aloli/mendoro-website.git
+cd mendoro-website
+code .
+----
+
+VS Code s'ouvre sur le site. Vous êtes prêt.
+
+== Installation complète
+
+Ajoutez ces deux étapes si vous voulez reconstruire et visualiser le site
+localement.
+
+=== 5. Outils de compilation Microsoft
+
+Crystal compile via l'éditeur de liens de Microsoft, qu'il faut installer
+séparément.
+
+. Téléchargez
+  https://visualstudio.microsoft.com/fr/downloads/[Build Tools pour Visual Studio]
+  (section *Outils pour Visual Studio* → *Build Tools pour Visual Studio*).
+. Lancez l'installateur et cochez la charge de travail
+  *Développement Desktop en C++*.
+. Installez. Comptez plusieurs gigaoctets et un redémarrage.
+
+=== 6. Crystal
+
+. Rendez-vous sur https://crystal-lang.org/install/on_windows/[crystal-lang.org — Install on Windows].
+. Téléchargez l'archive `crystal-<version>-windows-x86_64-msvc.zip`.
+. Décompressez-la, par exemple dans `C:\crystal`.
+. Ajoutez `C:\crystal\bin` à la variable d'environnement `Path` :
+ .. menu Démarrer → tapez `variables d'environnement` → *Modifier les variables
+    d'environnement système* ;
+ .. bouton *Variables d'environnement…* ;
+ .. dans *Variables utilisateur*, sélectionnez `Path` → *Modifier* → *Nouveau* ;
+ .. saisissez `C:\crystal\bin` → *OK* partout.
+. Fermez et rouvrez le terminal, puis vérifiez :
+
+[source,powershell]
+----
+crystal --version
+shards --version
+----
+
+[IMPORTANT]
+====
+Les commandes `crystal` et `shards` doivent être lancées depuis
+l'invite *x64 Native Tools Command Prompt for VS* (menu Démarrer →
+`x64 Native Tools`), qui positionne les variables nécessaires à l'éditeur
+de liens. Dans un terminal ordinaire, la compilation échoue sur une erreur
+`cannot find link.exe`.
+====
+
+== Le cycle de travail
+
+Une fois installé, voici la boucle complète.
+
+=== Récupérer les dernières modifications
+
+[source,powershell]
+----
+cd $HOME\Documents\mendoro-website
+git pull
+----
+
+=== Modifier un texte
+
+Tous les textes du site sont dans le dossier `content\` :
+
+[cols="2,3"]
+|===
+| Fichier | Contenu
+
+| `content\site.adoc`
+| Nom, fonction, domaine — repris sur toutes les pages
+
+| `content\accueil.adoc`
+| Titre et introduction de la page d'accueil
+
+| `content\contact.adoc`
+| Introduction du formulaire de contact
+
+| `content\mentions-legales.adoc`
+| Mentions légales, en entier
+
+| `content\prestations\*.adoc`
+| Une prestation par fichier, affichée dans l'ordre des noms de fichiers
+|===
+
+Ouvrez le fichier voulu dans VS Code et modifiez le texte. La syntaxe AsciiDoc
+utile ici tient en quelques règles :
+
+[source,asciidoc]
+----
+= Titre de la carte               <1>
+
+Un paragraphe ordinaire.          <2>
+
+Un second paragraphe : *gras*, _italique_.
+
+* premier élément de liste        <3>
+* second élément
+
+https://exemple.fr[texte du lien] <4>
+
+[.todo]#texte à compléter#        <5>
+----
+<1> Première ligne du fichier : elle donne le titre affiché.
+<2> Les paragraphes sont séparés par une ligne vide.
+<3> Une liste à puces.
+<4> Un lien.
+<5> Un passage surligné en attente de contenu, visible sur le site.
+
+[TIP]
+====
+Pour *ajouter une prestation*, créez un nouveau fichier dans
+`content\prestations\`, nommé avec un numéro d'ordre :
+`09-ma-nouvelle-prestation.adoc`. Elle apparaîtra sur la page d'accueil
+et dans la liste déroulante du formulaire de contact, sans autre manipulation.
+
+Pour *retirer* une prestation, supprimez son fichier.
+====
+
+=== Visualiser le résultat (installation complète uniquement)
+
+Dans l'invite *x64 Native Tools Command Prompt for VS* :
+
+[source,powershell]
+----
+cd %USERPROFILE%\Documents\mendoro-website
+shards install
+shards build
+bin\build.exe --serve
+----
+
+Ouvrez ensuite http://localhost:8765 dans votre navigateur. Arrêtez le serveur
+avec kbd:[Ctrl+C].
+
+Après chaque modification d'un fichier `.adoc`, relancez `bin\build.exe --serve`
+et rafraîchissez la page.
+
+NOTE: `shards install` n'est à lancer que la première fois, ou après une
+modification de `shard.yml`.
+
+=== Publier
+
+[source,powershell]
+----
+git add .
+git commit -m "Description de votre modification"
+git push
+----
+
+GitHub reconstruit alors le site et le publie automatiquement. Comptez une à
+deux minutes. Vous pouvez suivre l'avancement sur
+https://github.com/aloli/mendoro-website/actions[la page Actions du dépôt] :
+une pastille verte signale la publication réussie, une pastille rouge un
+problème.
+
+[WARNING]
+====
+Le message de `commit` est obligatoire et décrit ce que vous avez changé.
+Il reste visible dans l'historique : soyez explicite, par exemple
+`Ajout de la rubrique Ma carrière` plutôt que `màj`.
+====
+
+== En cas de problème
+
+[cols="2,3a"]
+|===
+| Symptôme | Que faire
+
+| `git` n'est pas reconnu comme une commande
+| Le terminal a été ouvert avant l'installation de Git. Fermez-le et rouvrez-en un.
+
+| `cannot find link.exe` à la compilation
+| Vous n'êtes pas dans l'invite *x64 Native Tools Command Prompt for VS*.
+  Voir l'étape 6.
+
+| `git push` est refusé (`rejected`)
+| Quelqu'un a modifié le site entre-temps. Lancez `git pull`, résolvez les
+  éventuels conflits, puis `git push` à nouveau.
+
+| La pastille est rouge sur la page Actions
+| Cliquez dessus pour lire le journal : il indique la ligne fautive. Le plus
+  souvent, une erreur de syntaxe AsciiDoc. En attendant, le site précédent
+  reste en ligne — une publication ratée ne casse jamais le site existant.
+
+| Le site en ligne n'a pas changé
+| Votre navigateur affiche une version en cache. Rechargez avec kbd:[Ctrl+F5].
+|===
+
+Pour toute autre difficulté, ouvrez un ticket sur
+https://github.com/aloli/mendoro-website/issues[la page Issues du dépôt].

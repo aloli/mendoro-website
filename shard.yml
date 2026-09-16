@@ -1,0 +1,22 @@
+name: mendoro-website
+version: 0.1.0
+
+description: |
+  Générateur du site vitrine d'Erik Pain, géomètre-expert.
+  Convertit les textes AsciiDoc de content/ en site statique dans _site/.
+
+authors:
+  - ALOLI sas
+
+targets:
+  build:
+    main: src/build.cr
+
+dependencies:
+  asciicrystal:
+    github: aloli-crystal/asciicrystal
+    version: "~> 2.0.26"
+
+crystal: ">= 1.19.0"
+
+license: MIT

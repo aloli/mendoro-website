@@ -2,9 +2,18 @@
 
 Site vitrine de https://mendoro.fr[Erik Pain], géomètre-expert.
 
+Les textes sont rédigés en AsciiDoc dans `content/` et convertis en site
+statique par un générateur Crystal, lui-même compilable sous Windows, macOS et
+FreeBSD.
+
+Pour installer le poste de travail, voir link:INSTALL.adoc[INSTALL.adoc].
+
 == Stack
 
-* HTML / CSS purs — aucun framework
+* Textes en AsciiDoc, convertis par
+  https://github.com/aloli-crystal/asciicrystal[asciicrystal]
+* Générateur en Crystal (`src/build.cr`), sans dépendance à Ruby
+* Sortie HTML / CSS pure — aucun framework, un seul script pour le formulaire
 * Responsive, compatible mode sombre
 * Français uniquement
 * Hébergé sur GitHub Pages
@@ -13,23 +22,56 @@ Site vitrine de https://mendoro.fr[Erik Pain], géomètre-expert.
 
 [source]
 ----
-index.html            # Prestations (page d'accueil)
-contact.html          # Formulaire « Contact, information, devis »
-mentions-legales.html # Mentions légales
-css/style.css         # Toutes les feuilles de style
-images/               # Emblème de l'Ordre et autres visuels
+content/                  # ← les textes, c'est ici
+  site.adoc               #   attributs globaux (nom, fonction, domaine)
+  accueil.adoc            #   titre et introduction de l'accueil
+  contact.adoc            #   introduction du formulaire
+  mentions-legales.adoc   #   mentions légales
+  prestations/*.adoc      #   une prestation par fichier, triée par nom
+
+templates/                # gabarits HTML, marqueurs {{clef}}
+  layout.html             #   coquille commune à toutes les pages
+  accueil.html            #   grille des prestations
+  contact.html            #   formulaire
+  contact-script.html     #   script du formulaire
+  mentions-legales.html   #   corps des mentions légales
+
+css/style.css             # toutes les feuilles de style
+images/                   # emblème de l'Ordre et autres visuels
+src/build.cr              # le générateur
+_site/                    # sortie générée — non versionnée
 ----
 
 La mise en page reprend la maquette : en-tête et pied de page fixes, seule la
 zone centrale défile.
 
+== Générer le site
+
+[source,sh]
+----
+shards install      # la première fois seulement
+shards build        # produit bin/build
+bin/build           # écrit _site/
+bin/build --serve   # écrit _site/ puis sert http://localhost:8765
+----
+
+== Ajouter ou retirer une prestation
+
+Créez ou supprimez un fichier dans `content/prestations/`. Le préfixe numérique
+fixe l'ordre d'affichage. La liste déroulante du formulaire de contact est
+alimentée par les mêmes fichiers : elle reste synchronisée sans intervention.
+
+`Ma carrière` est volontairement exclue de cette liste déroulante — voir
+`ecrire_contact` dans `src/build.cr`.
+
 == Reste à faire
 
 * Déposer l'emblème officiel de l'Ordre des géomètres-experts dans `images/`
-  et remplacer le bloc `.ordre-logo` des trois pages.
-* Rédiger la rubrique « Ma carrière » dans `index.html`.
-* Compléter les champs marqués `.todo` dans `mentions-legales.html`
-  (identité, n° d'inscription à l'Ordre, assurance RCP, médiateur, RGPD).
+  et remplacer le bloc `.ordre-logo` de `templates/layout.html`.
+* Rédiger `content/prestations/01-ma-carriere.adoc`.
+* Compléter les passages marqués `[.todo]#…#` dans
+  `content/mentions-legales.adoc` (identité, n° d'inscription à l'Ordre,
+  assurance RCP, médiateur, RGPD).
 * Vérifier que le backend `form.aloli.fr` accepte les champs du formulaire
   (`nom`, `prenom`, `adresse`, `tel`, `email`, `bien_adresse_type`,
   `bien_adresse`, `cadastre_section`, `cadastre_numero`, `demande`, `contexte`).
@@ -52,5 +94,6 @@ www.mendoro.fr.  CNAME aloli.github.io.
 
 == Déploiement
 
-Déployé automatiquement sur GitHub Pages à chaque push sur la branche
-`production`, via `.github/workflows/deploy.yml`.
+À chaque push sur la branche `production`, GitHub Actions installe Crystal,
+compile `bin/build`, génère `_site/` et le publie sur GitHub Pages
+(`.github/workflows/deploy.yml`).

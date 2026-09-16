@@ -1,0 +1,49 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Champ « autre adresse » révélé seulement quand il est pertinent.
+    var group = document.getElementById('bien-adresse-group');
+    var input = document.getElementById('bien_adresse');
+    document.querySelectorAll('input[name="bien_adresse_type"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        var autre = this.value === 'autre';
+        group.hidden = !autre;
+        input.required = autre;
+        if (autre) { input.focus(); } else { input.value = ''; }
+      });
+    });
+
+    // Envoi AJAX, pour rester sur la page.
+    var form = document.getElementById('contact-form');
+    var status = document.getElementById('form-status');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      status.style.display = 'block';
+      status.style.color = '';
+      status.textContent = 'Envoi en cours…';
+
+      var body = {};
+      new FormData(form).forEach(function (v, k) { body[k] = v; });
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(function (res) {
+        return res.json().then(function (json) { return { ok: res.ok, json: json }; });
+      }).then(function (result) {
+        if (result.ok && result.json.success) {
+          status.style.color = '#5c7c63';
+          status.textContent = 'Demande envoyée. Je vous rappelle dans la semaine.';
+          form.reset();
+          group.hidden = true;
+        } else {
+          status.style.color = '#b3261e';
+          status.textContent = result.json.error || 'Une erreur est survenue.';
+        }
+      }).catch(function () {
+        status.style.color = '#b3261e';
+        status.textContent = 'Impossible de contacter le serveur. Réessayez plus tard.';
+      });
+    });
+  });
+</script>

@@ -1,0 +1,67 @@
+= Mentions légales
+:page-title: Mentions légales — Erik Pain, géomètre-expert
+:page-description: Mentions légales du site d'Erik Pain, géomètre-expert.
+:page-robots: index, nofollow
+
+Informations légales relatives au site *mendoro.fr*.
+
+== Éditeur du site
+
+* Erik Pain, géomètre-expert
+* Dénomination et forme juridique : [.todo]#à compléter#
+* Adresse du cabinet : [.todo]#à compléter#
+* Téléphone : [.todo]#à compléter#
+* Courriel : [.todo]#à compléter#
+* SIRET : [.todo]#à compléter# — TVA intracommunautaire : [.todo]#à compléter#
+* Directeur de la publication : Erik Pain
+
+== Exercice de la profession
+
+Géomètre-expert inscrit au tableau de l'Ordre des géomètres-experts sous le
+numéro [.todo]#à compléter#, auprès du conseil régional [.todo]#à compléter#.
+
+Profession réglementée par la loi n° 46-942 du 7 mai 1946 instituant l'Ordre
+des géomètres-experts. L'exercice est soumis au code de déontologie des
+géomètres-experts.
+
+// Le double espace avant le lien est VOLONTAIRE : asciicrystal avale un
+// caractère juste avant une URL en ligne. À retirer quand le shard sera corrigé.
+* Autorité de tutelle : Ordre des géomètres-experts,  https://www.geometre-expert.fr[geometre-expert.fr]
+* Assurance de responsabilité civile professionnelle : [.todo]#assureur, n° de contrat, couverture géographique#
+
+== Hébergement
+
+Le site est hébergé par GitHub Pages — GitHub, Inc.,
+88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.
+
+== Médiation de la consommation
+
+Conformément à l'article L. 612-1 du code de la consommation, tout
+consommateur peut recourir gratuitement à un médiateur en vue de la résolution
+amiable d'un litige. Médiateur compétent : [.todo]#à compléter#.
+
+== Données personnelles
+
+Les informations saisies dans le formulaire de contact (identité, coordonnées,
+adresse et référence cadastrale de la propriété, description du projet) sont
+utilisées à seule fin de répondre à votre demande et d'établir, le cas échéant,
+un devis. Elles ne font l'objet d'aucune cession à des tiers.
+
+Base légale : votre consentement et les mesures précontractuelles prises à votre
+demande. Durée de conservation : [.todo]#à compléter#.
+
+Conformément au règlement (UE) 2016/679 et à la loi « Informatique et Libertés »,
+vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation
+et d'opposition sur les données vous concernant. Pour l'exercer, écrivez à
+[.todo]#adresse de contact à compléter#. Vous pouvez également introduire une
+réclamation auprès de la CNIL.
+
+== Cookies
+
+Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.
+
+== Propriété intellectuelle
+
+L'ensemble des contenus de ce site (textes, plans, images) est protégé par le
+droit d'auteur. Toute reproduction, même partielle, est soumise à autorisation
+préalable écrite.
