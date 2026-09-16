@@ -202,6 +202,8 @@ https://exemple.fr[texte du lien] <4>
 <3> Une liste à puces.
 <4> Un lien.
 <5> Un passage surligné en attente de contenu, visible sur le site.
+    Le `#` de fermeture est **obligatoire** : sans lui, la ligne s'affiche
+    telle quelle sur le site, crochets compris.
 
 [TIP]
 ====
