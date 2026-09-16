@@ -50,7 +50,8 @@ Git assure le suivi des versions et l'envoi des modifications vers GitHub.
     `Use Visual Studio Code as Git's default editor`
     (ou laissez Vim si vous n'installez pas VS Code).
  ** *Adjusting the name of the initial branch* → cochez
-    `Override the default branch name for new repositories` et saisissez `main`.
+    `Override the default branch name for new repositories` et saisissez
+    `production`, la branche utilisée par les dépôts ALOLI.
 . Terminez l'installation.
 
 Vérifiez dans un terminal (menu Démarrer → `Terminal`) :
