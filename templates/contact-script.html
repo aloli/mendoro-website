@@ -25,7 +25,10 @@
       : projet;
 
     var payload = {
-      name: (prenom + ' ' + nom).trim(),
+      // « name » est obligatoire côté service. Le nom étant facultatif
+      // dans le formulaire, le courriel — lui obligatoire — sert de repli :
+      // un expéditeur anonyme reste ainsi identifiable et joignable.
+      name: (prenom + ' ' + nom).trim() || champ('email'),
       email: champ('email'),
       subject: champ('demande'),
       // « message » est obligatoire côté service : le contexte étant
