@@ -15,7 +15,7 @@ targets:
 dependencies:
   asciicrystal:
     github: aloli-crystal/asciicrystal
-    version: "~> 2.0.26"
+    version: "~> 2.0.26.14"
 
 crystal: ">= 1.19.0"
 

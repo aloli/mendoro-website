@@ -24,9 +24,7 @@ Profession réglementée par la loi n° 46-942 du 7 mai 1946 instituant l'Ordre
 des géomètres-experts. L'exercice est soumis au code de déontologie des
 géomètres-experts.
 
-// Le double espace avant le lien est VOLONTAIRE : asciicrystal avale un
-// caractère juste avant une URL en ligne. À retirer quand le shard sera corrigé.
-* Autorité de tutelle : Ordre des géomètres-experts,  https://www.geometre-expert.fr[geometre-expert.fr]
+* Autorité de tutelle : Ordre des géomètres-experts, https://www.geometre-expert.fr[geometre-expert.fr]
 * Assurance de responsabilité civile professionnelle : [.todo]#assureur, n° de contrat, couverture géographique#
 
 == Hébergement
