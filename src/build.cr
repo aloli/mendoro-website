@@ -8,6 +8,7 @@
 #   bin/build --serve        # génère puis sert sur http://localhost:8765
 
 require "asciicrystal"
+require "uri"
 require "file_utils"
 require "http/server"
 
@@ -28,8 +29,16 @@ module Mendoro
     getter titre : String
     getter attributs : Hash(String, String)
     getter corps : String
+    # Identifiant de page, tiré du nom de fichier amputé de son préfixe
+    # d'ordre : `02-bornage-amiable.adoc` donne `bornage-amiable`.
+    getter slug : String
 
-    def initialize(@titre, @attributs, @corps)
+    def initialize(@titre, @attributs, @corps, @slug = "")
+    end
+
+    # Adresse de la page correspondante dans le site généré.
+    def page : String
+      "#{slug}.html"
     end
 
     ATTRIBUT = /\A:([\w-]+):\s*(.*)\z/
@@ -64,7 +73,8 @@ module Mendoro
         corps << ligne
       end
 
-      new(titre, attributs, corps.join('\n').strip)
+      slug = File.basename(chemin.to_s, ".adoc").sub(/\A\d+-/, "")
+      new(titre, attributs, corps.join('\n').strip, slug)
     end
 
     # Corps converti en fragment HTML. Sans « standalone => false »,
@@ -115,8 +125,9 @@ module Mendoro
     Dir.mkdir_p(SORTIE.to_s)
 
     ecrire_accueil(site, prestations)
+    prestations.each { |p| ecrire_prestation(site, prestations, p) }
     ecrire_contact(site, prestations)
-    ecrire_mentions(site)
+    ecrire_mentions(site, prestations)
     copier_statiques
 
     puts "→ #{SORTIE} (#{prestations.size} prestations)"
@@ -125,6 +136,17 @@ module Mendoro
   def self.charger_prestations : Array(Source)
     dossier = CONTENU / "prestations"
     Dir.glob("#{dossier}/*.adoc").sort.map { |f| Source.lire(f) }
+  end
+
+  # Le rappel des prestations, repris en pied de chaque page. La page
+  # affichée porte `aria-current`, que les lecteurs d'écran annoncent et que
+  # la feuille de style met en évidence.
+  def self.menu_prestations(prestations, chemin_courant : String) : String
+    prestations.map do |p|
+      courante = p.page == chemin_courant
+      marque = courante ? %( aria-current="page") : ""
+      %(        <li><a href="#{p.page}"#{marque}>#{echapper(p.titre)}</a></li>)
+    end.join('\n')
   end
 
   # Valeurs communes à toutes les pages.
@@ -149,31 +171,63 @@ module Mendoro
 
     cartes = prestations.map do |p|
       <<-HTML
-            <details class="card">
-              <summary>#{echapper(p.titre)}</summary>
-              <div class="card-body">
-      #{p.html}
-              </div>
-            </details>
+            <a class="card" href="#{p.page}">
+              <span class="card-titre">#{echapper(p.titre)}</span>
+            </a>
       HTML
     end
 
     valeurs = base(site, page, "")
     valeurs["corps"] = rendre(gabarit("accueil"),
       {"prestations" => cartes.join("\n")})
-    valeurs["pied-gauche-url"] = "contact.html"
-    valeurs["pied-gauche-libelle"] = "Contact, information, devis"
-    valeurs["pied-droit-url"] = "mentions-legales.html"
-    valeurs["pied-droit-libelle"] = "Mentions légales"
+    valeurs["menu-prestations"] = menu_prestations(prestations, "")
 
     ecrire("index.html", rendre(gabarit("layout"), valeurs))
+  end
+
+  # Prestations proposées dans la liste déroulante du formulaire. « Ma
+  # carrière » n'est pas une prestation : on ne la propose pas.
+  def self.prestations_demandables(prestations)
+    prestations.reject { |p| p.titre == "Ma carrière" }
+  end
+
+  # Chaque prestation devient une page à part entière.
+  def self.ecrire_prestation(site, prestations, presta : Source)
+    valeurs = base(site, presta, presta.page)
+    # Le texte de la prestation est le corps de la page, pas son chapeau.
+    valeurs["intro"] = ""
+    # Sans cela l'onglet n'afficherait que « Bornage amiable », sans dire de
+    # qui il s'agit — gênant dans une liste de favoris comme sur un moteur.
+    valeurs["page-title"] = presta.attributs["page-title"]? ||
+                            "#{presta.titre} — #{site["nom"]?}, #{site["fonction"]?}"
+    valeurs["page-description"] = presta.attributs["page-description"]? ||
+                                  "#{presta.titre} — #{site["nom"]?}, #{site["fonction"]?}."
+
+    # Le lien de fin de page emmène le libellé, que le formulaire relit pour
+    # présélectionner la nature de la demande : le visiteur n'a pas à la
+    # retrouver dans une liste de huit entrées.
+    demandable = prestations_demandables(prestations).any? { |p| p.titre == presta.titre }
+    cta_url = demandable ? "contact.html?demande=#{URI.encode_www_form(presta.titre)}" : "contact.html"
+    cta_libelle = demandable ? "Demander un devis" : "Me contacter"
+
+    # Les valeurs du bouton sont passées au gabarit de la prestation, et non
+    # à celui de la coquille : `rendre` vide tout marqueur qu'il ne connaît
+    # pas, si bien qu'un rendu intermédiaire les effacerait.
+    valeurs["corps"] = rendre(gabarit("prestation"), {
+      "contenu"     => presta.html,
+      "cta-url"     => cta_url,
+      "cta-libelle" => cta_libelle,
+    })
+    valeurs["menu-prestations"] = menu_prestations(prestations, presta.page)
+
+    ecrire(presta.page, rendre(gabarit("layout"), valeurs))
   end
 
   def self.ecrire_contact(site, prestations)
     page = Source.lire(CONTENU / "contact.adoc")
 
     # La liste déroulante reprend exactement les prestations publiées.
-    options = prestations.reject { |p| p.titre == "Ma carrière" }.map do |p|
+    options = prestations_demandables(prestations).map do |p|
       "            <option>#{echapper(p.titre)}</option>"
     end
 
@@ -183,15 +237,12 @@ module Mendoro
       "options-demande" => options.join("\n"),
     })
     valeurs["scripts"] = gabarit("contact-script")
-    valeurs["pied-gauche-url"] = "index.html"
-    valeurs["pied-gauche-libelle"] = "Retour aux prestations"
-    valeurs["pied-droit-url"] = "mentions-legales.html"
-    valeurs["pied-droit-libelle"] = "Mentions légales"
+    valeurs["menu-prestations"] = menu_prestations(prestations, "contact.html")
 
     ecrire("contact.html", rendre(gabarit("layout"), valeurs))
   end
 
-  def self.ecrire_mentions(site)
+  def self.ecrire_mentions(site, prestations)
     page = Source.lire(CONTENU / "mentions-legales.adoc")
 
     # Ici l'intro et le corps viennent du même fichier : le premier paragraphe
@@ -200,10 +251,7 @@ module Mendoro
     valeurs["intro"] = ""
     valeurs["corps"] = rendre(gabarit("mentions-legales"),
       {"contenu" => page.html})
-    valeurs["pied-gauche-url"] = "contact.html"
-    valeurs["pied-gauche-libelle"] = "Contact, information, devis"
-    valeurs["pied-droit-url"] = "index.html"
-    valeurs["pied-droit-libelle"] = "Retour aux prestations"
+    valeurs["menu-prestations"] = menu_prestations(prestations, "mentions-legales.html")
 
     ecrire("mentions-legales.html", rendre(gabarit("layout"), valeurs))
   end

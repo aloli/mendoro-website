@@ -45,7 +45,22 @@
     return payload;
   }
 
+  // Une prestation passée en paramètre présélectionne la nature de la
+  // demande : le visiteur arrive du descriptif, il n'a pas à la rechercher.
+  function preselectionnerDemande() {
+    var voulue = new URLSearchParams(location.search).get('demande');
+    if (!voulue) { return; }
+    var select = document.getElementById('demande');
+    var option = [].slice.call(select.options).find(function (o) {
+      return o.text === voulue;
+    });
+    // Un libellé inconnu — prestation renommée, lien ancien — est ignoré
+    // plutôt que d'imposer une valeur que le service ne reconnaîtrait pas.
+    if (option) { select.value = option.value || option.text; }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    preselectionnerDemande();
     // Champ « autre adresse » révélé seulement quand il est pertinent.
     var group = document.getElementById('bien-adresse-group');
     var input = document.getElementById('bien_adresse');

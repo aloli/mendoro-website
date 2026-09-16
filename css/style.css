@@ -68,12 +68,6 @@ body {
   background: var(--bg);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-
-  /* Full-viewport shell: only .site-main scrolls. */
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  overflow: hidden;
 }
 
 a { color: var(--brass); text-decoration: none; transition: color var(--transition); }
@@ -116,7 +110,9 @@ a[target="_blank"]::after {
 
 /* --- Header (stays at the top of the screen) ------------------------------ */
 .site-header {
-  flex: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background: var(--header-bg);
   color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -165,25 +161,25 @@ a[target="_blank"]::after {
 .brand-name, .brand-title { display: block; }
 .brand a:hover { color: #fff; }
 
-/* --- Main (the only scrolling area — "curseur pour faire défiler") -------- */
-.site-main {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: auto;
-  scrollbar-color: var(--brass) var(--bg-alt);
-}
+/* --- Contenu -------------------------------------------------------------- */
+.page { padding: 2.5rem 0 4rem; }
 
-.site-main::-webkit-scrollbar { width: 12px; }
-.site-main::-webkit-scrollbar-track { background: var(--bg-alt); }
-.site-main::-webkit-scrollbar-thumb {
+/* Lien d'évitement : invisible jusqu'à ce qu'il reçoive le focus clavier. */
+.saut-contenu {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 20;
   background: var(--brass);
-  border-radius: 6px;
-  border: 3px solid var(--bg-alt);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 6px 0;
 }
-.site-main::-webkit-scrollbar-thumb:hover { background: var(--navy); }
 
-.page { padding: 2.5rem 0 3.5rem; }
+.saut-contenu:focus {
+  left: 0;
+  color: #fff;
+}
 
 .page-title {
   font-family: var(--font-display);
@@ -202,98 +198,147 @@ a[target="_blank"]::after {
 .page-intro p { margin: 0; }
 .page-intro:empty { margin-bottom: 0; }
 
-/* --- Prestations grid ----------------------------------------------------- */
+/* --- Grille des prestations (accueil) ------------------------------------- */
 .prestations {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  align-items: start; /* sinon une carte ouverte étire sa voisine fermée */
   gap: 1.25rem;
 }
 
+/* Chaque carte est un lien vers la page de la prestation. */
 .card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-left: 3px solid var(--brass);
   border-radius: var(--radius);
   box-shadow: 0 1px 4px var(--shadow);
+  color: var(--text-heading);
   transition: box-shadow var(--transition), transform var(--transition);
 }
 
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 22px var(--shadow-hover);
+  color: var(--text-heading);
 }
 
-.card[open] {
-  box-shadow: 0 6px 22px var(--shadow-hover);
-}
-
-.card > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 1.35rem 1.5rem;
+.card-titre {
   font-family: var(--font-display);
   font-size: 1.12rem;
   line-height: 1.35;
-  color: var(--text-heading);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
-.card > summary::-webkit-details-marker { display: none; }
-
-/* Chevron */
-.card > summary::after {
+/* Chevron indiquant que la carte mène ailleurs. */
+.card::after {
   content: '';
   flex: none;
   width: 9px;
   height: 9px;
+  border-top: 2px solid var(--brass);
   border-right: 2px solid var(--brass);
-  border-bottom: 2px solid var(--brass);
   transform: rotate(45deg);
   transition: transform var(--transition);
 }
 
-.card[open] > summary::after { transform: rotate(-135deg); }
+.card:hover::after { transform: rotate(45deg) translate(2px, -2px); }
 
-.card-body {
-  padding: 0 1.5rem 1.5rem;
+/* --- Corps d'une page de prestation --------------------------------------- */
+.prose {
+  max-width: 70ch;
   color: var(--text-muted);
-  font-size: 0.95rem;
 }
 
-/* Asciidoctor enveloppe chaque paragraphe dans <div class="paragraph">. */
-.card-body .paragraph + .paragraph { margin-top: 0.75rem; }
-.card-body p { margin: 0; }
+.prose .paragraph + .paragraph,
+.prose .paragraph + .ulist,
+.prose .ulist + .paragraph { margin-top: 1rem; }
 
+.prose p { margin: 0; }
+.prose ul { margin-left: 1.2rem; }
+.prose li > p { margin: 0; }
+.prose li { margin-bottom: 0.3rem; }
+
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: var(--text-heading);
+  margin: 2rem 0 0.6rem;
+}
+
+/* L'encadré « compétence exclusive » des prestations. */
 .card-note {
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border);
-  font-size: 0.82rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .card-note strong { color: var(--text-heading); }
 
-/* --- Footer (stays at the bottom of the screen) --------------------------- */
+/* Rappel d'action en fin de page de prestation. */
+.appel-action {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.appel-action .btn { text-decoration: none; }
+
+/* --- Pied de page : le rappel des prestations ----------------------------- */
 .site-footer {
-  flex: none;
   background: var(--footer-bg);
   color: var(--on-dark-dim);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.87rem;
+  padding: 2.5rem 0 2rem;
 }
 
 .site-footer .container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem 3rem;
+  align-items: start;
+}
+
+.footer-menu h2 {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brass-soft);
+  margin-bottom: 0.85rem;
+}
+
+.footer-menu ul {
+  list-style: none;
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.footer-menu li {
+  margin-bottom: 0.45rem;
+  break-inside: avoid;
+}
+
+.footer-menu a { color: var(--on-dark); }
+.footer-menu a:hover { color: #fff; }
+
+/* La page affichée se distingue des autres entrées du rappel. */
+.footer-menu a[aria-current="page"] {
+  color: var(--brass-soft);
+  font-weight: 600;
+}
+
+.footer-aside {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  padding: 0.9rem 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
 }
 
 .footer-cta {
@@ -316,6 +361,11 @@ a[target="_blank"]::after {
 
 .footer-legal { color: var(--on-dark-dim); }
 .footer-legal:hover { color: #fff; }
+
+.footer-copy {
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.4rem;
+}
 
 /* --- Forms ---------------------------------------------------------------- */
 .form {
@@ -473,16 +523,11 @@ a[target="_blank"]::after {
 /* --- Responsive ----------------------------------------------------------- */
 @media (max-width: 760px) {
   .prestations { grid-template-columns: 1fr; }
+  .site-footer .container { grid-template-columns: 1fr; gap: 1.75rem; }
+  .footer-menu ul { columns: 1; }
   .form-row { grid-template-columns: 1fr; }
   .form { padding: 1.35rem; }
   .site-header .container { min-height: 70px; gap: 0.9rem; }
   .ordre-logo { height: 38px; padding: 5px 8px; }
-  .site-footer .container { justify-content: center; text-align: center; }
 }
 
-/* Very short screens: let the whole page scroll rather than trapping content
-   in a sliver of viewport between the fixed header and footer. */
-@media (max-height: 420px) {
-  body { height: auto; min-height: 100dvh; overflow: visible; }
-  .site-main { overflow: visible; }
-}

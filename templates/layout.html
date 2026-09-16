@@ -16,14 +16,16 @@
 </head>
 <body>
 
-<!-- ====== En-tête — reste en haut de l'écran ====== -->
+<a class="saut-contenu" href="#contenu">Aller au contenu</a>
+
+<!-- ====== En-tête, collant en haut ====== -->
 <header class="site-header">
   <div class="container">
     <!-- Emblème officiel en couleurs (vectoriel, issu de l'EPS du pack).
          Ses teintes étant sombres, il repose sur une pastille claire : ni les
          couleurs ni les proportions de l'emblème ne sont retouchées. -->
     <img class="ordre-logo" src="images/logo-geometre-expert.svg"
-         alt="{{ordre-libelle}}" width="791" height="520">
+         alt="{{ordre-libelle}}" width="578" height="308">
     <div class="brand">
       <!-- Un seul lien enveloppe le nom et la fonction : deux liens voisins
            vers la même page seraient annoncés deux fois par un lecteur
@@ -36,7 +38,7 @@
   </div>
 </header>
 
-<!-- ====== Contenu — seule zone défilante ====== -->
+<!-- ====== Contenu ====== -->
 <main class="site-main" id="contenu">
   <div class="container page">
     <h1 class="page-title">{{titre}}</h1>
@@ -45,11 +47,23 @@
   </div>
 </main>
 
-<!-- ====== Pied de page — reste en bas de l'écran ====== -->
+<!-- ====== Pied de page : le rappel des prestations ====== -->
 <footer class="site-footer">
   <div class="container">
-    <a href="{{pied-gauche-url}}" class="footer-cta">{{pied-gauche-libelle}}</a>
-    <a href="{{pied-droit-url}}" class="footer-legal">{{pied-droit-libelle}}</a>
+
+    <nav class="footer-menu" aria-label="Prestations">
+      <h2>Prestations</h2>
+      <ul>
+{{menu-prestations}}
+      </ul>
+    </nav>
+
+    <div class="footer-aside">
+      <a href="contact.html" class="footer-cta">Contact, information, devis</a>
+      <a href="mentions-legales.html" class="footer-legal">Mentions légales</a>
+      <p class="footer-copy">{{nom}} — {{fonction}}</p>
+    </div>
+
   </div>
 </footer>
 {{scripts}}
