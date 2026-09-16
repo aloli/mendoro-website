@@ -102,9 +102,11 @@ winget install -e --id ZedIndustries.Zed
 
 Elle colorise les fichiers `.adoc` et rend leur structure lisible.
 
-Le dépôt demande son installation automatiquement : à la première ouverture du
-projet, Zed devrait s'en charger seul. Si ce n'est pas le cas, faites-le à la
-main avec kbd:[Ctrl+Maj+X], en cherchant `AsciiDoc`.
+Vous n'avez rien à faire : le dépôt demande son installation, et Zed s'en
+charge seul à la première ouverture du projet.
+
+Si par exception elle n'apparaissait pas, installez-la à la main avec
+kbd:[Ctrl+Maj+X], en cherchant `AsciiDoc`.
 
 [IMPORTANT]
 ====
