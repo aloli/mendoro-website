@@ -129,7 +129,13 @@ module Mendoro
     Dir.mkdir_p(SORTIE.to_s)
 
     ecrire_accueil(site, prestations, actualites)
-    prestations.each { |p| ecrire_prestation(site, prestations, p, actualites) }
+    prestations.each do |p|
+      if p.attributs["liste"]? == "actualites"
+        ecrire_index_actualites(site, prestations, p, actualites)
+      else
+        ecrire_prestation(site, prestations, p, actualites)
+      end
+    end
     actualites.each { |a| ecrire_actualite(site, prestations, a) }
     ecrire_contact(site, prestations)
     ecrire_mentions(site, prestations)
@@ -391,21 +397,6 @@ module Mendoro
     # à celui de la coquille : `rendre` vide tout marqueur qu'il ne connaît
     # pas, si bien qu'un rendu intermédiaire les effacerait.
     contenu = presta.html
-    if presta.attributs["liste"]? == "actualites"
-      billets = actualites.map do |a|
-        resume = a.attributs["resume"]?
-        <<-HTML
-            <article class="actu">
-              <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
-              <h2><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h2>
-              #{media_actu(a)}
-              #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : a.html}
-              <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
-            </article>
-        HTML
-      end
-      contenu += "\n" + billets.join('\n')
-    end
 
     valeurs["corps"] = rendre(gabarit("prestation"), {
       "contenu"     => contenu,
@@ -416,6 +407,90 @@ module Mendoro
     valeurs["menu-pied"] = menu_pied(prestations, presta.page)
 
     ecrire(presta.page, rendre(gabarit("layout"), valeurs))
+  end
+
+  ACTUS_PAR_PAGE_DEFAUT = 10
+
+  def self.actus_par_page(site) : Int32
+    taille = (site["actus-par-page"]? || "").to_i?
+    taille && taille > 0 ? taille : ACTUS_PAR_PAGE_DEFAUT
+  end
+
+  # Adresse d'une page de la liste. La première garde l'adresse d'origine,
+  # pour ne pas casser les liens qui la visent déjà.
+  def self.page_liste(base_slug : String, numero : Int32) : String
+    numero == 1 ? "#{base_slug}.html" : "#{base_slug}-#{numero}.html"
+  end
+
+  # Un billet, tel qu'il paraît dans la liste.
+  def self.billet_actu(a : Source) : String
+    resume = a.attributs["resume"]?
+    <<-HTML
+        <article class="actu">
+          <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
+          <h2><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h2>
+          #{media_actu(a)}
+          #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : a.html}
+          <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
+        </article>
+    HTML
+  end
+
+  # La pagination ne s'affiche qu'à partir de deux pages : inutile d'encombrer
+  # une liste qui tient entière sous les yeux.
+  def self.pagination(base_slug : String, courante : Int32, total : Int32) : String
+    return "" if total <= 1
+
+    precedent = courante > 1 ? %(<a class="page-precedente" href="#{page_liste(base_slug, courante - 1)}">Plus récentes</a>) : ""
+    suivant = courante < total ? %(<a class="page-suivante" href="#{page_liste(base_slug, courante + 1)}">Plus anciennes</a>) : ""
+
+    numeros = (1..total).map do |n|
+      if n == courante
+        %(<span aria-current="page">#{n}</span>)
+      else
+        %(<a href="#{page_liste(base_slug, n)}">#{n}</a>)
+      end
+    end.join("\n            ")
+
+    <<-HTML
+        <nav class="pagination" aria-label="Pages d'actualités">
+          #{precedent}
+          <span class="pagination-numeros">
+            #{numeros}
+          </span>
+          #{suivant}
+        </nav>
+    HTML
+  end
+
+  # La page qui rassemble les actualités, découpée en autant de pages que
+  # nécessaire. Sans actualité, une seule page, vide de billets.
+  def self.ecrire_index_actualites(site, prestations, page : Source, actualites)
+    lots = actualites.each_slice(actus_par_page(site)).to_a
+    lots = [[] of Source] if lots.empty?
+    total = lots.size
+
+    lots.each_with_index do |lot, index|
+      numero = index + 1
+      chemin = page_liste(page.slug, numero)
+
+      valeurs = base(site, page, chemin)
+      valeurs["intro"] = ""
+      suffixe = numero == 1 ? "" : " — page #{numero}"
+      valeurs["page-title"] = "#{page.titre}#{suffixe} — #{site["nom"]?}, #{site["fonction"]?}"
+      valeurs["page-description"] = "#{page.titre} — #{site["nom"]?}, #{site["fonction"]?}."
+      valeurs["corps"] = rendre(gabarit("prestation"), {
+        "contenu" => page.html + "\n" + lot.map { |a| billet_actu(a) }.join('\n') +
+                     "\n" + pagination(page.slug, numero, total),
+        "cta-url"     => "contact.html",
+        "cta-libelle" => "Me contacter",
+      })
+      # Toutes les pages de la liste marquent la même entrée du pied.
+      valeurs["menu-prestations"] = menu_prestations(prestations, page.page)
+      valeurs["menu-pied"] = menu_pied(prestations, page.page)
+
+      ecrire(chemin, rendre(gabarit("layout"), valeurs))
+    end
   end
 
   # Chaque actualité a sa page : c'est elle que vise « Lire la suite ».

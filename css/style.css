@@ -456,6 +456,50 @@ a[target="_blank"]::after {
 .actu .actu-photo,
 .actu .actu-video { max-width: 34rem; margin-bottom: 0.8rem; }
 
+/* --- Pagination ----------------------------------------------------------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.pagination-numeros {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0 auto;
+}
+
+.pagination-numeros a,
+.pagination-numeros span {
+  min-width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pagination-numeros a:hover { border-color: var(--brass); color: var(--brass); }
+
+.pagination-numeros [aria-current="page"] {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: #fff;
+}
+
+.page-precedente,
+.page-suivante { font-weight: 600; white-space: nowrap; }
+
 /* --- Grille des prestations (accueil) ------------------------------------- */
 .prestations {
   display: grid;

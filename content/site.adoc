@@ -6,3 +6,6 @@
 // Adresse du service qui reçoit le formulaire de contact (crystal-forms).
 // TODO : à faire pointer sur l'instance dédiée à mendoro.fr une fois déployée.
 :form-action: https://form.mendoro.fr/submit
+// Nombre d'actualités par page sur la page qui les rassemble.
+// La pagination n'apparaît qu'au-delà de ce seuil.
+:actus-par-page: 10
