@@ -113,19 +113,12 @@ img, svg { max-width: 100%; height: auto; }
   padding: 0.85rem 0;
 }
 
-/* Placeholder for the official "Ordre des géomètres-experts" emblem.
-   Drop the supplied file in images/ and swap the <svg> for an <img>. */
-/* Emblème officiel, fourni en JPEG sur fond blanc. La pastille claire le
-   restitue tel quel sur l'en-tête sombre : ni ses couleurs ni ses
-   proportions ne sont retouchées. */
+/* Emblème officiel en vectoriel, variante « réserve » : l'Ordre la prévoit
+   pour les fonds sombres, elle se pose donc à même l'en-tête, sans pastille. */
 .ordre-logo {
   flex: none;
-  height: 46px;
+  height: 44px;
   width: auto;
-  background: #fff;
-  border-radius: 6px;
-  padding: 5px 9px;
-  box-sizing: content-box;
 }
 
 .brand { min-width: 0; }
@@ -461,7 +454,7 @@ img, svg { max-width: 100%; height: auto; }
   .form-row { grid-template-columns: 1fr; }
   .form { padding: 1.35rem; }
   .site-header .container { min-height: 70px; gap: 0.9rem; }
-  .ordre-logo { height: 34px; padding: 4px 7px; }
+  .ordre-logo { height: 32px; }
   .site-footer .container { justify-content: center; text-align: center; }
 }
 
