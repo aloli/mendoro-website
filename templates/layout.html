@@ -16,20 +16,44 @@
 </head>
 <body>
 
-<!-- ====== En-tête — reste en haut de l'écran ====== -->
+<a class="saut-contenu" href="#contenu">Aller au contenu</a>
+
+<!-- ====== En-tête, collant en haut ====== -->
 <header class="site-header">
   <div class="container">
-    <!-- TODO : remplacer par l'emblème officiel de l'Ordre des géomètres-experts
-         (déposer le fichier dans images/ puis utiliser <img src="images/ordre-ge.svg" alt="{{ordre-libelle}}">) -->
-    <div class="ordre-logo" role="img" aria-label="{{ordre-libelle}}">Ordre des GE</div>
-    <div class="brand">
-      <div class="brand-name"><a href="index.html">{{nom}}</a></div>
-      <div class="brand-title">{{fonction}}</div>
-    </div>
+    <!-- Un seul lien enveloppe l'emblème, le nom et la fonction : plusieurs
+         liens voisins vers la même page seraient annoncés autant de fois par
+         un lecteur d'écran, pour un même geste de l'utilisateur.
+
+         L'emblème officiel (vectoriel, issu de l'EPS du pack) y est décoratif :
+         nommé, il ferait croire que le lien mène au site de l'Ordre, alors que
+         la mention « Géomètre-expert » juste à côté dit déjà la même chose.
+         Ses teintes étant sombres, il repose sur une pastille claire ; ni ses
+         couleurs ni ses proportions ne sont retouchées. -->
+    <a class="brand" href="index.html">
+      <img class="ordre-logo" src="images/logo-geometre-expert.svg"
+           alt="" width="578" height="308">
+      <span class="brand-texte">
+        <span class="brand-name">{{nom}}</span>
+        <span class="brand-title">{{fonction}}</span>
+      </span>
+    </a>
+
+    <!-- Navigation. Le menu déroulant repose sur <details> : neuf entrées ne
+         tiennent pas en ligne, et ce choix évite d'en dépendre d'un script. -->
+    <nav class="site-nav" aria-label="Navigation principale">
+      <details class="nav-prestations">
+        <summary>Prestations</summary>
+        <ul>
+{{menu-prestations}}
+        </ul>
+      </details>
+      <a href="contact.html" class="nav-contact">Contact, information, devis</a>
+    </nav>
   </div>
 </header>
 
-<!-- ====== Contenu — seule zone défilante ====== -->
+<!-- ====== Contenu ====== -->
 <main class="site-main" id="contenu">
   <div class="container page">
     <h1 class="page-title">{{titre}}</h1>
@@ -38,13 +62,40 @@
   </div>
 </main>
 
-<!-- ====== Pied de page — reste en bas de l'écran ====== -->
+<!-- ====== Pied de page ====== -->
 <footer class="site-footer">
   <div class="container">
-    <a href="{{pied-gauche-url}}" class="footer-cta">{{pied-gauche-libelle}}</a>
-    <a href="{{pied-droit-url}}" class="footer-legal">{{pied-droit-libelle}}</a>
+    <nav aria-label="Pied de page">
+      <ul class="footer-menu">
+{{menu-pied}}
+      </ul>
+    </nav>
   </div>
 </footer>
+
+<script>
+  // Écran d'attente des vidéos : le lecteur n'est inséré qu'au clic, si bien
+  // qu'aucune requête n'atteint la plateforme tant que le visiteur n'a rien
+  // demandé. C'est ce qui permet aux mentions légales de rester exactes.
+  document.addEventListener('click', function (e) {
+    var bouton = e.target.closest && e.target.closest('.video-attente');
+    if (!bouton) { return; }
+    var cadre = document.createElement('iframe');
+    cadre.src = bouton.dataset.src + (bouton.dataset.src.indexOf('?') < 0 ? '?' : '&') + 'autoplay=1';
+    cadre.title = bouton.dataset.titre;
+    cadre.allow = 'autoplay; fullscreen; picture-in-picture';
+    cadre.referrerPolicy = 'strict-origin-when-cross-origin';
+    cadre.allowFullscreen = true;
+    bouton.replaceWith(cadre);
+  });
+
+  // Referme le menu quand on clique ailleurs : sans cela, <details> resterait
+  // ouvert jusqu'à un second clic sur son propre titre.
+  document.addEventListener('click', function (e) {
+    var menu = document.querySelector('.nav-prestations');
+    if (menu && menu.open && !menu.contains(e.target)) { menu.open = false; }
+  });
+</script>
 {{scripts}}
 </body>
 </html>

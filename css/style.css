@@ -33,6 +33,10 @@
   --max-w:     1060px;
   --radius:    10px;
   --transition:0.25s ease;
+
+  /* Picto « s'ouvre dans un nouvel onglet », posé en masque pour
+     qu'il épouse la couleur du lien qui le porte. */
+  --icone-lien-externe: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M18%2013v6a2%202%200%200%201-2%202H5a2%202%200%200%201-2-2V8a2%202%200%200%201%202-2h6'/%3E%3Cpolyline%20points='15%203%2021%203%2021%209'/%3E%3Cline%20x1='10'%20y1='14'%20x2='21'%20y2='3'/%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,12 +68,6 @@ body {
   background: var(--bg);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-
-  /* Full-viewport shell: only .site-main scrolls. */
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
-  overflow: hidden;
 }
 
 a { color: var(--brass); text-decoration: none; transition: color var(--transition); }
@@ -80,6 +78,19 @@ a:hover { color: var(--navy); }
 }
 
 img, svg { max-width: 100%; height: auto; }
+
+/* Tout lien s'ouvrant dans un nouvel onglet le signale par un picto. */
+a[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.3em;
+  vertical-align: -0.04em;
+  background-color: currentColor;
+  -webkit-mask: var(--icone-lien-externe) no-repeat center / contain;
+  mask: var(--icone-lien-externe) no-repeat center / contain;
+}
 
 :focus-visible {
   outline: 2px solid var(--brass);
@@ -99,7 +110,9 @@ img, svg { max-width: 100%; height: auto; }
 
 /* --- Header (stays at the top of the screen) ------------------------------ */
 .site-header {
-  flex: none;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   background: var(--header-bg);
   color: #fff;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -110,28 +123,30 @@ img, svg { max-width: 100%; height: auto; }
   align-items: center;
   gap: 1.25rem;
   min-height: 82px;
-  padding: 0.85rem 0;
+  padding: 0.6rem 0;
 }
 
-/* Placeholder for the official "Ordre des géomètres-experts" emblem.
-   Drop the supplied file in images/ and swap the <svg> for an <img>. */
+/* Emblème officiel en couleurs. Ses teintes sombres ne ressortant pas sur
+   l'en-tête, il est posé sur une pastille claire plutôt que retouché. */
 .ordre-logo {
   flex: none;
-  width: 58px;
-  height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px dashed rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  color: var(--on-dark-dim);
-  font-size: 0.6rem;
-  line-height: 1.2;
-  text-align: center;
-  padding: 4px;
+  height: 52px;
+  width: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-sizing: content-box;
 }
 
-.brand { min-width: 0; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-width: 0;
+  color: inherit;
+}
+
+.brand-texte { min-width: 0; }
 
 .brand-name {
   font-family: var(--font-display);
@@ -150,28 +165,28 @@ img, svg { max-width: 100%; height: auto; }
   margin-top: 0.15rem;
 }
 
-.brand a { color: inherit; }
+.brand-name, .brand-title { display: block; }
 .brand a:hover { color: #fff; }
 
-/* --- Main (the only scrolling area — "curseur pour faire défiler") -------- */
-.site-main {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: auto;
-  scrollbar-color: var(--brass) var(--bg-alt);
-}
+/* --- Contenu -------------------------------------------------------------- */
+.page { padding: 2.5rem 0 4rem; }
 
-.site-main::-webkit-scrollbar { width: 12px; }
-.site-main::-webkit-scrollbar-track { background: var(--bg-alt); }
-.site-main::-webkit-scrollbar-thumb {
+/* Lien d'évitement : invisible jusqu'à ce qu'il reçoive le focus clavier. */
+.saut-contenu {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 20;
   background: var(--brass);
-  border-radius: 6px;
-  border: 3px solid var(--bg-alt);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  border-radius: 0 0 6px 0;
 }
-.site-main::-webkit-scrollbar-thumb:hover { background: var(--navy); }
 
-.page { padding: 2.5rem 0 3.5rem; }
+.saut-contenu:focus {
+  left: 0;
+  color: #fff;
+}
 
 .page-title {
   font-family: var(--font-display);
@@ -190,120 +205,540 @@ img, svg { max-width: 100%; height: auto; }
 .page-intro p { margin: 0; }
 .page-intro:empty { margin-bottom: 0; }
 
-/* --- Prestations grid ----------------------------------------------------- */
-.prestations {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: start; /* sinon une carte ouverte étire sa voisine fermée */
-  gap: 1.25rem;
+/* --- Actualités mises en avant -------------------------------------------- */
+.actu-une { margin-bottom: 3rem; }
+
+.actu-une-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
-.card {
+.actu-une-entete h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--text-heading);
+}
+
+/* Défilement horizontal natif : le geste tactile, la molette et le clavier
+   fonctionnent sans script. L'accrochage aligne les cartes proprement. */
+.actu-defile {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  /* La barre est masquée : la navigation par pastilles la remplace, et un
+     seul élément visible à la fois rend le glissement libre peu lisible. */
+  scrollbar-width: none;
+}
+
+.actu-defile::-webkit-scrollbar { display: none; }
+
+/* Un visiteur qui demande moins d'animations obtient un saut direct. */
+@media (prefers-reduced-motion: reduce) {
+  .actu-defile { scroll-behavior: auto; }
+}
+
+.actu-defile:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; }
+
+.actu-carte {
+  /* Une actualité occupe tout l'espace : on passe de l'une à l'autre plutôt
+     que d'en montrer trois de front. */
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-left: 3px solid var(--brass);
   border-radius: var(--radius);
   box-shadow: 0 1px 4px var(--shadow);
+}
+
+.actu-carte h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.actu-carte h3 a { color: var(--text-heading); }
+.actu-carte h3 a:hover { color: var(--brass); }
+
+.actu-date {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+}
+
+.actu-resume {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.actu-lien { font-weight: 600; white-space: nowrap; }
+
+.actu-media-absent { font-size: 0.9rem; }
+
+.actu-media:empty { display: none; }
+
+.actu-texte {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+/* En écran large, le média passe à gauche du texte. Sinon une vidéo 16/9
+   pleine largeur atteindrait près de six cents pixels de haut. */
+@media (min-width: 761px) {
+  .actu-carte--media {
+    display: grid;
+    grid-template-columns: minmax(0, 24rem) 1fr;
+    gap: 1.5rem;
+    align-items: center;
+  }
+}
+
+/* Navigation d'une actualité à l'autre : de simples ancres, que le
+   navigateur suit en faisant défiler le conteneur. Aucun script. */
+.actu-pas {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.actu-pas a {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all var(--transition);
+}
+
+.actu-pas a:hover {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+/* :target met en valeur la pastille de l'actualité affichée — encore du CSS
+   seul, le navigateur tenant le fragment d'adresse à jour. */
+.actu-carte:target { outline: none; }
+
+/* Vidéo : le rapport 16/9 est tenu par le conteneur, pas par des marges
+   calculées — l'iframe le remplit entièrement. */
+.actu-video {
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-alt);
+}
+
+.actu-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* Écran d'attente. Aucune image n'est chargée depuis la plateforme : une
+   vignette distante trahirait déjà l'adresse du visiteur, ce que ce
+   dispositif a précisément pour objet d'éviter. */
+.video-attente {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  background: var(--bg-alt);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.video-attente:hover {
+  background: var(--bg-card);
+  border-color: var(--brass);
+  color: var(--text-heading);
+}
+
+/* Triangle de lecture, dessiné en bordures : pas d'image à charger. */
+.video-lire {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.75rem 0 0.75rem 1.25rem;
+  border-color: transparent transparent transparent var(--brass);
+  margin-left: 0.3rem;
+}
+
+.video-mention { line-height: 1.35; }
+.video-mention small { color: var(--text-muted); font-size: 0.78rem; }
+
+.actu-photo img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+/* Dans le défilé, toutes les vignettes occupent le même cadre : sans cela une
+   photo de téléphone en portrait — 622 par 1280 — dicterait à elle seule la
+   hauteur du volet, et donc celle des trois actualités. */
+.actu-defile .actu-photo img {
+  height: 12rem;
+  object-fit: cover;
+}
+
+/* Sur la page Actualités, la photo garde ses proportions, mais sa hauteur
+   reste bornée pour ne pas repousser le billet suivant hors de l'écran. */
+.actu .actu-photo img {
+  width: auto;
+  max-width: 100%;
+  max-height: 22rem;
+}
+
+.actu-photo figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
+
+/* Titre de la grille, désormais précédée des actualités. */
+.titre-section {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--text-heading);
+  margin-bottom: 1.25rem;
+}
+
+/* --- Liste des actualités ------------------------------------------------- */
+.actu {
+  padding: 1.75rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.actu h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin: 0.35rem 0 0.7rem;
+}
+
+.actu h2 a { color: var(--text-heading); }
+.actu h2 a:hover { color: var(--brass); }
+
+.actu .actu-photo,
+.actu .actu-video { max-width: 34rem; margin-bottom: 0.8rem; }
+
+/* --- Pagination ----------------------------------------------------------- */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 2.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.pagination-numeros {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0 auto;
+}
+
+.pagination-numeros a,
+.pagination-numeros span {
+  min-width: 2.1rem;
+  height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pagination-numeros a:hover { border-color: var(--brass); color: var(--brass); }
+
+.pagination-numeros [aria-current="page"] {
+  background: var(--brass);
+  border-color: var(--brass);
+  color: #fff;
+}
+
+.page-precedente,
+.page-suivante { font-weight: 600; white-space: nowrap; }
+
+/* --- Grille des prestations (accueil) ------------------------------------- */
+.prestations {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+/* Chaque carte est un lien vers la page de la prestation. */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px var(--shadow);
+  color: var(--text-heading);
   transition: box-shadow var(--transition), transform var(--transition);
 }
 
 .card:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 22px var(--shadow-hover);
+  color: var(--text-heading);
 }
 
-.card[open] {
-  box-shadow: 0 6px 22px var(--shadow-hover);
-}
-
-.card > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: 1.35rem 1.5rem;
+.card-titre {
   font-family: var(--font-display);
   font-size: 1.12rem;
   line-height: 1.35;
-  color: var(--text-heading);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
-.card > summary::-webkit-details-marker { display: none; }
-
-/* Chevron */
-.card > summary::after {
+/* Chevron indiquant que la carte mène ailleurs. */
+.card::after {
   content: '';
   flex: none;
   width: 9px;
   height: 9px;
+  border-top: 2px solid var(--brass);
   border-right: 2px solid var(--brass);
-  border-bottom: 2px solid var(--brass);
   transform: rotate(45deg);
   transition: transform var(--transition);
 }
 
-.card[open] > summary::after { transform: rotate(-135deg); }
+.card:hover::after { transform: rotate(45deg) translate(2px, -2px); }
 
-.card-body {
-  padding: 0 1.5rem 1.5rem;
+/* --- Corps d'une page de prestation --------------------------------------- */
+.prose {
+  max-width: 70ch;
   color: var(--text-muted);
-  font-size: 0.95rem;
 }
 
-/* Asciidoctor enveloppe chaque paragraphe dans <div class="paragraph">. */
-.card-body .paragraph + .paragraph { margin-top: 0.75rem; }
-.card-body p { margin: 0; }
+.prose .paragraph + .paragraph,
+.prose .paragraph + .ulist,
+.prose .ulist + .paragraph { margin-top: 1rem; }
 
+.prose p { margin: 0; }
+.prose ul { margin-left: 1.2rem; }
+.prose li > p { margin: 0; }
+.prose li { margin-bottom: 0.3rem; }
+
+.prose h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: var(--text-heading);
+  margin: 2rem 0 0.6rem;
+}
+
+/* L'encadré « compétence exclusive » des prestations. */
 .card-note {
-  margin-top: 0.9rem;
-  padding-top: 0.9rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border);
-  font-size: 0.82rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .card-note strong { color: var(--text-heading); }
 
-/* --- Footer (stays at the bottom of the screen) --------------------------- */
+/* Rappel d'action en fin de page de prestation. */
+.appel-action {
+  margin-top: 2.5rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.appel-action .btn { text-decoration: none; }
+
+/* --- Justification des textes suivis -------------------------------------- */
+/* Appliquée aux seuls blocs de prose : ni les titres, ni les cartes, ni les
+   libellés de formulaire n'ont à être justifiés.
+
+   `hyphens: auto` est indissociable du procédé : sans césure, le navigateur
+   étire les espaces entre les mots et creuse des « rivières » de blanc,
+   d'autant plus visibles que la colonne est étroite. La césure s'appuie sur
+   le `lang="fr"` porté par la page. */
+.page-intro,
+.prose,
+.legal,
+.bandeau {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* --- Bandeau d'information ------------------------------------------------ */
+.bandeau {
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(192, 138, 46, 0.09);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  color: var(--text);
+  max-width: 680px;
+}
+
+.bandeau h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--text-heading);
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.bandeau .paragraph + .paragraph { margin-top: 0.6rem; }
+.bandeau p { margin: 0; font-size: 0.95rem; }
+
+/* --- Navigation, dans l'en-tête ------------------------------------------- */
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-contact {
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav-contact:hover { color: var(--brass-soft); }
+
+/* Menu déroulant sans script : <details> ouvre et ferme de lui-même. */
+.nav-prestations { position: relative; }
+
+.nav-prestations > summary {
+  cursor: pointer;
+  list-style: none;
+  color: #fff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.nav-prestations > summary::-webkit-details-marker { display: none; }
+
+.nav-prestations > summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--brass-soft);
+  border-bottom: 2px solid var(--brass-soft);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--transition);
+}
+
+.nav-prestations[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.nav-prestations > summary:hover { color: var(--brass-soft); }
+
+.nav-prestations ul {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.7rem);
+  z-index: 20;
+  min-width: 20rem;
+  padding: 0.6rem 0;
+  list-style: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+}
+
+.nav-prestations li { margin: 0; }
+
+.nav-prestations ul a {
+  display: block;
+  padding: 0.5rem 1.1rem;
+  color: var(--text);
+  font-weight: 400;
+  font-size: 0.93rem;
+}
+
+.nav-prestations ul a:hover {
+  background: var(--bg-alt);
+  color: var(--text-heading);
+}
+
+/* La page affichée se distingue des autres entrées. */
+.nav-prestations ul a[aria-current="page"] {
+  color: var(--brass);
+  font-weight: 600;
+}
+
+/* --- Pied de page --------------------------------------------------------- */
 .site-footer {
-  flex: none;
   background: var(--footer-bg);
   color: var(--on-dark-dim);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.87rem;
+  padding: 1.5rem 0;
 }
 
-.site-footer .container {
+.site-footer .container { display: flex; justify-content: center; }
+
+.footer-menu {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  padding: 0.9rem 0;
+  justify-content: center;
+  gap: 0.5rem 2rem;
+  list-style: none;
 }
 
-.footer-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
+.footer-menu a { color: var(--on-dark); }
+.footer-menu a:hover { color: #fff; }
+
+.footer-menu a[aria-current="page"] {
+  color: var(--brass-soft);
   font-weight: 600;
 }
-
-.footer-cta::after {
-  content: '→';
-  color: var(--brass-soft);
-  transition: transform var(--transition);
-  display: inline-block;
-}
-
-.footer-cta:hover { color: var(--brass-soft); }
-.footer-cta:hover::after { transform: translateX(3px); }
-
-.footer-legal { color: var(--on-dark-dim); }
-.footer-legal:hover { color: #fff; }
 
 /* --- Forms ---------------------------------------------------------------- */
 .form {
@@ -375,6 +810,21 @@ img, svg { max-width: 100%; height: auto; }
   font-size: 0.79rem;
   color: var(--text-muted);
   margin-top: 0.3rem;
+}
+
+/* Champs obligatoires. L'attribut « required » suffit aux lecteurs
+   d'écran ; l'astérisque est là pour l'œil, d'où l'aria-hidden posé
+   dans le gabarit. */
+.requis {
+  color: var(--brass);
+  font-weight: 700;
+  margin-left: 0.15em;
+}
+
+.form-note {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
 }
 
 .choice {
@@ -461,16 +911,14 @@ img, svg { max-width: 100%; height: auto; }
 /* --- Responsive ----------------------------------------------------------- */
 @media (max-width: 760px) {
   .prestations { grid-template-columns: 1fr; }
+  .site-header .container { flex-wrap: wrap; }
+  .site-nav { width: 100%; margin-left: 0; justify-content: space-between; gap: 1rem; }
+  .nav-prestations ul { right: auto; left: 0; min-width: min(20rem, 92vw); }
+  .site-footer .container { justify-content: center; text-align: center; }
+  .footer-menu { gap: 0.4rem 1.25rem; }
   .form-row { grid-template-columns: 1fr; }
   .form { padding: 1.35rem; }
   .site-header .container { min-height: 70px; gap: 0.9rem; }
-  .ordre-logo { width: 46px; height: 46px; font-size: 0.52rem; }
-  .site-footer .container { justify-content: center; text-align: center; }
+  .ordre-logo { height: 38px; padding: 5px 8px; }
 }
 
-/* Very short screens: let the whole page scroll rather than trapping content
-   in a sliver of viewport between the fixed header and footer. */
-@media (max-height: 420px) {
-  body { height: auto; min-height: 100dvh; overflow: visible; }
-  .site-main { overflow: visible; }
-}

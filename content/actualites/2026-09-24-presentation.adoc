@@ -1,0 +1,8 @@
+= Le métier de géomètre-expert
+:resume: Une courte vidéo pour comprendre ce que recouvre la profession.
+:video: https://www.youtube.com/watch?v=NxPLSqDpono
+
+Une présentation de la profession de géomètre-expert, de ses missions et
+des garanties qu'elle apporte.
+
+[.todo]#Texte d'accompagnement à reprendre.#

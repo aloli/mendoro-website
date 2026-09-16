@@ -1,9 +1,77 @@
 <script>
+  // Le service de réception (crystal-forms) impose quatre champs : « name »
+  // et « message » sont obligatoires, « email » alimente le Reply-To,
+  // « subject » le sujet du courriel. Tout autre champ est repris tel quel
+  // dans le corps, son nom servant de libellé — d'où les clés en toutes
+  // lettres ci-dessous, qui donnent un courriel lisible sans mise en forme
+  // supplémentaire côté service.
+  function construirePayload(donnees) {
+    function champ(nom) { return (donnees.get(nom) || '').trim(); }
+
+    var prenom = champ('prenom');
+    var nom = champ('nom');
+    var ville = champ('ville');
+    var projetAdresse = champ('projet_adresse');
+    var contexte = champ('contexte');
+
+    // Le lieu du projet est envoyé d'une pièce : Erik lit une adresse, pas
+    // des fragments à recoller.
+    var projet = [projetAdresse, ville].filter(Boolean).join(', ');
+
+    // Le demandeur réside-t-il à l'adresse du projet ? Le cas échéant on
+    // recopie, plutôt que de lui faire saisir deux fois la même chose.
+    var adressePostale = champ('adresse_type') === 'autre'
+      ? champ('adresse')
+      : projet;
+
+    var payload = {
+      // Le prénom étant facultatif, trim() absorbe l'espace qu'il laisse.
+      name: (prenom + ' ' + nom).trim(),
+      email: champ('email'),
+      subject: champ('demande'),
+      // « message » est obligatoire côté service : le contexte étant
+      // facultatif dans le formulaire, une phrase de remplacement évite un
+      // refus en 422.
+      message: contexte || 'Aucun contexte précisé par le demandeur.',
+      _gotcha: champ('_gotcha')
+    };
+
+    // Champs libres, repris tels quels dans le courriel : leurs noms en
+    // toutes lettres servent de libellés.
+    var complements = {
+      'Téléphone': champ('tel'),
+      'Adresse postale': adressePostale,
+      'Adresse du projet': projet,
+      'Section cadastrale': champ('cadastre_section').toUpperCase(),
+      'Numéro de parcelle': champ('cadastre_numero')
+    };
+    Object.keys(complements).forEach(function (cle) {
+      if (complements[cle]) { payload[cle] = complements[cle]; }
+    });
+
+    return payload;
+  }
+
+  // Une prestation passée en paramètre présélectionne la nature de la
+  // demande : le visiteur arrive du descriptif, il n'a pas à la rechercher.
+  function preselectionnerDemande() {
+    var voulue = new URLSearchParams(location.search).get('demande');
+    if (!voulue) { return; }
+    var select = document.getElementById('demande');
+    var option = [].slice.call(select.options).find(function (o) {
+      return o.text === voulue;
+    });
+    // Un libellé inconnu — prestation renommée, lien ancien — est ignoré
+    // plutôt que d'imposer une valeur que le service ne reconnaîtrait pas.
+    if (option) { select.value = option.value || option.text; }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
+    preselectionnerDemande();
     // Champ « autre adresse » révélé seulement quand il est pertinent.
-    var group = document.getElementById('bien-adresse-group');
-    var input = document.getElementById('bien_adresse');
-    document.querySelectorAll('input[name="bien_adresse_type"]').forEach(function (radio) {
+    var group = document.getElementById('adresse-group');
+    var input = document.getElementById('adresse');
+    document.querySelectorAll('input[name="adresse_type"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         var autre = this.value === 'autre';
         group.hidden = !autre;
@@ -21,8 +89,7 @@
       status.style.color = '';
       status.textContent = 'Envoi en cours…';
 
-      var body = {};
-      new FormData(form).forEach(function (v, k) { body[k] = v; });
+      var body = construirePayload(new FormData(form));
 
       fetch(form.action, {
         method: 'POST',

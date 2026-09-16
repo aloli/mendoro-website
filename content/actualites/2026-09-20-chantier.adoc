@@ -1,0 +1,9 @@
+= Bornage à Paray-le-Monial
+:resume: Retour en images sur une opération de bornage amiable menée ce mois-ci.
+:photo: images/actus/bornage.jpg
+:legende: Pose d'une borne en limite de propriété, septembre 2026.
+
+[.todo]#Actualité d'exemple. Déposez la photo dans `images/actus/` et
+indiquez son chemin dans l'attribut `:photo:`, sa légende dans
+`:legende:`. Tant que le fichier est absent, la carte s'affiche sans
+image plutôt que de montrer une image cassée.#

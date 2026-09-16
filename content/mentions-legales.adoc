@@ -11,7 +11,7 @@ Informations légales relatives au site *mendoro.fr*.
 * Forme juridique : Entreprise individuelle
 * Adresse du cabinet : 12 rue de la république 71600 Paray-le-Monial
 * Téléphone : 06 71 14 42 76
-* Courriel : erik.pain@geometre-expert.fr
+* Contact : par téléphone, par courrier, ou via link:contact.html[le formulaire de contact]
 * SIRET : 10180724600018
 * TVA intracommunautaire : FR81 101807246
 * Directeur de la publication : Erik Pain
@@ -27,7 +27,7 @@ géomètres-experts.
 
 * Autorité de tutelle : Ordre des géomètres-experts, https://www.geometre-expert.fr[geometre-expert.fr, window="_blank"]
 * Assurance de responsabilité civile professionnelle :  MMA IARD Assurances Mutuelles
-  contrat d’assurance N° 118 263 431 souscrit par le Conseil Supérieur de l’Ordre des Géomètres-Experts, garantissant les conséquences pécuniaires de la Responsabilité Civile Professionnelle pouvant lui incomber au titre des dommages causés aux tiers et du fait de ses activités, conformément aux dispositions régissant la profession de GéomètreExpert, notamment la Loi n° 46-942 du 7 mai 1946 modifiée, le décret n° 96-478 du 31 mai 1996 modifié ainsi que les textes afférents.
+  contrat d’assurance N° 118 263 431 souscrit par le Conseil Supérieur de l’Ordre des Géomètres-Experts, garantissant les conséquences pécuniaires de la Responsabilité Civile Professionnelle pouvant lui incomber au titre des dommages causés aux tiers et du fait de ses activités, conformément aux dispositions régissant la profession de Géomètre-Expert, notamment la Loi n° 46-942 du 7 mai 1946 modifiée, le décret n° 96-478 du 31 mai 1996 modifié ainsi que les textes afférents.
 
 == Hébergement
 
@@ -38,7 +38,17 @@ Le site est hébergé par GitHub Pages — GitHub, Inc.,
 
 Conformément à l'article L. 612-1 du code de la consommation, tout
 consommateur peut recourir gratuitement à un médiateur en vue de la résolution
-amiable d'un litige. Médiateur compétent : [.todo]#à compléter#.
+amiable d'un litige.
+
+L'Ordre des géomètres-experts a désigné *ANM Consommation* comme médiateur de
+la consommation pour la profession :
+
+* ANM Consommation — 25 allée Rose Dieng Kuntz, 75019 Paris
+* https://www.anm-conso.com[anm-conso.com, window="_blank"]
+
+Conformément à l'article L. 612-2 du code de la consommation, le médiateur ne
+peut être saisi qu'après une réclamation écrite adressée au préalable
+directement au cabinet.
 
 == Données personnelles
 
@@ -50,15 +60,30 @@ un devis. Elles ne font l'objet d'aucune cession à des tiers.
 Base légale : votre consentement et les mesures précontractuelles prises à votre
 demande. Durée de conservation : Deux ans.
 
+Les messages envoyés depuis le formulaire de contact sont acheminés par un
+service opéré par *ALOLI sas*, à Laguiole (Aveyron), agissant en qualité de
+sous-traitant au sens de l'article 28 du règlement (UE) 2016/679. Ce service se
+borne à transmettre le message par courriel, sans en conserver de copie ; il
+retient temporairement l'adresse IP de l'expéditeur, pendant une heure, à seule
+fin de limiter les envois automatisés.
+
 Conformément au règlement (UE) 2016/679 et à la loi « Informatique et Libertés »,
 vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation
 et d'opposition sur les données vous concernant. Pour l'exercer, écrivez à
-erik.pain@geometre-expert.fr. Vous pouvez également introduire une
-réclamation auprès de la CNIL.
+dpo@mendoro.fr, ou utilisez link:contact.html[le formulaire de contact]. Vous
+pouvez également introduire une réclamation auprès de la CNIL.
 
 == Cookies
 
 Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.
+
+Les vidéos publiées dans les actualités sont hébergées par YouTube ou Vimeo.
+Elles ne sont chargées qu'à votre demande : tant que vous n'avez pas cliqué sur
+« Lire la vidéo », aucune donnée — pas même votre adresse IP — n'est transmise
+à ces plateformes. Une fois la lecture lancée, elle relève de leur propre
+politique de confidentialité. Le chargement se fait dans le mode le moins
+intrusif que chacune propose : `youtube-nocookie.com` pour YouTube, l'option
+« do not track » pour Vimeo.
 
 == Propriété intellectuelle
 

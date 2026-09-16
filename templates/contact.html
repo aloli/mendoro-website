@@ -1,4 +1,7 @@
+{{bandeau}}
     <form id="contact-form" class="form" action="{{form-action}}" method="POST">
+
+      <p class="form-note">Les champs suivis d'un astérisque sont obligatoires.</p>
 
       <!-- Piège à robots -->
       <div style="display:none" aria-hidden="true">
@@ -6,58 +9,22 @@
       </div>
 
       <fieldset class="fieldset">
-        <legend>Vous</legend>
+        <legend>Où se situe votre projet&nbsp;?</legend>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="nom">Nom</label>
-            <input type="text" id="nom" name="nom" required autocomplete="family-name">
-          </div>
-          <div class="form-group">
-            <label for="prenom">Prénom</label>
-            <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
-          </div>
+        <div class="form-group">
+          <label for="projet_adresse">Adresse du projet</label>
+          <input type="text" id="projet_adresse" name="projet_adresse"
+                 placeholder="Rue, lieu-dit…">
         </div>
 
         <div class="form-group">
-          <label for="adresse">Adresse postale</label>
-          <input type="text" id="adresse" name="adresse" autocomplete="street-address">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="tel">Téléphone</label>
-            <input type="tel" id="tel" name="tel" required autocomplete="tel">
-          </div>
-          <div class="form-group">
-            <label for="email">Courriel</label>
-            <input type="email" id="email" name="email" required autocomplete="email">
-          </div>
-        </div>
-      </fieldset>
-
-      <fieldset class="fieldset">
-        <legend>La propriété objet du projet</legend>
-
-        <div class="form-group">
-          <span class="field-label">Adresse postale de la propriété</span>
-          <label class="choice">
-            <input type="radio" name="bien_adresse_type" value="identique" checked>
-            Identique à mon adresse postale
-          </label>
-          <label class="choice">
-            <input type="radio" name="bien_adresse_type" value="autre">
-            Autre adresse
-          </label>
-        </div>
-
-        <div class="form-group" id="bien-adresse-group" hidden>
-          <label for="bien_adresse">Adresse de la propriété</label>
-          <input type="text" id="bien_adresse" name="bien_adresse">
+          <label for="ville">Ville<span class="requis" aria-hidden="true">*</span></label>
+          <input type="text" id="ville" name="ville" placeholder="Paray-le-Monial"
+                 required autocomplete="address-level2">
         </div>
 
         <div class="form-group">
-          <span class="field-label">Référence cadastrale de la propriété</span>
+          <span class="field-label">Référence cadastrale</span>
           <div class="cadastre">
             <div>
               <label for="cadastre_section">Section</label>
@@ -66,7 +33,7 @@
                      inputmode="latin" title="Une ou deux lettres">
             </div>
             <div>
-              <label for="cadastre_numero">Numéro</label>
+              <label for="cadastre_numero">Numéro de parcelle</label>
               <input type="text" id="cadastre_numero" name="cadastre_numero"
                      pattern="[0-9]{1,5}" placeholder="0142" inputmode="numeric"
                      title="Le numéro de parcelle">
@@ -83,7 +50,7 @@
         <legend>Votre demande</legend>
 
         <div class="form-group">
-          <label for="demande">Nature de la demande</label>
+          <label for="demande">Nature de la demande<span class="requis" aria-hidden="true">*</span></label>
           <select id="demande" name="demande" required>
             <option value="" selected disabled>Choisissez…</option>
 {{options-demande}}
@@ -95,6 +62,51 @@
           <label for="contexte">Contexte du projet</label>
           <textarea id="contexte" name="contexte"
                     placeholder="Si vous le souhaitez, vous pouvez me donner le contexte de votre projet."></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Vous</legend>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom<span class="requis" aria-hidden="true">*</span></label>
+            <input type="text" id="nom" name="nom" required autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" autocomplete="given-name">
+          </div>
+        </div>
+
+        <!-- Le projet ayant été situé plus haut, on peut demander ici si le
+             demandeur y réside, plutôt que l'inverse. -->
+        <div class="form-group">
+          <span class="field-label">Votre adresse postale</span>
+          <label class="choice">
+            <input type="radio" name="adresse_type" value="identique" checked>
+            Identique à l'adresse du projet
+          </label>
+          <label class="choice">
+            <input type="radio" name="adresse_type" value="autre">
+            Autre adresse
+          </label>
+        </div>
+
+        <div class="form-group" id="adresse-group" hidden>
+          <label for="adresse">Adresse postale</label>
+          <input type="text" id="adresse" name="adresse" autocomplete="street-address">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tel">Téléphone<span class="requis" aria-hidden="true">*</span></label>
+            <input type="tel" id="tel" name="tel" required autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="email">Courriel<span class="requis" aria-hidden="true">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+          </div>
         </div>
       </fieldset>
 
