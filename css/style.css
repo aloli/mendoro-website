@@ -34,9 +34,6 @@
   --radius:    10px;
   --transition:0.25s ease;
 
-  /* Hauteur réservée sous le contenu pour le pied fixe. */
-  --hauteur-pied: 5rem;
-
   /* Picto « s'ouvre dans un nouvel onglet », posé en masque pour
      qu'il épouse la couleur du lien qui le porte. */
   --icone-lien-externe: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M18%2013v6a2%202%200%200%201-2%202H5a2%202%200%200%201-2-2V8a2%202%200%200%201%202-2h6'/%3E%3Cpolyline%20points='15%203%2021%203%2021%209'/%3E%3Cline%20x1='10'%20y1='14'%20x2='21'%20y2='3'/%3E%3C/svg%3E");
@@ -71,10 +68,6 @@ body {
   background: var(--bg);
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
-
-  /* Le pied étant fixé, le contenu doit lui réserver sa hauteur, sans quoi
-     ses dernières lignes passeraient dessous. */
-  padding-bottom: var(--hauteur-pied);
 }
 
 a { color: var(--brass); text-decoration: none; transition: color var(--transition); }
@@ -678,11 +671,6 @@ a[target="_blank"]::after {
 
 /* --- Pied de page --------------------------------------------------------- */
 .site-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9;
   background: var(--footer-bg);
   color: var(--on-dark-dim);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -862,13 +850,6 @@ a[target="_blank"]::after {
 }
 
 /* --- Responsive ----------------------------------------------------------- */
-/* Sur un écran très bas — un téléphone couché — un pied fixe amputerait une
-   part excessive de la vue : il redevient alors un pied ordinaire. */
-@media (max-height: 480px) {
-  body { padding-bottom: 0; }
-  .site-footer { position: static; }
-}
-
 @media (max-width: 760px) {
   .prestations { grid-template-columns: 1fr; }
   .site-header .container { flex-wrap: wrap; }
