@@ -33,7 +33,22 @@ zone centrale défile.
 * Vérifier que le backend `form.aloli.fr` accepte les champs du formulaire
   (`nom`, `prenom`, `adresse`, `tel`, `email`, `bien_adresse_type`,
   `bien_adresse`, `cadastre_section`, `cadastre_numero`, `demande`, `contexte`).
-* Faire pointer le DNS de `mendoro.fr` vers GitHub Pages.
+* Faire pointer le DNS de `mendoro.fr` vers GitHub Pages, puis renseigner le
+  domaine personnalisé dans _Settings > Pages_ (impossible tant que le domaine
+  ne résout pas : GitHub ne peut pas émettre le certificat).
++
+[source]
+----
+mendoro.fr.      A     185.199.108.153
+mendoro.fr.      A     185.199.109.153
+mendoro.fr.      A     185.199.110.153
+mendoro.fr.      A     185.199.111.153
+mendoro.fr.      AAAA  2606:50c0:8000::153
+mendoro.fr.      AAAA  2606:50c0:8001::153
+mendoro.fr.      AAAA  2606:50c0:8002::153
+mendoro.fr.      AAAA  2606:50c0:8003::153
+www.mendoro.fr.  CNAME aloli.github.io.
+----
 
 == Déploiement
 
