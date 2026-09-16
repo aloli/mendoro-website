@@ -163,12 +163,14 @@ module Mendoro
   record Video, plateforme : String, url : String
 
   YOUTUBE_ID  = /\A[\w-]{11}\z/
-  YOUTUBE_URL = %r{(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([\w-]{11})}
+  YOUTUBE_URL = %r{(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([\w-]{11})}
   VIMEO_URL   = %r{vimeo\.com/(?:video/)?(\d+)}
 
   # L'attribut `:video:` accepte une adresse YouTube ou Vimeo complète, ou
   # l'identifiant YouTube seul. Reconnaître l'adresse épargne au rédacteur
-  # d'aller y extraire un identifiant.
+  # d'aller y extraire un identifiant — y compris la forme « shorts », que
+  # YouTube donne au partage depuis un téléphone et qui s'embarque comme
+  # les autres.
   #
   # YouTube est chargé depuis `youtube-nocookie.com`, Vimeo avec `dnt=1` :
   # dans les deux cas, le mode le moins bavard que la plateforme propose.
