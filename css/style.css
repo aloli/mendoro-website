@@ -212,43 +212,113 @@ a[target="_blank"]::after {
 .page-intro p { margin: 0; }
 .page-intro:empty { margin-bottom: 0; }
 
-/* --- Actualité mise en avant --------------------------------------------- */
-.actu-une {
-  margin-bottom: 2.5rem;
-  padding: 1.5rem 1.75rem;
-  background: var(--bg-alt);
+/* --- Actualités mises en avant -------------------------------------------- */
+.actu-une { margin-bottom: 3rem; }
+
+.actu-une-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.actu-une-entete h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--text-heading);
+}
+
+/* Défilement horizontal natif : le geste tactile, la molette et le clavier
+   fonctionnent sans script. L'accrochage aligne les cartes proprement. */
+.actu-defile {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.9rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--brass) var(--bg-alt);
+}
+
+.actu-defile::-webkit-scrollbar { height: 9px; }
+.actu-defile::-webkit-scrollbar-track { background: var(--bg-alt); border-radius: 5px; }
+.actu-defile::-webkit-scrollbar-thumb { background: var(--brass); border-radius: 5px; }
+
+.actu-defile:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; }
+
+.actu-carte {
+  flex: 0 0 min(22rem, 84%);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--brass);
   border-radius: var(--radius);
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+.actu-carte h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.actu-carte h3 a { color: var(--text-heading); }
+.actu-carte h3 a:hover { color: var(--brass); }
+
+.actu-date {
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+}
+
+.actu-resume {
+  color: var(--text-muted);
+  font-size: 0.93rem;
   text-align: justify;
   hyphens: auto;
 }
 
-.actu-date {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--brass);
-  margin-bottom: 0.35rem;
-  text-align: left;
+.actu-lien { font-weight: 600; white-space: nowrap; }
+
+.actu-media-absent { font-size: 0.9rem; }
+
+/* Vidéo : le rapport 16/9 est tenu par le conteneur, pas par des marges
+   calculées — l'iframe le remplit entièrement. */
+.actu-video {
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--bg-alt);
 }
 
-.actu-titre,
-.actu h2 {
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.3rem;
-  color: var(--text-heading);
-  margin-bottom: 0.6rem;
-  text-align: left;
+.actu-video iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
 }
 
-.actu-une p,
-.actu p { margin: 0; color: var(--text-muted); }
-.actu-une .paragraph + .paragraph { margin-top: 0.6rem; }
+.actu-photo img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
 
-.actu-lien { font-weight: 600; }
+.actu-photo figcaption {
+  margin-top: 0.45rem;
+  font-size: 0.83rem;
+  color: var(--text-muted);
+}
 
-/* Titre de la grille, désormais précédée de l'actualité. */
+/* Titre de la grille, désormais précédée des actualités. */
 .titre-section {
   font-family: var(--font-display);
   font-weight: 400;
@@ -259,11 +329,22 @@ a[target="_blank"]::after {
 
 /* --- Liste des actualités ------------------------------------------------- */
 .actu {
-  padding: 1.5rem 0;
+  padding: 1.75rem 0;
   border-top: 1px solid var(--border);
-  text-align: justify;
-  hyphens: auto;
 }
+
+.actu h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  margin: 0.35rem 0 0.7rem;
+}
+
+.actu h2 a { color: var(--text-heading); }
+.actu h2 a:hover { color: var(--brass); }
+
+.actu .actu-photo,
+.actu .actu-video { max-width: 34rem; margin-bottom: 0.8rem; }
 
 /* --- Grille des prestations (accueil) ------------------------------------- */
 .prestations {

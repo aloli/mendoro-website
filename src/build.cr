@@ -77,7 +77,7 @@ module Mendoro
       end
 
       fichier = File.basename(chemin.to_s, ".adoc")
-      new(titre, attributs, corps.join('\n').strip, fichier.sub(/\A\d+-/, ""), fichier)
+      new(titre, attributs, corps.join('\n').strip, fichier.sub(/\A\d{4}-\d{2}-\d{2}-/, "").sub(/\A\d+-/, ""), fichier)
     end
 
     # Corps converti en fragment HTML. Sans « standalone => false »,
@@ -130,6 +130,7 @@ module Mendoro
 
     ecrire_accueil(site, prestations, actualites)
     prestations.each { |p| ecrire_prestation(site, prestations, p, actualites) }
+    actualites.each { |a| ecrire_actualite(site, prestations, a) }
     ecrire_contact(site, prestations)
     ecrire_mentions(site, prestations)
     copier_statiques
@@ -146,6 +147,52 @@ module Mendoro
     Dir.glob("#{dossier}/*.adoc").sort.reverse.map { |f| Source.lire(f) }
   end
 
+  # Adresse de la page d'une actualité. Le préfixe écarte toute collision
+  # avec une prestation qui porterait le même nom.
+  def self.page_actu(a : Source) : String
+    "actu-#{a.slug}.html"
+  end
+
+  # Un identifiant YouTube fait onze caractères. Tant qu'il n'est pas
+  # renseigné, mieux vaut une consigne visible qu'un lecteur cassé.
+  ID_YOUTUBE = /\A[\w-]{11}\z/
+
+  # Le média d'une actualité : vidéo, photo, ou rien.
+  def self.media_actu(a : Source) : String
+    if video = a.attributs["video"]?
+      if ID_YOUTUBE.matches?(video)
+        <<-HTML
+            <div class="actu-video">
+              <iframe src="https://www.youtube-nocookie.com/embed/#{video}"
+                      title="#{echapper(a.titre)}" loading="lazy"
+                      allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
+                      referrerpolicy="strict-origin-when-cross-origin"
+                      allowfullscreen></iframe>
+            </div>
+        HTML
+      else
+        %(        <p class="actu-media-absent"><span class="todo">Identifiant de la vidéo à renseigner.</span></p>)
+      end
+    elsif photo = a.attributs["photo"]?
+      # Une photo annoncée mais absente donnerait une image cassée : on
+      # préfère n'afficher que la légende, et le signaler à la génération.
+      if File.exists?(RACINE / photo)
+        legende = a.attributs["legende"]?
+        <<-HTML
+            <figure class="actu-photo">
+              <img src="#{photo}" alt="#{echapper(legende || a.titre)}" loading="lazy">
+              #{legende ? %(<figcaption>#{echapper(legende)}</figcaption>) : ""}
+            </figure>
+        HTML
+      else
+        STDERR.puts "   ! photo absente : #{photo} (#{a.fichier})"
+        %(        <p class="actu-media-absent"><span class="todo">Photo à déposer : #{echapper(photo)}</span></p>)
+      end
+    else
+      ""
+    end
+  end
+
   # `2026-09-16-mise-en-ligne` → `16 septembre 2026`, sans dépendance externe.
   MOIS = %w[janvier février mars avril mai juin juillet août septembre
     octobre novembre décembre]
@@ -157,6 +204,21 @@ module Mendoro
     else
       ""
     end
+  end
+
+  # Une carte du défilé. Le résumé vient de l'attribut `:resume:` : il est
+  # écrit pour être lu seul, ce qu'un extrait tronqué du corps ne serait pas.
+  def self.carte_actu(a : Source) : String
+    resume = a.attributs["resume"]?
+    <<-HTML
+          <article class="actu-carte">
+            <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
+            <h3><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h3>
+    #{media_actu(a)}
+            #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : ""}
+            <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
+          </article>
+    HTML
   end
 
   def self.charger_prestations : Array(Source)
@@ -220,18 +282,25 @@ module Mendoro
 
     # La dernière actualité passe devant les prestations. S'il n'y en a
     # aucune, le bloc disparaît plutôt que d'afficher un cadre vide.
-    derniere = actualites.first?
-    encart = if derniere
+    recentes = actualites.first(3)
+    encart = if recentes.empty?
+               ""
+             else
                <<-HTML
                    <section class="actu-une" aria-labelledby="actu-une-titre">
-                     <p class="actu-date">#{echapper(date_lisible(derniere.fichier))}</p>
-                     <h2 class="actu-titre" id="actu-une-titre">#{echapper(derniere.titre)}</h2>
-                     #{derniere.html}
-                     <p><a class="actu-lien" href="actualites.html">Toutes les actualités</a></p>
+                     <div class="actu-une-entete">
+                       <h2 id="actu-une-titre">Actualités</h2>
+                       <a class="actu-lien" href="actualites.html">Toutes les actualités</a>
+                     </div>
+                     <!-- Défilement horizontal natif : ni script ni dépendance,
+                          et le geste tactile comme la molette fonctionnent. Le
+                          conteneur est focalisable, pour le défiler au clavier. -->
+                     <div class="actu-defile" tabindex="0" role="region"
+                          aria-label="Dernières actualités, défilement horizontal">
+               #{recentes.map { |a| carte_actu(a) }.join('\n')}
+                     </div>
                    </section>
                HTML
-             else
-               ""
              end
 
     valeurs = base(site, page, "")
@@ -291,11 +360,14 @@ module Mendoro
     contenu = presta.html
     if presta.attributs["liste"]? == "actualites"
       billets = actualites.map do |a|
+        resume = a.attributs["resume"]?
         <<-HTML
             <article class="actu">
               <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
-              <h2>#{echapper(a.titre)}</h2>
-              #{a.html}
+              <h2><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h2>
+              #{media_actu(a)}
+              #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : a.html}
+              <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
             </article>
         HTML
       end
@@ -311,6 +383,24 @@ module Mendoro
     valeurs["menu-pied"] = menu_pied(prestations, presta.page)
 
     ecrire(presta.page, rendre(gabarit("layout"), valeurs))
+  end
+
+  # Chaque actualité a sa page : c'est elle que vise « Lire la suite ».
+  def self.ecrire_actualite(site, prestations, a : Source)
+    valeurs = base(site, a, page_actu(a))
+    valeurs["intro"] = ""
+    valeurs["page-title"] = "#{a.titre} — #{site["nom"]?}, #{site["fonction"]?}"
+    valeurs["page-description"] = a.attributs["resume"]? || a.titre
+    valeurs["corps"] = rendre(gabarit("prestation"), {
+      "contenu" => %(<p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>\n) +
+                   media_actu(a) + "\n" + a.html,
+      "cta-url"     => "contact.html",
+      "cta-libelle" => "Me contacter",
+    })
+    valeurs["menu-prestations"] = menu_prestations(prestations, page_actu(a))
+    valeurs["menu-pied"] = menu_pied(prestations, page_actu(a))
+
+    ecrire(page_actu(a), rendre(gabarit("layout"), valeurs))
   end
 
   def self.ecrire_contact(site, prestations)

@@ -77,6 +77,13 @@ pouvez également introduire une réclamation auprès de la CNIL.
 
 Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.
 
+Les vidéos publiées dans les actualités sont hébergées par YouTube et chargées
+en mode de confidentialité avancée (`youtube-nocookie.com`), qui écarte les
+cookies publicitaires. L'affichage d'une page portant une vidéo établit
+néanmoins une connexion aux serveurs de Google, qui reçoivent à cette occasion
+votre adresse IP ; en lancer la lecture relève ensuite de la politique de
+confidentialité de Google.
+
 == Propriété intellectuelle
 
 L'ensemble des contenus de ce site (textes, plans, images) est protégé par le
