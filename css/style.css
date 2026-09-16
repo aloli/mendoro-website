@@ -328,83 +328,109 @@ a[target="_blank"]::after {
 .bandeau .paragraph + .paragraph { margin-top: 0.6rem; }
 .bandeau p { margin: 0; font-size: 0.95rem; }
 
-/* --- Pied de page : le rappel des prestations ----------------------------- */
+/* --- Navigation, dans l'en-tête ------------------------------------------- */
+.site-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-contact {
+  color: #fff;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.nav-contact:hover { color: var(--brass-soft); }
+
+/* Menu déroulant sans script : <details> ouvre et ferme de lui-même. */
+.nav-prestations { position: relative; }
+
+.nav-prestations > summary {
+  cursor: pointer;
+  list-style: none;
+  color: #fff;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.nav-prestations > summary::-webkit-details-marker { display: none; }
+
+.nav-prestations > summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--brass-soft);
+  border-bottom: 2px solid var(--brass-soft);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--transition);
+}
+
+.nav-prestations[open] > summary::after {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+.nav-prestations > summary:hover { color: var(--brass-soft); }
+
+.nav-prestations ul {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.7rem);
+  z-index: 20;
+  min-width: 20rem;
+  padding: 0.6rem 0;
+  list-style: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.35);
+}
+
+.nav-prestations li { margin: 0; }
+
+.nav-prestations ul a {
+  display: block;
+  padding: 0.5rem 1.1rem;
+  color: var(--text);
+  font-weight: 400;
+  font-size: 0.93rem;
+}
+
+.nav-prestations ul a:hover {
+  background: var(--bg-alt);
+  color: var(--text-heading);
+}
+
+/* La page affichée se distingue des autres entrées. */
+.nav-prestations ul a[aria-current="page"] {
+  color: var(--brass);
+  font-weight: 600;
+}
+
+/* --- Pied de page --------------------------------------------------------- */
 .site-footer {
   background: var(--footer-bg);
   color: var(--on-dark-dim);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.87rem;
-  padding: 2.5rem 0 2rem;
+  padding: 1.5rem 0;
 }
 
 .site-footer .container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 2rem 3rem;
-  align-items: start;
-}
-
-.footer-menu h2 {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--brass-soft);
-  margin-bottom: 0.85rem;
-}
-
-.footer-menu ul {
-  list-style: none;
-  columns: 2;
-  column-gap: 2rem;
-}
-
-.footer-menu li {
-  margin-bottom: 0.45rem;
-  break-inside: avoid;
-}
-
-.footer-menu a { color: var(--on-dark); }
-.footer-menu a:hover { color: #fff; }
-
-/* La page affichée se distingue des autres entrées du rappel. */
-.footer-menu a[aria-current="page"] {
-  color: var(--brass-soft);
-  font-weight: 600;
-}
-
-.footer-aside {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.7rem;
-}
-
-.footer-cta {
-  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  font-weight: 600;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
 }
 
-.footer-cta::after {
-  content: '→';
-  color: var(--brass-soft);
-  transition: transform var(--transition);
-  display: inline-block;
-}
-
-.footer-cta:hover { color: var(--brass-soft); }
-.footer-cta:hover::after { transform: translateX(3px); }
-
-.footer-legal { color: var(--on-dark-dim); }
+.footer-legal { color: var(--on-dark); }
 .footer-legal:hover { color: #fff; }
-
-.footer-copy {
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 0.4rem;
-}
+.footer-copy { color: rgba(255, 255, 255, 0.4); }
 
 /* --- Forms ---------------------------------------------------------------- */
 .form {
@@ -562,8 +588,10 @@ a[target="_blank"]::after {
 /* --- Responsive ----------------------------------------------------------- */
 @media (max-width: 760px) {
   .prestations { grid-template-columns: 1fr; }
-  .site-footer .container { grid-template-columns: 1fr; gap: 1.75rem; }
-  .footer-menu ul { columns: 1; }
+  .site-header .container { flex-wrap: wrap; }
+  .site-nav { width: 100%; margin-left: 0; justify-content: space-between; gap: 1rem; }
+  .nav-prestations ul { right: auto; left: 0; min-width: min(20rem, 92vw); }
+  .site-footer .container { justify-content: center; text-align: center; }
   .form-row { grid-template-columns: 1fr; }
   .form { padding: 1.35rem; }
   .site-header .container { min-height: 70px; gap: 0.9rem; }

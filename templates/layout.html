@@ -35,6 +35,18 @@
         <span class="brand-title">{{fonction}}</span>
       </a>
     </div>
+
+    <!-- Navigation. Le menu déroulant repose sur <details> : neuf entrées ne
+         tiennent pas en ligne, et ce choix évite d'en dépendre d'un script. -->
+    <nav class="site-nav" aria-label="Navigation principale">
+      <details class="nav-prestations">
+        <summary>Prestations</summary>
+        <ul>
+{{menu-prestations}}
+        </ul>
+      </details>
+      <a href="contact.html" class="nav-contact">Contact, information, devis</a>
+    </nav>
   </div>
 </header>
 
@@ -47,25 +59,22 @@
   </div>
 </main>
 
-<!-- ====== Pied de page : le rappel des prestations ====== -->
+<!-- ====== Pied de page ====== -->
 <footer class="site-footer">
   <div class="container">
-
-    <nav class="footer-menu" aria-label="Prestations">
-      <h2>Prestations</h2>
-      <ul>
-{{menu-prestations}}
-      </ul>
-    </nav>
-
-    <div class="footer-aside">
-      <a href="contact.html" class="footer-cta">Contact, information, devis</a>
-      <a href="mentions-legales.html" class="footer-legal">Mentions légales</a>
-      <p class="footer-copy">{{nom}} — {{fonction}}</p>
-    </div>
-
+    <a href="mentions-legales.html" class="footer-legal">Mentions légales</a>
+    <p class="footer-copy">{{nom}} — {{fonction}}</p>
   </div>
 </footer>
+
+<script>
+  // Referme le menu quand on clique ailleurs : sans cela, <details> resterait
+  // ouvert jusqu'à un second clic sur son propre titre.
+  document.addEventListener('click', function (e) {
+    var menu = document.querySelector('.nav-prestations');
+    if (menu && menu.open && !menu.contains(e.target)) { menu.open = false; }
+  });
+</script>
 {{scripts}}
 </body>
 </html>
