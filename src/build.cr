@@ -229,15 +229,24 @@ module Mendoro
 
   # Une carte du défilé. Le résumé vient de l'attribut `:resume:` : il est
   # écrit pour être lu seul, ce qu'un extrait tronqué du corps ne serait pas.
-  def self.carte_actu(a : Source) : String
+  def self.carte_actu(a : Source, rang : Int32) : String
     resume = a.attributs["resume"]?
+    media = media_actu(a)
+    # Une carte portant un média se met sur deux colonnes en écran large :
+    # une vidéo 16/9 pleine largeur ferait près de six cents pixels de haut
+    # et chasserait tout le reste hors de l'écran.
+    classe = media.empty? ? "actu-carte" : "actu-carte actu-carte--media"
     <<-HTML
-          <article class="actu-carte">
-            <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
-            <h3><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h3>
-    #{media_actu(a)}
-            #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : ""}
-            <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
+          <article class="#{classe}" id="actu-#{rang}">
+            <div class="actu-media">
+    #{media}
+            </div>
+            <div class="actu-texte">
+              <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
+              <h3><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h3>
+              #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : ""}
+              <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
+            </div>
           </article>
     HTML
   end
@@ -318,8 +327,11 @@ module Mendoro
                           conteneur est focalisable, pour le défiler au clavier. -->
                      <div class="actu-defile" tabindex="0" role="region"
                           aria-label="Dernières actualités, défilement horizontal">
-               #{recentes.map { |a| carte_actu(a) }.join('\n')}
+               #{recentes.map_with_index(1) { |a, rang| carte_actu(a, rang) }.join('\n')}
                      </div>
+                     <nav class="actu-pas" aria-label="Choisir une actualité">
+               #{recentes.map_with_index(1) { |a, rang| %(          <a href="#actu-#{rang}"><span class="visually-hidden">#{echapper(a.titre)}</span><span aria-hidden="true">#{rang}</span></a>) }.join('\n')}
+                     </nav>
                    </section>
                HTML
              end
