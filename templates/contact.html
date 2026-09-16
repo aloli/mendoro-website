@@ -1,6 +1,8 @@
 {{bandeau}}
     <form id="contact-form" class="form" action="{{form-action}}" method="POST">
 
+      <p class="form-note">Les champs suivis d'un astérisque sont obligatoires.</p>
+
       <!-- Piège à robots -->
       <div style="display:none" aria-hidden="true">
         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
@@ -47,7 +49,7 @@
         <legend>Votre demande</legend>
 
         <div class="form-group">
-          <label for="demande">Nature de la demande</label>
+          <label for="demande">Nature de la demande<span class="requis" aria-hidden="true">*</span></label>
           <select id="demande" name="demande" required>
             <option value="" selected disabled>Choisissez…</option>
 {{options-demande}}
@@ -67,11 +69,11 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="nom">Nom</label>
+            <label for="nom">Nom<span class="requis" aria-hidden="true">*</span></label>
             <input type="text" id="nom" name="nom" required autocomplete="family-name">
           </div>
           <div class="form-group">
-            <label for="prenom">Prénom</label>
+            <label for="prenom">Prénom<span class="requis" aria-hidden="true">*</span></label>
             <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
           </div>
         </div>
@@ -97,11 +99,11 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="tel">Téléphone</label>
+            <label for="tel">Téléphone<span class="requis" aria-hidden="true">*</span></label>
             <input type="tel" id="tel" name="tel" required autocomplete="tel">
           </div>
           <div class="form-group">
-            <label for="email">Courriel</label>
+            <label for="email">Courriel<span class="requis" aria-hidden="true">*</span></label>
             <input type="email" id="email" name="email" required autocomplete="email">
           </div>
         </div>

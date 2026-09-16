@@ -812,6 +812,21 @@ a[target="_blank"]::after {
   margin-top: 0.3rem;
 }
 
+/* Champs obligatoires. L'attribut « required » suffit aux lecteurs
+   d'écran ; l'astérisque est là pour l'œil, d'où l'aria-hidden posé
+   dans le gabarit. */
+.requis {
+  color: var(--brass);
+  font-weight: 700;
+  margin-left: 0.15em;
+}
+
+.form-note {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
 .choice {
   display: flex;
   align-items: center;
