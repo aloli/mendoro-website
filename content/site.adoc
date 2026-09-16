@@ -3,3 +3,6 @@
 :fonction: Géomètre-expert
 :domaine: mendoro.fr
 :ordre-libelle: Ordre des géomètres-experts
+// Adresse du service qui reçoit le formulaire de contact (crystal-forms).
+// TODO : à faire pointer sur l'instance dédiée à mendoro.fr une fois déployée.
+:form-action: https://form.mendoro.fr/submit

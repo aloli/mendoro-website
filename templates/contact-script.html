@@ -1,4 +1,50 @@
 <script>
+  // Le service de réception (crystal-forms) impose quatre champs : « name »
+  // et « message » sont obligatoires, « email » alimente le Reply-To,
+  // « subject » le sujet du courriel. Tout autre champ est repris tel quel
+  // dans le corps, son nom servant de libellé — d'où les clés en toutes
+  // lettres ci-dessous, qui donnent un courriel lisible sans mise en forme
+  // supplémentaire côté service.
+  function construirePayload(donnees) {
+    function champ(nom) { return (donnees.get(nom) || '').trim(); }
+
+    var prenom = champ('prenom');
+    var nom = champ('nom');
+    var adresse = champ('adresse');
+    var contexte = champ('contexte');
+
+    // L'adresse du bien est envoyée résolue : Erik en lit toujours une seule,
+    // sans avoir à interpréter le choix « identique / autre ».
+    var adresseBien = champ('bien_adresse_type') === 'autre'
+      ? champ('bien_adresse')
+      : adresse;
+
+    var payload = {
+      name: (prenom + ' ' + nom).trim(),
+      email: champ('email'),
+      subject: champ('demande'),
+      // « message » est obligatoire : le contexte étant facultatif dans le
+      // formulaire, une phrase de remplacement évite un refus en 422.
+      message: contexte || 'Aucun contexte précisé par le demandeur.',
+      _gotcha: champ('_gotcha')
+    };
+
+    // Champs libres. Les valeurs vides sont écartées par le service, mais
+    // autant ne pas les envoyer.
+    var complements = {
+      'Téléphone': champ('tel'),
+      'Adresse postale': adresse,
+      'Adresse du bien': adresseBien,
+      'Section cadastrale': champ('cadastre_section').toUpperCase(),
+      'Numéro de parcelle': champ('cadastre_numero')
+    };
+    Object.keys(complements).forEach(function (cle) {
+      if (complements[cle]) { payload[cle] = complements[cle]; }
+    });
+
+    return payload;
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     // Champ « autre adresse » révélé seulement quand il est pertinent.
     var group = document.getElementById('bien-adresse-group');
@@ -21,8 +67,7 @@
       status.style.color = '';
       status.textContent = 'Envoi en cours…';
 
-      var body = {};
-      new FormData(form).forEach(function (v, k) { body[k] = v; });
+      var body = construirePayload(new FormData(form));
 
       fetch(form.action, {
         method: 'POST',
