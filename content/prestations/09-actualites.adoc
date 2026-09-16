@@ -1,0 +1,5 @@
+= Actualités
+:menu: pied
+:liste: actualites
+
+Les nouvelles du cabinet.

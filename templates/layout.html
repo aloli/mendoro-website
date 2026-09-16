@@ -21,20 +21,23 @@
 <!-- ====== En-tête, collant en haut ====== -->
 <header class="site-header">
   <div class="container">
-    <!-- Emblème officiel en couleurs (vectoriel, issu de l'EPS du pack).
-         Ses teintes étant sombres, il repose sur une pastille claire : ni les
-         couleurs ni les proportions de l'emblème ne sont retouchées. -->
-    <img class="ordre-logo" src="images/logo-geometre-expert.svg"
-         alt="{{ordre-libelle}}" width="578" height="308">
-    <div class="brand">
-      <!-- Un seul lien enveloppe le nom et la fonction : deux liens voisins
-           vers la même page seraient annoncés deux fois par un lecteur
-           d'écran, pour un même geste de l'utilisateur. -->
-      <a href="index.html">
+    <!-- Un seul lien enveloppe l'emblème, le nom et la fonction : plusieurs
+         liens voisins vers la même page seraient annoncés autant de fois par
+         un lecteur d'écran, pour un même geste de l'utilisateur.
+
+         L'emblème officiel (vectoriel, issu de l'EPS du pack) y est décoratif :
+         nommé, il ferait croire que le lien mène au site de l'Ordre, alors que
+         la mention « Géomètre-expert » juste à côté dit déjà la même chose.
+         Ses teintes étant sombres, il repose sur une pastille claire ; ni ses
+         couleurs ni ses proportions ne sont retouchées. -->
+    <a class="brand" href="index.html">
+      <img class="ordre-logo" src="images/logo-geometre-expert.svg"
+           alt="" width="578" height="308">
+      <span class="brand-texte">
         <span class="brand-name">{{nom}}</span>
         <span class="brand-title">{{fonction}}</span>
-      </a>
-    </div>
+      </span>
+    </a>
 
     <!-- Navigation. Le menu déroulant repose sur <details> : neuf entrées ne
          tiennent pas en ligne, et ce choix évite d'en dépendre d'un script. -->
@@ -62,8 +65,11 @@
 <!-- ====== Pied de page ====== -->
 <footer class="site-footer">
   <div class="container">
-    <a href="mentions-legales.html" class="footer-legal">Mentions légales</a>
-    <p class="footer-copy">{{nom}} — {{fonction}}</p>
+    <nav aria-label="Pied de page">
+      <ul class="footer-menu">
+{{menu-pied}}
+      </ul>
+    </nav>
   </div>
 </footer>
 

@@ -138,7 +138,15 @@ a[target="_blank"]::after {
   box-sizing: content-box;
 }
 
-.brand { min-width: 0; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-width: 0;
+  color: inherit;
+}
+
+.brand-texte { min-width: 0; }
 
 .brand-name {
   font-family: var(--font-display);
@@ -157,7 +165,6 @@ a[target="_blank"]::after {
   margin-top: 0.15rem;
 }
 
-.brand a { color: inherit; display: block; }
 .brand-name, .brand-title { display: block; }
 .brand a:hover { color: #fff; }
 
@@ -197,6 +204,59 @@ a[target="_blank"]::after {
 
 .page-intro p { margin: 0; }
 .page-intro:empty { margin-bottom: 0; }
+
+/* --- Actualité mise en avant --------------------------------------------- */
+.actu-une {
+  margin-bottom: 2.5rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--bg-alt);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.actu-date {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+  margin-bottom: 0.35rem;
+  text-align: left;
+}
+
+.actu-titre,
+.actu h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: var(--text-heading);
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.actu-une p,
+.actu p { margin: 0; color: var(--text-muted); }
+.actu-une .paragraph + .paragraph { margin-top: 0.6rem; }
+
+.actu-lien { font-weight: 600; }
+
+/* Titre de la grille, désormais précédée de l'actualité. */
+.titre-section {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--text-heading);
+  margin-bottom: 1.25rem;
+}
+
+/* --- Liste des actualités ------------------------------------------------- */
+.actu {
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  text-align: justify;
+  hyphens: auto;
+}
 
 /* --- Grille des prestations (accueil) ------------------------------------- */
 .prestations {
@@ -420,17 +480,23 @@ a[target="_blank"]::after {
   padding: 1.5rem 0;
 }
 
-.site-footer .container {
+.site-footer .container { display: flex; justify-content: center; }
+
+.footer-menu {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  justify-content: center;
+  gap: 0.5rem 2rem;
+  list-style: none;
 }
 
-.footer-legal { color: var(--on-dark); }
-.footer-legal:hover { color: #fff; }
-.footer-copy { color: rgba(255, 255, 255, 0.4); }
+.footer-menu a { color: var(--on-dark); }
+.footer-menu a:hover { color: #fff; }
+
+.footer-menu a[aria-current="page"] {
+  color: var(--brass-soft);
+  font-weight: 600;
+}
 
 /* --- Forms ---------------------------------------------------------------- */
 .form {

@@ -1,0 +1,6 @@
+= Le site est en ligne
+
+[.todo]#Première actualité, à remplacer par la vôtre. Pour en publier une
+nouvelle, créez un fichier dans `content/actualites/` nommé par sa date :
+`2026-10-02-un-titre.adoc`. La plus récente s'affiche d'elle-même en page
+d'accueil.#

@@ -32,8 +32,11 @@ module Mendoro
     # Identifiant de page, tiré du nom de fichier amputé de son préfixe
     # d'ordre : `02-bornage-amiable.adoc` donne `bornage-amiable`.
     getter slug : String
+    # Nom de fichier entier, préfixe compris. Les actualités y lisent leur
+    # date, que l'amputation ci-dessus effacerait.
+    getter fichier : String
 
-    def initialize(@titre, @attributs, @corps, @slug = "")
+    def initialize(@titre, @attributs, @corps, @slug = "", @fichier = "")
     end
 
     # Adresse de la page correspondante dans le site généré.
@@ -73,8 +76,8 @@ module Mendoro
         corps << ligne
       end
 
-      slug = File.basename(chemin.to_s, ".adoc").sub(/\A\d+-/, "")
-      new(titre, attributs, corps.join('\n').strip, slug)
+      fichier = File.basename(chemin.to_s, ".adoc")
+      new(titre, attributs, corps.join('\n').strip, fichier.sub(/\A\d+-/, ""), fichier)
     end
 
     # Corps converti en fragment HTML. Sans « standalone => false »,
@@ -120,17 +123,40 @@ module Mendoro
   def self.generer
     site = Source.lire(CONTENU / "site.adoc").attributs
     prestations = charger_prestations
+    actualites = charger_actualites
 
     FileUtils.rm_rf(SORTIE.to_s)
     Dir.mkdir_p(SORTIE.to_s)
 
-    ecrire_accueil(site, prestations)
-    prestations.each { |p| ecrire_prestation(site, prestations, p) }
+    ecrire_accueil(site, prestations, actualites)
+    prestations.each { |p| ecrire_prestation(site, prestations, p, actualites) }
     ecrire_contact(site, prestations)
     ecrire_mentions(site, prestations)
     copier_statiques
 
     puts "→ #{SORTIE} (#{prestations.size} prestations)"
+  end
+
+  # Actualités, de la plus récente à la plus ancienne. Le nom du fichier porte
+  # la date — `2026-09-16-mise-en-ligne.adoc` — ce qui donne l'ordre sans
+  # métadonnée à saisir, et une adresse de page lisible.
+  def self.charger_actualites : Array(Source)
+    dossier = CONTENU / "actualites"
+    return [] of Source unless Dir.exists?(dossier)
+    Dir.glob("#{dossier}/*.adoc").sort.reverse.map { |f| Source.lire(f) }
+  end
+
+  # `2026-09-16-mise-en-ligne` → `16 septembre 2026`, sans dépendance externe.
+  MOIS = %w[janvier février mars avril mai juin juillet août septembre
+    octobre novembre décembre]
+
+  def self.date_lisible(slug : String) : String
+    if m = /\A(\d{4})-(\d{2})-(\d{2})-/.match(slug)
+      jour = m[3].to_i
+      "#{jour == 1 ? "1er" : jour.to_s} #{MOIS[m[2].to_i - 1]} #{m[1]}"
+    else
+      ""
+    end
   end
 
   def self.charger_prestations : Array(Source)
@@ -142,10 +168,23 @@ module Mendoro
   # affichée porte `aria-current`, que les lecteurs d'écran annoncent et que
   # la feuille de style met en évidence.
   def self.menu_prestations(prestations, chemin_courant : String) : String
-    prestations.map do |p|
+    prestations_du_menu(prestations).map do |p|
       courante = p.page == chemin_courant
       marque = courante ? %( aria-current="page") : ""
       %(        <li><a href="#{p.page}"#{marque}>#{echapper(p.titre)}</a></li>)
+    end.join('\n')
+  end
+
+  # Les entrées du pied de page, suivies des mentions légales.
+  def self.menu_pied(pages, chemin_courant : String) : String
+    entrees = pages_du_pied(pages).map do |p|
+      {p.page, p.titre}
+    end
+    entrees << {"mentions-legales.html", "Mentions légales"}
+
+    entrees.map do |chemin, libelle|
+      marque = chemin == chemin_courant ? %( aria-current="page") : ""
+      %(    <li><a href="#{chemin}"#{marque}>#{echapper(libelle)}</a></li>)
     end.join('\n')
   end
 
@@ -166,10 +205,12 @@ module Mendoro
     valeurs
   end
 
-  def self.ecrire_accueil(site, prestations)
+  def self.ecrire_accueil(site, prestations, actualites)
     page = Source.lire(CONTENU / "accueil.adoc")
 
-    cartes = prestations.map do |p|
+    # La grille est titrée « Mes prestations » : les pages reléguées au pied
+    # — carrière, actualités — n'y ont pas leur place.
+    cartes = prestations_du_menu(prestations).map do |p|
       <<-HTML
             <a class="card" href="#{p.page}">
               <span class="card-titre">#{echapper(p.titre)}</span>
@@ -177,22 +218,56 @@ module Mendoro
       HTML
     end
 
+    # La dernière actualité passe devant les prestations. S'il n'y en a
+    # aucune, le bloc disparaît plutôt que d'afficher un cadre vide.
+    derniere = actualites.first?
+    encart = if derniere
+               <<-HTML
+                   <section class="actu-une" aria-labelledby="actu-une-titre">
+                     <p class="actu-date">#{echapper(date_lisible(derniere.fichier))}</p>
+                     <h2 class="actu-titre" id="actu-une-titre">#{echapper(derniere.titre)}</h2>
+                     #{derniere.html}
+                     <p><a class="actu-lien" href="actualites.html">Toutes les actualités</a></p>
+                   </section>
+               HTML
+             else
+               ""
+             end
+
     valeurs = base(site, page, "")
-    valeurs["corps"] = rendre(gabarit("accueil"),
-      {"prestations" => cartes.join("\n")})
+    valeurs["corps"] = rendre(gabarit("accueil"), {
+      "actualite"   => encart,
+      "prestations" => cartes.join("\n"),
+    })
     valeurs["menu-prestations"] = menu_prestations(prestations, "")
+    valeurs["menu-pied"] = menu_pied(prestations, "")
 
     ecrire("index.html", rendre(gabarit("layout"), valeurs))
   end
 
-  # Prestations proposées dans la liste déroulante du formulaire. « Ma
-  # carrière » n'est pas une prestation : on ne la propose pas.
+  # Une page portant `:menu: pied` va dans le pied de page plutôt que dans le
+  # menu des prestations. L'emplacement se décide donc dans le contenu, sans
+  # liste de titres à tenir à jour ici.
+  def self.au_pied?(page : Source) : Bool
+    page.attributs["menu"]? == "pied"
+  end
+
+  def self.prestations_du_menu(pages)
+    pages.reject { |p| au_pied?(p) }
+  end
+
+  def self.pages_du_pied(pages)
+    pages.select { |p| au_pied?(p) }
+  end
+
+  # Seules les vraies prestations sont proposées dans la liste déroulante du
+  # formulaire : « Ma carrière » ou « Actualités » n'en sont pas.
   def self.prestations_demandables(prestations)
-    prestations.reject { |p| p.titre == "Ma carrière" }
+    prestations_du_menu(prestations)
   end
 
   # Chaque prestation devient une page à part entière.
-  def self.ecrire_prestation(site, prestations, presta : Source)
+  def self.ecrire_prestation(site, prestations, presta : Source, actualites)
     valeurs = base(site, presta, presta.page)
     # Le texte de la prestation est le corps de la page, pas son chapeau.
     valeurs["intro"] = ""
@@ -213,12 +288,27 @@ module Mendoro
     # Les valeurs du bouton sont passées au gabarit de la prestation, et non
     # à celui de la coquille : `rendre` vide tout marqueur qu'il ne connaît
     # pas, si bien qu'un rendu intermédiaire les effacerait.
+    contenu = presta.html
+    if presta.attributs["liste"]? == "actualites"
+      billets = actualites.map do |a|
+        <<-HTML
+            <article class="actu">
+              <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
+              <h2>#{echapper(a.titre)}</h2>
+              #{a.html}
+            </article>
+        HTML
+      end
+      contenu += "\n" + billets.join('\n')
+    end
+
     valeurs["corps"] = rendre(gabarit("prestation"), {
-      "contenu"     => presta.html,
+      "contenu"     => contenu,
       "cta-url"     => cta_url,
       "cta-libelle" => cta_libelle,
     })
     valeurs["menu-prestations"] = menu_prestations(prestations, presta.page)
+    valeurs["menu-pied"] = menu_pied(prestations, presta.page)
 
     ecrire(presta.page, rendre(gabarit("layout"), valeurs))
   end
@@ -254,6 +344,7 @@ module Mendoro
     })
     valeurs["scripts"] = gabarit("contact-script")
     valeurs["menu-prestations"] = menu_prestations(prestations, "contact.html")
+    valeurs["menu-pied"] = menu_pied(prestations, "contact.html")
 
     ecrire("contact.html", rendre(gabarit("layout"), valeurs))
   end
@@ -268,6 +359,7 @@ module Mendoro
     valeurs["corps"] = rendre(gabarit("mentions-legales"),
       {"contenu" => page.html})
     valeurs["menu-prestations"] = menu_prestations(prestations, "mentions-legales.html")
+    valeurs["menu-pied"] = menu_pied(prestations, "mentions-legales.html")
 
     ecrire("mentions-legales.html", rendre(gabarit("layout"), valeurs))
   end
