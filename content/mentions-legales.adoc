@@ -38,7 +38,17 @@ Le site est hébergé par GitHub Pages — GitHub, Inc.,
 
 Conformément à l'article L. 612-1 du code de la consommation, tout
 consommateur peut recourir gratuitement à un médiateur en vue de la résolution
-amiable d'un litige. Médiateur compétent : [.todo]#à compléter#.
+amiable d'un litige.
+
+L'Ordre des géomètres-experts a désigné *ANM Consommation* comme médiateur de
+la consommation pour la profession :
+
+* ANM Consommation — 25 allée Rose Dieng Kuntz, 75019 Paris
+* https://www.anm-conso.com[anm-conso.com (nouvelle fenêtre), window="_blank"]
+
+Conformément à l'article L. 612-2 du code de la consommation, le médiateur ne
+peut être saisi qu'après une réclamation écrite adressée au préalable
+directement au cabinet.
 
 == Données personnelles
 
