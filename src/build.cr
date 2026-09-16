@@ -153,25 +153,46 @@ module Mendoro
     "actu-#{a.slug}.html"
   end
 
-  # Un identifiant YouTube fait onze caractères. Tant qu'il n'est pas
-  # renseigné, mieux vaut une consigne visible qu'un lecteur cassé.
-  ID_YOUTUBE = /\A[\w-]{11}\z/
+  # Une vidéo reconnue : sa plateforme, et l'adresse à charger.
+  record Video, plateforme : String, url : String
+
+  YOUTUBE_ID  = /\A[\w-]{11}\z/
+  YOUTUBE_URL = %r{(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/)([\w-]{11})}
+  VIMEO_URL   = %r{vimeo\.com/(?:video/)?(\d+)}
+
+  # L'attribut `:video:` accepte une adresse YouTube ou Vimeo complète, ou
+  # l'identifiant YouTube seul. Reconnaître l'adresse épargne au rédacteur
+  # d'aller y extraire un identifiant.
+  #
+  # YouTube est chargé depuis `youtube-nocookie.com`, Vimeo avec `dnt=1` :
+  # dans les deux cas, le mode le moins bavard que la plateforme propose.
+  def self.reconnaitre_video(spec : String) : Video?
+    if m = VIMEO_URL.match(spec)
+      Video.new("Vimeo", "https://player.vimeo.com/video/#{m[1]}?dnt=1")
+    elsif m = YOUTUBE_URL.match(spec)
+      Video.new("YouTube", "https://www.youtube-nocookie.com/embed/#{m[1]}")
+    elsif YOUTUBE_ID.matches?(spec)
+      Video.new("YouTube", "https://www.youtube-nocookie.com/embed/#{spec}")
+    end
+  end
 
   # Le média d'une actualité : vidéo, photo, ou rien.
   def self.media_actu(a : Source) : String
-    if video = a.attributs["video"]?
-      if ID_YOUTUBE.matches?(video)
+    if spec = a.attributs["video"]?
+      if video = reconnaitre_video(spec)
+        # Écran d'attente : aucune requête vers la plateforme avant le clic
+        # du visiteur. Le lecteur n'est inséré qu'ensuite.
         <<-HTML
             <div class="actu-video">
-              <iframe src="https://www.youtube-nocookie.com/embed/#{video}"
-                      title="#{echapper(a.titre)}" loading="lazy"
-                      allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"
-                      referrerpolicy="strict-origin-when-cross-origin"
-                      allowfullscreen></iframe>
+              <button type="button" class="video-attente" data-src="#{video.url}"
+                      data-titre="#{echapper(a.titre)}">
+                <span class="video-lire" aria-hidden="true"></span>
+                <span class="video-mention">Lire la vidéo<br><small>Chargée depuis #{video.plateforme} à votre clic</small></span>
+              </button>
             </div>
         HTML
       else
-        %(        <p class="actu-media-absent"><span class="todo">Identifiant de la vidéo à renseigner.</span></p>)
+        %(        <p class="actu-media-absent"><span class="todo">Adresse de la vidéo à renseigner.</span></p>)
       end
     elsif photo = a.attributs["photo"]?
       # Une photo annoncée mais absente donnerait une image cassée : on

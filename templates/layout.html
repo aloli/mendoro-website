@@ -74,6 +74,21 @@
 </footer>
 
 <script>
+  // Écran d'attente des vidéos : le lecteur n'est inséré qu'au clic, si bien
+  // qu'aucune requête n'atteint la plateforme tant que le visiteur n'a rien
+  // demandé. C'est ce qui permet aux mentions légales de rester exactes.
+  document.addEventListener('click', function (e) {
+    var bouton = e.target.closest && e.target.closest('.video-attente');
+    if (!bouton) { return; }
+    var cadre = document.createElement('iframe');
+    cadre.src = bouton.dataset.src + (bouton.dataset.src.indexOf('?') < 0 ? '?' : '&') + 'autoplay=1';
+    cadre.title = bouton.dataset.titre;
+    cadre.allow = 'autoplay; fullscreen; picture-in-picture';
+    cadre.referrerPolicy = 'strict-origin-when-cross-origin';
+    cadre.allowFullscreen = true;
+    bouton.replaceWith(cadre);
+  });
+
   // Referme le menu quand on clique ailleurs : sans cela, <details> resterait
   // ouvert jusqu'à un second clic sur son propre titre.
   document.addEventListener('click', function (e) {

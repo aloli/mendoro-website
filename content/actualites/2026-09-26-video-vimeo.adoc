@@ -1,0 +1,7 @@
+= Une vidéo de démonstration
+:resume: Vidéo d'essai, servant à vérifier le lecteur et l'écran d'attente.
+:video: https://vimeo.com/1035505066
+
+[.todo]#Actualité d'essai, à remplacer. L'attribut `:video:` accepte
+indifféremment une adresse YouTube ou Vimeo complète, ou l'identifiant
+YouTube seul.#

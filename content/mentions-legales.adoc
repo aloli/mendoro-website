@@ -77,12 +77,13 @@ pouvez également introduire une réclamation auprès de la CNIL.
 
 Ce site ne dépose aucun cookie et n'utilise aucun outil de mesure d'audience.
 
-Les vidéos publiées dans les actualités sont hébergées par YouTube et chargées
-en mode de confidentialité avancée (`youtube-nocookie.com`), qui écarte les
-cookies publicitaires. L'affichage d'une page portant une vidéo établit
-néanmoins une connexion aux serveurs de Google, qui reçoivent à cette occasion
-votre adresse IP ; en lancer la lecture relève ensuite de la politique de
-confidentialité de Google.
+Les vidéos publiées dans les actualités sont hébergées par YouTube ou Vimeo.
+Elles ne sont chargées qu'à votre demande : tant que vous n'avez pas cliqué sur
+« Lire la vidéo », aucune donnée — pas même votre adresse IP — n'est transmise
+à ces plateformes. Une fois la lecture lancée, elle relève de leur propre
+politique de confidentialité. Le chargement se fait dans le mode le moins
+intrusif que chacune propose : `youtube-nocookie.com` pour YouTube, l'option
+« do not track » pour Vimeo.
 
 == Propriété intellectuelle
 
