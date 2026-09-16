@@ -10,31 +10,37 @@
 
     var prenom = champ('prenom');
     var nom = champ('nom');
-    var adresse = champ('adresse');
+    var ville = champ('ville');
+    var projetAdresse = champ('projet_adresse');
     var contexte = champ('contexte');
 
-    // L'adresse du bien est envoyée résolue : Erik en lit toujours une seule,
-    // sans avoir à interpréter le choix « identique / autre ».
-    var adresseBien = champ('bien_adresse_type') === 'autre'
-      ? champ('bien_adresse')
-      : adresse;
+    // Le lieu du projet est envoyé d'une pièce : Erik lit une adresse, pas
+    // des fragments à recoller.
+    var projet = [projetAdresse, ville].filter(Boolean).join(', ');
+
+    // Le demandeur réside-t-il à l'adresse du projet ? Le cas échéant on
+    // recopie, plutôt que de lui faire saisir deux fois la même chose.
+    var adressePostale = champ('adresse_type') === 'autre'
+      ? champ('adresse')
+      : projet;
 
     var payload = {
       name: (prenom + ' ' + nom).trim(),
       email: champ('email'),
       subject: champ('demande'),
-      // « message » est obligatoire : le contexte étant facultatif dans le
-      // formulaire, une phrase de remplacement évite un refus en 422.
+      // « message » est obligatoire côté service : le contexte étant
+      // facultatif dans le formulaire, une phrase de remplacement évite un
+      // refus en 422.
       message: contexte || 'Aucun contexte précisé par le demandeur.',
       _gotcha: champ('_gotcha')
     };
 
-    // Champs libres. Les valeurs vides sont écartées par le service, mais
-    // autant ne pas les envoyer.
+    // Champs libres, repris tels quels dans le courriel : leurs noms en
+    // toutes lettres servent de libellés.
     var complements = {
       'Téléphone': champ('tel'),
-      'Adresse postale': adresse,
-      'Adresse du bien': adresseBien,
+      'Adresse postale': adressePostale,
+      'Adresse du projet': projet,
       'Section cadastrale': champ('cadastre_section').toUpperCase(),
       'Numéro de parcelle': champ('cadastre_numero')
     };
@@ -62,9 +68,9 @@
   document.addEventListener('DOMContentLoaded', function () {
     preselectionnerDemande();
     // Champ « autre adresse » révélé seulement quand il est pertinent.
-    var group = document.getElementById('bien-adresse-group');
-    var input = document.getElementById('bien_adresse');
-    document.querySelectorAll('input[name="bien_adresse_type"]').forEach(function (radio) {
+    var group = document.getElementById('adresse-group');
+    var input = document.getElementById('adresse');
+    document.querySelectorAll('input[name="adresse_type"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         var autre = this.value === 'autre';
         group.hidden = !autre;
