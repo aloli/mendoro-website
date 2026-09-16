@@ -1,0 +1,41 @@
+= Erik Pain — Géomètre-expert
+
+Site vitrine de https://mendoro.fr[Erik Pain], géomètre-expert.
+
+== Stack
+
+* HTML / CSS purs — aucun framework
+* Responsive, compatible mode sombre
+* Français uniquement
+* Hébergé sur GitHub Pages
+
+== Structure
+
+[source]
+----
+index.html            # Prestations (page d'accueil)
+contact.html          # Formulaire « Contact, information, devis »
+mentions-legales.html # Mentions légales
+css/style.css         # Toutes les feuilles de style
+images/               # Emblème de l'Ordre et autres visuels
+----
+
+La mise en page reprend la maquette : en-tête et pied de page fixes, seule la
+zone centrale défile.
+
+== Reste à faire
+
+* Déposer l'emblème officiel de l'Ordre des géomètres-experts dans `images/`
+  et remplacer le bloc `.ordre-logo` des trois pages.
+* Rédiger la rubrique « Ma carrière » dans `index.html`.
+* Compléter les champs marqués `.todo` dans `mentions-legales.html`
+  (identité, n° d'inscription à l'Ordre, assurance RCP, médiateur, RGPD).
+* Vérifier que le backend `form.aloli.fr` accepte les champs du formulaire
+  (`nom`, `prenom`, `adresse`, `tel`, `email`, `bien_adresse_type`,
+  `bien_adresse`, `cadastre_section`, `cadastre_numero`, `demande`, `contexte`).
+* Faire pointer le DNS de `mendoro.fr` vers GitHub Pages.
+
+== Déploiement
+
+Déployé automatiquement sur GitHub Pages à chaque push sur la branche
+`production`, via `.github/workflows/deploy.yml`.

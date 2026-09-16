@@ -1,0 +1,464 @@
+/* ==========================================================================
+   Erik Pain — Géomètre-expert — style.css
+   Pure CSS, responsive, dark-mode ready. Full-viewport shell:
+   fixed header, scrolling content, fixed footer.
+   ========================================================================== */
+
+/* --- Custom properties ---------------------------------------------------- */
+:root {
+  --navy:        #14384f;
+  --navy-deep:   #0d2637;
+  --brass:       #c08a2e;
+  --brass-soft:  #e0b464;
+  --sage:        #5c7c63;
+
+  --bg:          #ffffff;
+  --bg-alt:      #f4f6f8;
+  --bg-card:     #ffffff;
+  --text:        #1d2a33;
+  --text-muted:  #5a6b78;
+  --text-heading:#0d2637;
+  --border:      #dde3e8;
+  --shadow:      rgba(13, 38, 55, 0.07);
+  --shadow-hover:rgba(13, 38, 55, 0.16);
+
+  --header-bg:   var(--navy-deep);
+  --footer-bg:   var(--navy-deep);
+  --on-dark:     rgba(255, 255, 255, 0.82);
+  --on-dark-dim: rgba(255, 255, 255, 0.55);
+
+  --font-body:    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-display: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+
+  --max-w:     1060px;
+  --radius:    10px;
+  --transition:0.25s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #101c25;
+    --bg-alt:      #16262f;
+    --bg-card:     #16262f;
+    --text:        #dfe6eb;
+    --text-muted:  #9aacb8;
+    --text-heading:#f1f5f8;
+    --border:      #27404e;
+    --shadow:      rgba(0, 0, 0, 0.35);
+    --shadow-hover:rgba(0, 0, 0, 0.55);
+
+    --header-bg:   #0a1a25;
+    --footer-bg:   #0a1a25;
+    --brass:       var(--brass-soft);
+  }
+}
+
+/* --- Reset & base --------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+
+  /* Full-viewport shell: only .site-main scrolls. */
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+a { color: var(--brass); text-decoration: none; transition: color var(--transition); }
+a:hover { color: var(--navy); }
+
+@media (prefers-color-scheme: dark) {
+  a:hover { color: #fff; }
+}
+
+img, svg { max-width: 100%; height: auto; }
+
+:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.container { width: 90%; max-width: var(--max-w); margin: 0 auto; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* --- Header (stays at the top of the screen) ------------------------------ */
+.site-header {
+  flex: none;
+  background: var(--header-bg);
+  color: #fff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.site-header .container {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 82px;
+  padding: 0.85rem 0;
+}
+
+/* Placeholder for the official "Ordre des géomètres-experts" emblem.
+   Drop the supplied file in images/ and swap the <svg> for an <img>. */
+.ordre-logo {
+  flex: none;
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  color: var(--on-dark-dim);
+  font-size: 0.6rem;
+  line-height: 1.2;
+  text-align: center;
+  padding: 4px;
+}
+
+.brand { min-width: 0; }
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 3.6vw, 1.9rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.brand-title {
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  color: var(--brass-soft);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.15rem;
+}
+
+.brand a { color: inherit; }
+.brand a:hover { color: #fff; }
+
+/* --- Main (the only scrolling area — "curseur pour faire défiler") -------- */
+.site-main {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: auto;
+  scrollbar-color: var(--brass) var(--bg-alt);
+}
+
+.site-main::-webkit-scrollbar { width: 12px; }
+.site-main::-webkit-scrollbar-track { background: var(--bg-alt); }
+.site-main::-webkit-scrollbar-thumb {
+  background: var(--brass);
+  border-radius: 6px;
+  border: 3px solid var(--bg-alt);
+}
+.site-main::-webkit-scrollbar-thumb:hover { background: var(--navy); }
+
+.page { padding: 2.5rem 0 3.5rem; }
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  font-weight: 400;
+  color: var(--text-heading);
+  margin-bottom: 0.4rem;
+}
+
+.page-intro {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  max-width: 62ch;
+}
+
+/* --- Prestations grid ----------------------------------------------------- */
+.prestations {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: start; /* sinon une carte ouverte étire sa voisine fermée */
+  gap: 1.25rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px var(--shadow-hover);
+}
+
+.card[open] {
+  box-shadow: 0 6px 22px var(--shadow-hover);
+}
+
+.card > summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 1.35rem 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.12rem;
+  line-height: 1.35;
+  color: var(--text-heading);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.card > summary::-webkit-details-marker { display: none; }
+
+/* Chevron */
+.card > summary::after {
+  content: '';
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-right: 2px solid var(--brass);
+  border-bottom: 2px solid var(--brass);
+  transform: rotate(45deg);
+  transition: transform var(--transition);
+}
+
+.card[open] > summary::after { transform: rotate(-135deg); }
+
+.card-body {
+  padding: 0 1.5rem 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.card-body p + p { margin-top: 0.75rem; }
+
+.card-note {
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.card-note strong { color: var(--text-heading); }
+
+/* --- Footer (stays at the bottom of the screen) --------------------------- */
+.site-footer {
+  flex: none;
+  background: var(--footer-bg);
+  color: var(--on-dark-dim);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.87rem;
+}
+
+.site-footer .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding: 0.9rem 0;
+}
+
+.footer-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #fff;
+  font-weight: 600;
+}
+
+.footer-cta::after {
+  content: '→';
+  color: var(--brass-soft);
+  transition: transform var(--transition);
+  display: inline-block;
+}
+
+.footer-cta:hover { color: var(--brass-soft); }
+.footer-cta:hover::after { transform: translateX(3px); }
+
+.footer-legal { color: var(--on-dark-dim); }
+.footer-legal:hover { color: #fff; }
+
+/* --- Forms ---------------------------------------------------------------- */
+.form {
+  max-width: 680px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+
+.fieldset {
+  border: none;
+  margin-bottom: 1.75rem;
+}
+
+.fieldset > legend {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--text-heading);
+  margin-bottom: 0.9rem;
+  padding: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group { margin-bottom: 1rem; }
+
+.form-group > label,
+.field-label {
+  display: block;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="tel"],
+.form-group input[type="email"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(192, 138, 46, 0.18);
+}
+
+.form-group textarea { resize: vertical; min-height: 120px; }
+
+.hint {
+  font-size: 0.79rem;
+  color: var(--text-muted);
+  margin-top: 0.3rem;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.93rem;
+}
+
+.choice input { accent-color: var(--brass); }
+
+/* Cadastral reference: 1–2 letters + number */
+.cadastre {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1rem;
+}
+
+.cadastre input[name="cadastre_section"] { text-transform: uppercase; }
+
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.btn--primary {
+  background: var(--navy);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--brass);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.form-status {
+  margin-top: 1rem;
+  font-size: 0.93rem;
+  display: none;
+}
+
+/* --- Legal page ----------------------------------------------------------- */
+.legal { max-width: 70ch; }
+
+.legal h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: var(--text-heading);
+  margin: 2rem 0 0.6rem;
+}
+
+.legal h2:first-of-type { margin-top: 0; }
+
+.legal p, .legal ul { color: var(--text-muted); font-size: 0.95rem; }
+.legal ul { margin-left: 1.2rem; }
+.legal li { margin-bottom: 0.3rem; }
+
+/* Marks content still awaiting the real figures. */
+.todo {
+  background: rgba(192, 138, 46, 0.12);
+  border-left: 3px solid var(--brass);
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-style: italic;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (max-width: 760px) {
+  .prestations { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .form { padding: 1.35rem; }
+  .site-header .container { min-height: 70px; gap: 0.9rem; }
+  .ordre-logo { width: 46px; height: 46px; font-size: 0.52rem; }
+  .site-footer .container { justify-content: center; text-align: center; }
+}
+
+/* Very short screens: let the whole page scroll rather than trapping content
+   in a sliver of viewport between the fixed header and footer. */
+@media (max-height: 420px) {
+  body { height: auto; min-height: 100dvh; overflow: visible; }
+  .site-main { overflow: visible; }
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact, information, devis — Erik Pain, géomètre-expert</title>
+  <meta name="description" content="Demande d'information ou de devis auprès d'Erik Pain, géomètre-expert. Complétez le formulaire, vous êtes rappelé dans la semaine.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://mendoro.fr/contact.html">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ====== En-tête — reste en haut de l'écran ====== -->
+<header class="site-header">
+  <div class="container">
+    <!-- TODO : remplacer par l'emblème officiel de l'Ordre des géomètres-experts -->
+    <div class="ordre-logo" role="img" aria-label="Ordre des géomètres-experts">Ordre des GE</div>
+    <div class="brand">
+      <div class="brand-name"><a href="index.html">Erik Pain</a></div>
+      <div class="brand-title">Géomètre-expert</div>
+    </div>
+  </div>
+</header>
+
+<!-- ====== Formulaire — seule zone défilante ====== -->
+<main class="site-main" id="contenu">
+  <div class="container page">
+
+    <h1 class="page-title">Contact, information, devis</h1>
+    <p class="page-intro">
+      Merci de compléter ce formulaire : je vous rappelle dans la semaine.
+    </p>
+
+    <form id="contact-form" class="form" action="https://form.aloli.fr/submit" method="POST">
+
+      <!-- Piège à robots -->
+      <div style="display:none" aria-hidden="true">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+      </div>
+
+      <fieldset class="fieldset">
+        <legend>Vous</legend>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <input type="text" id="nom" name="nom" required autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label for="prenom">Prénom</label>
+            <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="adresse">Adresse postale</label>
+          <input type="text" id="adresse" name="adresse" autocomplete="street-address">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="tel">Téléphone</label>
+            <input type="tel" id="tel" name="tel" required autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="email">Courriel</label>
+            <input type="email" id="email" name="email" required autocomplete="email">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>La propriété objet du projet</legend>
+
+        <div class="form-group">
+          <span class="field-label">Adresse postale de la propriété</span>
+          <label class="choice">
+            <input type="radio" name="bien_adresse_type" value="identique" checked>
+            Identique à mon adresse postale
+          </label>
+          <label class="choice">
+            <input type="radio" name="bien_adresse_type" value="autre">
+            Autre adresse
+          </label>
+        </div>
+
+        <div class="form-group" id="bien-adresse-group" hidden>
+          <label for="bien_adresse">Adresse de la propriété</label>
+          <input type="text" id="bien_adresse" name="bien_adresse">
+        </div>
+
+        <div class="form-group">
+          <span class="field-label">Référence cadastrale de la propriété</span>
+          <div class="cadastre">
+            <div>
+              <label for="cadastre_section">Section</label>
+              <input type="text" id="cadastre_section" name="cadastre_section"
+                     maxlength="2" pattern="[A-Za-z]{1,2}" placeholder="AB"
+                     inputmode="latin" title="Une ou deux lettres">
+            </div>
+            <div>
+              <label for="cadastre_numero">Numéro</label>
+              <input type="text" id="cadastre_numero" name="cadastre_numero"
+                     pattern="[0-9]{1,5}" placeholder="0142" inputmode="numeric"
+                     title="Le numéro de parcelle">
+            </div>
+          </div>
+          <p class="hint">
+            Figure sur votre acte de propriété ou sur votre avis de taxe foncière.
+            Laissez vide si vous ne la connaissez pas.
+          </p>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Votre demande</legend>
+
+        <div class="form-group">
+          <label for="demande">Nature de la demande</label>
+          <select id="demande" name="demande" required>
+            <option value="" selected disabled>Choisissez…</option>
+            <option>Bornage amiable</option>
+            <option>Division foncière</option>
+            <option>Implantation de bâtiment</option>
+            <option>État descriptif de division — copropriété</option>
+            <option>Urbanisme — déclaration préalable de division, permis d'aménager</option>
+            <option>Convention de servitude</option>
+            <option>Délimitation de la propriété des personnes publiques</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contexte">Contexte du projet</label>
+          <textarea id="contexte" name="contexte"
+                    placeholder="Si vous le souhaitez, vous pouvez me donner le contexte de votre projet."></textarea>
+        </div>
+      </fieldset>
+
+      <button type="submit" class="btn btn--primary">Envoyer ma demande</button>
+      <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+    </form>
+
+  </div>
+</main>
+
+<!-- ====== Pied de page — reste en bas de l'écran ====== -->
+<footer class="site-footer">
+  <div class="container">
+    <a href="index.html" class="footer-cta">Retour aux prestations</a>
+    <a href="mentions-legales.html" class="footer-legal">Mentions légales</a>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Champ « autre adresse » révélé seulement quand il est pertinent.
+    var group = document.getElementById('bien-adresse-group');
+    var input = document.getElementById('bien_adresse');
+    document.querySelectorAll('input[name="bien_adresse_type"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        var autre = this.value === 'autre';
+        group.hidden = !autre;
+        input.required = autre;
+        if (autre) { input.focus(); } else { input.value = ''; }
+      });
+    });
+
+    // Envoi AJAX, pour rester sur la page.
+    var form = document.getElementById('contact-form');
+    var status = document.getElementById('form-status');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      status.style.display = 'block';
+      status.style.color = '';
+      status.textContent = 'Envoi en cours…';
+
+      var body = {};
+      new FormData(form).forEach(function (v, k) { body[k] = v; });
+
+      fetch(form.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      }).then(function (res) {
+        return res.json().then(function (json) { return { ok: res.ok, json: json }; });
+      }).then(function (result) {
+        if (result.ok && result.json.success) {
+          status.style.color = '#5c7c63';
+          status.textContent = 'Demande envoyée. Je vous rappelle dans la semaine.';
+          form.reset();
+          group.hidden = true;
+        } else {
+          status.style.color = '#b3261e';
+          status.textContent = result.json.error || 'Une erreur est survenue.';
+        }
+      }).catch(function () {
+        status.style.color = '#b3261e';
+        status.textContent = 'Impossible de contacter le serveur. Réessayez plus tard.';
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
