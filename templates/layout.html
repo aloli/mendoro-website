@@ -25,8 +25,13 @@
     <img class="ordre-logo" src="images/logo-geometre-expert.svg"
          alt="{{ordre-libelle}}" width="791" height="520">
     <div class="brand">
-      <div class="brand-name"><a href="index.html">{{nom}}</a></div>
-      <div class="brand-title">{{fonction}}</div>
+      <!-- Un seul lien enveloppe le nom et la fonction : deux liens voisins
+           vers la même page seraient annoncés deux fois par un lecteur
+           d'écran, pour un même geste de l'utilisateur. -->
+      <a href="index.html">
+        <span class="brand-name">{{nom}}</span>
+        <span class="brand-title">{{fonction}}</span>
+      </a>
     </div>
   </div>
 </header>

@@ -33,6 +33,10 @@
   --max-w:     1060px;
   --radius:    10px;
   --transition:0.25s ease;
+
+  /* Picto « s'ouvre dans un nouvel onglet », posé en masque pour
+     qu'il épouse la couleur du lien qui le porte. */
+  --icone-lien-externe: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='black'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M18%2013v6a2%202%200%200%201-2%202H5a2%202%200%200%201-2-2V8a2%202%200%200%201%202-2h6'/%3E%3Cpolyline%20points='15%203%2021%203%2021%209'/%3E%3Cline%20x1='10'%20y1='14'%20x2='21'%20y2='3'/%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
@@ -80,6 +84,19 @@ a:hover { color: var(--navy); }
 }
 
 img, svg { max-width: 100%; height: auto; }
+
+/* Tout lien s'ouvrant dans un nouvel onglet le signale par un picto. */
+a[target="_blank"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  margin-left: 0.3em;
+  vertical-align: -0.04em;
+  background-color: currentColor;
+  -webkit-mask: var(--icone-lien-externe) no-repeat center / contain;
+  mask: var(--icone-lien-externe) no-repeat center / contain;
+}
 
 :focus-visible {
   outline: 2px solid var(--brass);
@@ -144,7 +161,8 @@ img, svg { max-width: 100%; height: auto; }
   margin-top: 0.15rem;
 }
 
-.brand a { color: inherit; }
+.brand a { color: inherit; display: block; }
+.brand-name, .brand-title { display: block; }
 .brand a:hover { color: #fff; }
 
 /* --- Main (the only scrolling area — "curseur pour faire défiler") -------- */
