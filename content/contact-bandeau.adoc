@@ -1,0 +1,9 @@
+= Le formulaire n'est pas encore en service
+
+Sa mise en route est imminente. En attendant, appelez-moi au
+link:tel:+33671144276[06 71 14 42 76] : je réponds moi-même.
+
+Vous pouvez aussi m'écrire au 12 rue de la République, 71600 Paray-le-Monial.
+
+// Pour retirer ce bandeau une fois le service en ligne : supprimez ce fichier.
+// Rien d'autre à modifier, la page s'en passera d'elle-même.

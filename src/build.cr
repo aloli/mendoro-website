@@ -231,8 +231,24 @@ module Mendoro
       "            <option>#{echapper(p.titre)}</option>"
     end
 
+    # Bandeau facultatif : présent tant que le fichier existe, disparu dès
+    # qu'on le supprime. Aucun réglage à retrouver ailleurs.
+    fichier_bandeau = CONTENU / "contact-bandeau.adoc"
+    bandeau = if File.exists?(fichier_bandeau)
+                avis = Source.lire(fichier_bandeau)
+                <<-HTML
+                    <aside class="bandeau" role="note">
+                      <h2>#{echapper(avis.titre)}</h2>
+                #{avis.html}
+                    </aside>
+                HTML
+              else
+                ""
+              end
+
     valeurs = base(site, page, "contact.html")
     valeurs["corps"] = rendre(gabarit("contact"), {
+      "bandeau"         => bandeau,
       "form-action"     => site["form-action"]? || "https://form.aloli.fr/submit",
       "options-demande" => options.join("\n"),
     })

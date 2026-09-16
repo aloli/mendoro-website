@@ -289,6 +289,45 @@ a[target="_blank"]::after {
 
 .appel-action .btn { text-decoration: none; }
 
+/* --- Justification des textes suivis -------------------------------------- */
+/* Appliquée aux seuls blocs de prose : ni les titres, ni les cartes, ni les
+   libellés de formulaire n'ont à être justifiés.
+
+   `hyphens: auto` est indissociable du procédé : sans césure, le navigateur
+   étire les espaces entre les mots et creuse des « rivières » de blanc,
+   d'autant plus visibles que la colonne est étroite. La césure s'appuie sur
+   le `lang="fr"` porté par la page. */
+.page-intro,
+.prose,
+.legal,
+.bandeau {
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* --- Bandeau d'information ------------------------------------------------ */
+.bandeau {
+  margin-bottom: 2rem;
+  padding: 1.25rem 1.5rem;
+  background: rgba(192, 138, 46, 0.09);
+  border-left: 3px solid var(--brass);
+  border-radius: var(--radius);
+  color: var(--text);
+  max-width: 680px;
+}
+
+.bandeau h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: var(--text-heading);
+  margin-bottom: 0.6rem;
+  text-align: left;
+}
+
+.bandeau .paragraph + .paragraph { margin-top: 0.6rem; }
+.bandeau p { margin: 0; font-size: 0.95rem; }
+
 /* --- Pied de page : le rappel des prestations ----------------------------- */
 .site-footer {
   background: var(--footer-bg);
