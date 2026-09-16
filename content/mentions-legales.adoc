@@ -60,6 +60,13 @@ un devis. Elles ne font l'objet d'aucune cession à des tiers.
 Base légale : votre consentement et les mesures précontractuelles prises à votre
 demande. Durée de conservation : Deux ans.
 
+Les messages envoyés depuis le formulaire de contact sont acheminés par un
+service opéré par *ALOLI sas*, à Laguiole (Aveyron), agissant en qualité de
+sous-traitant au sens de l'article 28 du règlement (UE) 2016/679. Ce service se
+borne à transmettre le message par courriel, sans en conserver de copie ; il
+retient temporairement l'adresse IP de l'expéditeur, pendant une heure, à seule
+fin de limiter les envois automatisés.
+
 Conformément au règlement (UE) 2016/679 et à la loi « Informatique et Libertés »,
 vous disposez d'un droit d'accès, de rectification, d'effacement, de limitation
 et d'opposition sur les données vous concernant. Pour l'exercer, écrivez à

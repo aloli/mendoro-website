@@ -110,15 +110,19 @@ img, svg { max-width: 100%; height: auto; }
   align-items: center;
   gap: 1.25rem;
   min-height: 82px;
-  padding: 0.85rem 0;
+  padding: 0.6rem 0;
 }
 
-/* Emblème officiel en vectoriel, variante « réserve » : l'Ordre la prévoit
-   pour les fonds sombres, elle se pose donc à même l'en-tête, sans pastille. */
+/* Emblème officiel en couleurs. Ses teintes sombres ne ressortant pas sur
+   l'en-tête, il est posé sur une pastille claire plutôt que retouché. */
 .ordre-logo {
   flex: none;
-  height: 44px;
+  height: 52px;
   width: auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  box-sizing: content-box;
 }
 
 .brand { min-width: 0; }
@@ -454,7 +458,7 @@ img, svg { max-width: 100%; height: auto; }
   .form-row { grid-template-columns: 1fr; }
   .form { padding: 1.35rem; }
   .site-header .container { min-height: 70px; gap: 0.9rem; }
-  .ordre-logo { height: 32px; }
+  .ordre-logo { height: 38px; padding: 5px 8px; }
   .site-footer .container { justify-content: center; text-align: center; }
 }
 
