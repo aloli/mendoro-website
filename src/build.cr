@@ -15,11 +15,15 @@ require "http/server"
 module Mendoro
   VERSION = "0.1.0"
 
-  RACINE    = Path[__DIR__].parent
-  CONTENU   = RACINE / "content"
-  GABARITS  = RACINE / "templates"
-  SORTIE    = RACINE / "_site"
-  STATIQUES = %w[css images CNAME]
+  RACINE   = Path[__DIR__].parent
+  CONTENU  = RACINE / "content"
+  GABARITS = RACINE / "templates"
+  SORTIE   = RACINE / "_site"
+  # Le domaine personnalisé tient dans le réglage Pages du dépôt, pas ici :
+  # publiant par un workflow Actions, GitHub ignore un fichier CNAME livré
+  # dans l'artefact. En embarquer un donnerait l'illusion d'une source de
+  # vérité qui n'en est pas une.
+  STATIQUES = %w[css images]
 
   PORT_LOCAL = 8765
 
