@@ -27,7 +27,7 @@
     var payload = {
       // Le prénom étant facultatif, trim() absorbe l'espace qu'il laisse.
       name: (prenom + ' ' + nom).trim(),
-      email: champ('email'),
+      email: champ('email').trim(),
       subject: champ('demande'),
       // « message » est obligatoire côté service : le contexte étant
       // facultatif dans le formulaire, une phrase de remplacement évite un
