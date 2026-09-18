@@ -1,5 +1,3 @@
-= Actualités
+== Vidéos, photos
 :menu: pied
 :liste: actualites
-
-Les nouvelles du cabinet.
