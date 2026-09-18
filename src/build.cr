@@ -159,12 +159,15 @@ module Mendoro
     "actu-#{a.slug}.html"
   end
 
-  # Une vidéo reconnue : sa plateforme, et l'adresse à charger.
-  record Video, plateforme : String, url : String
+  # Une vidéo reconnue : sa plateforme, l'adresse à charger, et son
+  # orientation — un « short » est tourné à la verticale et ne s'accommode
+  # pas du cadre paysage.
+  record Video, plateforme : String, url : String, vertical : Bool = false
 
-  YOUTUBE_ID  = /\A[\w-]{11}\z/
-  YOUTUBE_URL = %r{(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([\w-]{11})}
-  VIMEO_URL   = %r{vimeo\.com/(?:video/)?(\d+)}
+  YOUTUBE_ID        = /\A[\w-]{11}\z/
+  YOUTUBE_URL       = %r{(?:youtube\.com/watch\?v=|youtu\.be/|youtube\.com/embed/|youtube\.com/shorts/)([\w-]{11})}
+  VIMEO_URL         = %r{vimeo\.com/(?:video/)?(\d+)}
+  YOUTUBE_VERTICALE = %r{youtube\.com/shorts/}
 
   # L'attribut `:video:` accepte une adresse YouTube ou Vimeo complète, ou
   # l'identifiant YouTube seul. Reconnaître l'adresse épargne au rédacteur
@@ -178,7 +181,8 @@ module Mendoro
     if m = VIMEO_URL.match(spec)
       Video.new("Vimeo", "https://player.vimeo.com/video/#{m[1]}?dnt=1")
     elsif m = YOUTUBE_URL.match(spec)
-      Video.new("YouTube", "https://www.youtube-nocookie.com/embed/#{m[1]}")
+      Video.new("YouTube", "https://www.youtube-nocookie.com/embed/#{m[1]}",
+        vertical: YOUTUBE_VERTICALE.matches?(spec))
     elsif YOUTUBE_ID.matches?(spec)
       Video.new("YouTube", "https://www.youtube-nocookie.com/embed/#{spec}")
     end
@@ -191,7 +195,7 @@ module Mendoro
         # Écran d'attente : aucune requête vers la plateforme avant le clic
         # du visiteur. Le lecteur n'est inséré qu'ensuite.
         <<-HTML
-            <div class="actu-video">
+            <div class="actu-video#{video.vertical ? " actu-video--vertical" : ""}">
               <button type="button" class="video-attente" data-src="#{video.url}"
                       data-titre="#{echapper(a.titre)}">
                 <span class="video-lire" aria-hidden="true"></span>

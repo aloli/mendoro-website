@@ -387,6 +387,20 @@ a[target="_blank"]::after {
   display: block;
 }
 
+/* Un « short » est tourné à la verticale : le cadre paysage le réduirait à
+   une bande centrale entre deux aplats noirs. Il garde donc ses
+   proportions, et la largeur est bornée pour que la hauteur qui en découle
+   ne chasse pas le texte hors de l'écran. */
+.actu-video--vertical {
+  aspect-ratio: 9 / 16;
+  width: min(100%, 15rem);
+  margin-inline: auto;
+}
+
+/* Dans le défilé, plus étroit encore : la hauteur d'un volet est celle de
+   son média, et les trois doivent rester de même taille. */
+.actu-defile .actu-video--vertical { width: min(100%, 8.5rem); }
+
 /* Écran d'attente. Aucune image n'est chargée depuis la plateforme : une
    vignette distante trahirait déjà l'adresse du visiteur, ce que ce
    dispositif a précisément pour objet d'éviter. */
