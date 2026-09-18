@@ -1,0 +1,4 @@
+= Alignement
+:resume: Retour en image sur une opération d'alignement.
+:photo: images/actus/alignement.jpg
+:legende: Pose d'une borne.

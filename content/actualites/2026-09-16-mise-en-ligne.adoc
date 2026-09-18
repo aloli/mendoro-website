@@ -4,7 +4,3 @@
 Le cabinet dispose désormais de son site. On y trouve le détail des
 prestations — bornage, division foncière, copropriété, urbanisme — et un
 formulaire pour me joindre en décrivant précisément votre projet.
-
-[.todo]#Texte d'exemple, à remplacer. Le résumé affiché en accueil se
-règle par l'attribut `:resume:` en tête du document ; ce corps-ci n'est lu
-que sur la page de l'actualité.#

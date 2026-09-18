@@ -1,0 +1,4 @@
+= Division foncière
+:resume: Retour en image sur une opération de division foncière.
+:photo: images/actus/bornage.jpg
+:legende: Pose d'une borne.

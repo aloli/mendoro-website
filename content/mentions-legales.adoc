@@ -34,7 +34,7 @@ géomètres-experts.
 Le site est hébergé par GitHub Pages — GitHub, Inc.,
 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.
 
-== Médiation de la consommation
+= Médiation de la consommation
 
 Conformément à l'article L. 612-1 du code de la consommation, tout
 consommateur peut recourir gratuitement à un médiateur en vue de la résolution
