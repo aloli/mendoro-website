@@ -3,7 +3,7 @@
 :page-description: Erik Pain, géomètre-expert : bornage amiable, division foncière, implantation de bâtiment, état descriptif de division, urbanisme, convention de servitude, délimitation du domaine public.
 :og-description: Bornage amiable · Division foncière · Copropriété · Urbanisme
 
-== Mendoro provient de :
+== Mendoro provient de
 Emendare : Améliorer en latin.
 Horos : Limite, borne en grec ancien.
 
