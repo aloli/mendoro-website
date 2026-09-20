@@ -1,5 +1,5 @@
 = Premier pas sur Youtube
-:resume: Une courte vidéo de salutation.
+:resume: Une très courte vidéo de salutation.
 :video: https://youtube.com/shorts/HB72Tkts-oA
 
-Petit                     test sur youtube
+Une très courte vidéo de salutation.
