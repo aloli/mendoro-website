@@ -1,5 +1,5 @@
 = Contact, informations, demande de devis
-:page-title: Contact, devis — Erik Pain, géomètre - expert
-:page-description: Demande d'information ou de devis auprès d'Erik Pain, géomètre-expert. Complétez le formulaire, vous êtes rappelé dans la semaine.
+:page-title: Contact, devis — Erik Pain, géomètre-expert
+:page-description: Demande d'information ou de devis auprès d'Erik Pain, géomètre-expert. Complétez le formulaire, vous êtes rappelé prochainement.
 
-Merci de compléter ce formulaire : je vous rappelle dans la semaine.
+Merci de compléter ce formulaire : je vous rappelle prochainement.
