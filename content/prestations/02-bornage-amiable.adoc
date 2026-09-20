@@ -1,50 +1,40 @@
 = Bornage amiable
 
-Le bornage fixe définitivement la limite séparant deux propriétés privées
-contiguës. Après recherche des titres, analyse du cadastre et relevé sur
-le terrain, la limite est matérialisée par des bornes.
+== Le bornage et la reconnaissance des limites d’un terrain
+Les titres de propriété et le cadastre n’offrent pas toujours des garanties suffisantes pour reconnaitre les limites d’un terrain.
+Le géomètre-expert assure de multiples prestations en matière de foncier pour le compte des particuliers, professionnels ou collectivités territoriales.
 
-L'opération se conclut par un procès-verbal de bornage signé par les
-propriétaires concernés : c'est cette signature qui rend la limite
-définitive et opposable.
-
-[.card-note]
-*Compétence exclusive.* Seul un géomètre-expert inscrit à l'Ordre peut
-réaliser un bornage délimitant la propriété foncière.
-
-
-AJOUT :
-
-Le bornage et la reconnaissance des limites d’un terrain
-Les titres de propriété et le cadastre n’offrent pas toujours des garanties suffisantes pour reconnaitre les limites d’un terrain. Le géomètre-expert assure de multiples prestations en matière de foncier pour le compte des particuliers, professionnels ou collectivités territoriales.
-
-Qu’appelle-t-on bornage ?
+== Qu’appelle-t-on bornage ?
 Le bornage a pour effet de définir juridiquement et de matérialiser sur un terrain les limites des propriétés privées contiguës, appartenant (ou destinées à appartenir) à des propriétaires différents.
 
 Le géomètre-expert est le seul professionnel habilité à délimiter de façon irrévocable un terrain et à le « borner ».
 
 Le géomètre-expert réalise le bornage d’un terrain en cas :
 
-de vérification de la surface,
-d’un aménagement prévu par un voisin,
-de l’édification d’une clôture,
-ou de la création d’un terrain à bâtir.
-En quoi consistent les missions de bornage du géomètre-expert ?
+- de vérification de la superficie,
++ d’un aménagement prévu par un voisin,
+/ de l’édification d’une clôture,
+- ou de la création d’un terrain à bâtir.
+
+== En quoi consistent les missions de bornage du géomètre-expert ?
 Le géomètre-expert réalise 3 types de prestations dans le cadre de sa mission de bornage d’un terrain.
 
-Le bornage amiable
-Dans le bornage amiable, le géomètre-expert propose une limite qui ne devient définitive qu’avec l’accord de toutes les parties concernées. Il s’agit d’une procédure contradictoire.
+*Le bornage amiable*
+Dans le bornage amiable, le géomètre-expert propose une limite qui ne devient définitive qu’avec l’accord de toutes les parties concernées.
+Il s’agit d’une procédure contradictoire.
 
-Le bornage judiciaire
+*Le bornage judiciaire*
 Le géomètre-expert intervient comme expert de justice désigné par le juge. Sauf accord des parties en cours d’expertise, il propose dans un rapport une ou plusieurs solutions.
 
-Le géomètre-expert remplit la mission qui lui est confiée dans le respect des règles de procédure civile et de celles de l’expert de justice (Code de déontologie du Conseil National des Compagnies d’Experts de Justice – CNCEJ).
+Le géomètre-expert remplit la mission qui lui est confiée dans le respect des règles de procédure civile et de celles de l’expert de justice (Code de déontologie du Conseil National des Compagnies d’Experts de Justice – CNCEJ[https://cnejec.fr/index.php/regles-de-deontologie/, window="_blank"]).
 
 Il peut, dans une instance judiciaire, être également appelé comme conseil de l’une des parties.
 
-La délimitation de la propriété des personnes publiques
+*La délimitation de la propriété des personnes publiques*
 Dans ce troisième cas, le géomètre-expert assiste la collectivité pour :
 
-les opérations d’analyse,
-de matérialisation de la limite,
-de rédaction du procès-verbal de délimitation et de notification aux riverains.
+* les opérations d’analyse,
+* de matérialisation de la limite,
+* de rédaction du procès-verbal de délimitation et de notification aux riverains.
+
+==Le géomètre-expert peut être missionné comme conseil par un propriétaire convoqué en bornage par un de ses voisins
