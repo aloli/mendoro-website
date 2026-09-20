@@ -27,7 +27,7 @@
     var payload = {
       // Le prénom étant facultatif, trim() absorbe l'espace qu'il laisse.
       name: (prenom + ' ' + nom).trim(),
-      email: champ('email').trim(),
+      email: champ('email'),
       subject: champ('demande'),
       // « message » est obligatoire côté service : le contexte étant
       // facultatif dans le formulaire, une phrase de remplacement évite un
@@ -100,7 +100,7 @@
       }).then(function (result) {
         if (result.ok && result.json.success) {
           status.style.color = '#5c7c63';
-          status.textContent = 'Demande envoyée. Je vous rappelle dans la semaine.';
+          status.textContent = 'Demande envoyée. Je vous rappelle prochainement.';
           form.reset();
           group.hidden = true;
         } else {
