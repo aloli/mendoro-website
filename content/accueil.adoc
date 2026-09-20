@@ -2,7 +2,7 @@
 :page-title: Erik Pain — Géomètre-expert
 :page-description: Erik Pain, géomètre-expert : bornage amiable, division foncière, implantation de bâtiment, Copropriété (état descriptif de division), urbanisme, convention de servitude, délimitation du domaine public.
 :og-description: Bornage amiable · Division foncière · Copropriété · Urbanisme
-
+[.card-note]
 *Mendoro provient de :*.
 
 
