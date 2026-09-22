@@ -5,12 +5,11 @@
 
 [.card-note]
 == *Mendoro provient de :*
-  * *Emendare* : Améliorer, en latin.
-  * *Horos* : Limite, borne, en grec ancien.
+  *Emendare* : Améliorer, en latin.
+  *Horos* : Limite, borne, en grec ancien.
 
 [.card-note]
 Inscrit au tableau de l’Ordre des géomètres-experts, je suis à votre disposition pour réaliser vos bornages, vos divisions foncières, l’implantation de votre bâtiment, délimiter vos servitudes.
 Membre de la profession depuis 1998, je vous offre toute mon expertise pour concilier les parties en présence et vous proposer un résultat optimum.
 
-[.card-note]
-En image :
+________________________________________________________________________________________________________________________________________
