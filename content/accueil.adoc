@@ -6,11 +6,7 @@
 [.card-note]
 == *Mendoro.fr provient de :*
 
-* *Emendare* : Améliorer, en latin
-
-/ *Horos* : Limite, borne, en grec ancien
-
-- *Horos* : Limite, borne, en grec ancien
+ * *Emendare* : Améliorer, en latin
 
 + *Horos* : Limite, borne, en grec ancien
 
