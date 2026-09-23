@@ -1,5 +1,3 @@
-= Vidéos, photos
+= En images
 :menu: pied
 :liste: actualites
--
-- fgfdgdg
