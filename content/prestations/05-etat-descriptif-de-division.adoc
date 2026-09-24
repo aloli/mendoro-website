@@ -1,9 +1,22 @@
-= État descriptif de division — copropriété
+= Copropriété
 
-L'état descriptif de division identifie chaque lot d'un immeuble
-(parties privatives, parties communes) et lui affecte des tantièmes
-de copropriété.
+Le géomètre-expert établit l’ensemble des documents qui régissent tout immeuble bâti dont la propriété est répartie par lots, comprenant une partie privative et une quote-part de parties communes générales et spéciales.
 
-J'établis ou modifie l'état descriptif de division et le règlement de
-copropriété, et réalise les mesurages de surface privative nécessaires
-aux ventes.
+== La mise en copropriété d’un immeuble implique sa division entre parties privatives et parties communes.
+
+Le géomètre-expert rédige l’état descriptif de division des nouvelles copropriétés
+Il dresse les plans d’intérieur et exploite les plans du maître d’ouvrage pour rédiger l’état descriptif de division.
+
+*L’état descriptif de division* est un document essentiel en copropriété. Il définit les parties privatives et les parties communes. Il est annexé au règlement de copropriété.
+
+Il comporte :
+
+- une liste des lots privatifs,
+- une description de l’usage,
+- les quotes-parts de copropriété,
+- les "tantièmes" de charges (ou millièmes, dix-millièmes, cent-millièmes ou toute autre subdivision imaginable).
+- le plan de chaque niveaux
+
+Le géomètre-expert fixe la quote-part de la propriété du sol ainsi que les droits de vote attribués à chaque lot lors des assemblées générales.
+Il détermine la répartition des charges générales et spéciales.
+Il dresse le plan de chaque niveaux annexé au règlement
