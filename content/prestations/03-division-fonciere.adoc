@@ -1,19 +1,23 @@
+= Découpage de propriété
 
-= La division de propriété, une prestation foncière du géomètre-expert
+== Le découpage, la division ou le partage de propriété, une prestation foncière du géomètre-expert
 
-La division de propriété consiste à morceler une propriété en vue d’obtenir plusieurs entités distinctes.
+*La division de propriété consiste à morceler une propriété en vue d’obtenir plusieurs entités distinctes pour réaliser par exemple une vente ou une donation*
 
 Dans le cas d’une succession ou d’un futur lotissement par exemple, le géomètre-expert étudie la faisabilité de la division puis la réalise après vous avoir expliqué les étapes nécessaires à la constitution du dossier.
 
 == Quelles sont les étapes d’un projet de division de propriété ?
 
-Le géomètre-expert enregistre le dossier dans le portail GEOFONCIER dès confirmation de la commande. Il examine ensuite le ou les titre(s) de propriété :
+Le géomètre-expert enregistre le dossier dans le portail GEOFONCIER.fr[geofoncier.fr, window="_blank"] dès confirmation de la commande. Il examine ensuite le ou les titre(s) de propriété :
 
 * identité des propriétaires,
 - désignation du bien,
 * servitudes,
 * plans de bornage annexé.
-Il étudie la situation du terrain au regard de la réglementation d’urbanisme et de la destination future des terrains (constructibilité, aménagement, boisement, incidence hydraulique, etc.). Dans son analyse, le géomètre-expert se penche sur :
+
+Il étudie la situation du terrain au regard de la réglementation d’urbanisme et de la destination future des terrains (constructibilité, aménagement, boisement, incidence hydraulique, etc.).
+
+Dans son analyse, le géomètre-expert se penche sur :
 
 * la détermination des limites divisoires,
 * l’établissement d’un plan régulier,
