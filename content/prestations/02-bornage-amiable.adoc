@@ -19,12 +19,12 @@ Le géomètre-expert réalise le bornage d’un terrain en cas :
 == En quoi consistent les missions de bornage du géomètre-expert ?
 Le géomètre-expert réalise 3 types de prestations dans le cadre de sa mission de bornage d’un terrain.
 
-*Le bornage amiable*
+== * Le bornage amiable
 
 Dans le bornage amiable, le géomètre-expert propose une limite qui ne devient définitive qu’avec l’accord de toutes les parties concernées.
 Il s’agit d’une procédure contradictoire.
 
-*Le bornage judiciaire*
+- *Le bornage judiciaire*
 
 Le géomètre-expert intervient comme expert de justice désigné par le juge. Sauf accord des parties en cours d’expertise, il propose dans un rapport une ou plusieurs solutions.
 
