@@ -9,4 +9,4 @@ Après avoir vérifié la cohérence des éléments fournis par le maître d’o
 
 Il procède aux opérations de terrain qui matérialisent l’implantation de l’ouvrage projeté (angles du bâtiment, niveaux, axes des IPN...). Il effectue les mesures de contrôle et livre l’épure de piquetage correspondante.
 
-L'implantation garantit le respect des prospects et évite les contentieux.
+*L'implantation garantit le respect des prospects et évite les contentieux*
