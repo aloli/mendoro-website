@@ -8,7 +8,7 @@ Dans le cas d’une succession ou d’un futur lotissement par exemple, le géom
 
 == Quelles sont les étapes d’un projet de division de propriété ?
 
-Le géomètre-expert enregistre le dossier dans le portail GEOFONCIER.fr[geofoncier.fr, window="_blank"] dès confirmation de la commande. Il examine ensuite le ou les titre(s) de propriété :
+Le géomètre-expert enregistre le dossier dans le portail www.geofoncier.fr/[geofoncier.fr, window="_blank"] dès confirmation de la commande. Il examine ensuite le ou les titre(s) de propriété :
 
 - identité des propriétaires,
 - désignation du bien,
