@@ -11,10 +11,10 @@ Le géomètre-expert est le seul professionnel habilité à délimiter de façon
 
 Le géomètre-expert réalise le bornage d’un terrain en cas :
 
-- de vérification de la superficie,
+* de vérification de la superficie,
 * d’un aménagement prévu par un voisin,
 * de l’édification d’une clôture,
-- ou de la création d’un terrain à bâtir.
+* ou de la création d’un terrain à bâtir.
 
 == En quoi consistent les missions de bornage du géomètre-expert ?
 Le géomètre-expert réalise 3 types de prestations dans le cadre de sa mission de bornage d’un terrain.

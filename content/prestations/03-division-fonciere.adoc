@@ -10,10 +10,10 @@ Dans le cas d’une succession ou d’un futur lotissement par exemple, le géom
 
 Le géomètre-expert enregistre le dossier dans le portail GEOFONCIER.fr[geofoncier.fr, window="_blank"] dès confirmation de la commande. Il examine ensuite le ou les titre(s) de propriété :
 
-* identité des propriétaires,
+- identité des propriétaires,
 - désignation du bien,
-* servitudes,
-* plans de bornage annexé.
+- servitudes,
+- plans de bornage annexé.
 
 Il étudie la situation du terrain au regard de la réglementation d’urbanisme et de la destination future des terrains (constructibilité, aménagement, boisement, incidence hydraulique, etc.).
 
