@@ -24,4 +24,4 @@ Dans son analyse, le géomètre-expert se penche sur :
 * le report, si besoin, des servitudes anciennes et nouvelles et de leur assiette éventuelle,
 * la rédaction du descriptif du terrain à bâtir,
 * l’établissement du Document Modificatif du Parcellaire Cadastral (DMPC) numérique,
-* et l’enregistrement du plan de division et des actes fonciers dressés dans le cadre de la mission dans le portail GEOFONCIER.fr.
+* et l’enregistrement du plan de division et des actes fonciers dressés dans le cadre de la mission dans le portail https://www.geofoncier.fr/[geofoncier.fr, window="_blank"].
