@@ -1,8 +1,12 @@
-= Implantation de bâtiment
+= Implantation d'ouvrage
 
-Avant le démarrage des travaux, je matérialise sur le terrain l'emprise
-exacte du projet : angles du bâtiment, niveaux, axes de référence.
+== Le géomètre-expert garantie la précision du positionnement de l’ouvrage à implanter
 
-L'implantation garantit le respect des limites de propriété et des règles
-de prospect du permis de construire — et évite le contentieux d'un ouvrage
-édifié quelques dizaines de centimètres trop près de la limite.
+À partir d’un plan, l’implantation matérialise sur le terrain la position et l’emprise d’un ouvrage à réaliser.
+
+En quoi consiste la mission d’implantation du géomètre-expert ?
+Après avoir vérifié la cohérence des éléments fournis par le maître d’ouvrage, le géomètre-expert définit la précision à atteindre.
+
+Il procède aux opérations de terrain qui matérialisent l’implantation de l’ouvrage projeté (angles du bâtiment, niveaux, axes des IPN...). Il effectue les mesures de contrôle et livre l’épure de piquetage correspondante.
+
+L'implantation garantit le respect des prospects et évite les contentieux.
