@@ -559,9 +559,23 @@ module Mendoro
 
   # ------------------------------------------------------------ aperçu local
 
+  # Le serveur de fichiers statiques de Crystal ne connaît pas de page par
+  # défaut : `/` répondrait 404. Comme GitHub Pages, on sert alors
+  # `index.html`, à la racine comme dans un sous-dossier.
+  class PageParDefaut
+    include HTTP::Handler
+
+    def call(context)
+      requete = context.request
+      requete.path = "#{requete.path}index.html" if requete.path.ends_with?('/')
+      call_next(context)
+    end
+  end
+
   def self.servir
     serveur = HTTP::Server.new([
       HTTP::LogHandler.new,
+      PageParDefaut.new,
       HTTP::StaticFileHandler.new(SORTIE.to_s, directory_listing: false),
     ])
     adresse = serveur.bind_tcp("127.0.0.1", PORT_LOCAL)
