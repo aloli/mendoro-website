@@ -234,6 +234,14 @@ a[target="_blank"]::after {
 .page-intro p { margin: 0; }
 .page-intro:empty { margin-bottom: 0; }
 
+.page-intro .paragraph + .paragraph,
+.page-intro .paragraph + .ulist,
+.page-intro .ulist + .paragraph { margin-top: 1rem; }
+
+.page-intro ul { margin-left: 1.2rem; }
+.page-intro li > p { margin: 0; }
+.page-intro li { margin-bottom: 0.3rem; }
+
 /* --- Actualités mises en avant -------------------------------------------- */
 .actu-une { margin-bottom: 3rem; }
 
