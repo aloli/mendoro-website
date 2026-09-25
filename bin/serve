@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Génère le site puis le sert sur http://localhost:8765.
+set -euo pipefail
+
+exec "$(dirname "$0")/build" --serve
