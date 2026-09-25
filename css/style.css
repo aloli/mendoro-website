@@ -260,33 +260,7 @@ a[target="_blank"]::after {
   color: var(--text-heading);
 }
 
-/* Défilement horizontal natif : le geste tactile, la molette et le clavier
-   fonctionnent sans script. L'accrochage aligne les cartes proprement. */
-.actu-defile {
-  display: flex;
-  gap: 1.25rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  /* La barre est masquée : la navigation par pastilles la remplace, et un
-     seul élément visible à la fois rend le glissement libre peu lisible. */
-  scrollbar-width: none;
-}
-
-.actu-defile::-webkit-scrollbar { display: none; }
-
-/* Un visiteur qui demande moins d'animations obtient un saut direct. */
-@media (prefers-reduced-motion: reduce) {
-  .actu-defile { scroll-behavior: auto; }
-}
-
-.actu-defile:focus-visible { outline: 2px solid var(--brass); outline-offset: 4px; }
-
 .actu-carte {
-  /* Une actualité occupe tout l'espace : on passe de l'une à l'autre plutôt
-     que d'en montrer trois de front. */
-  flex: 0 0 100%;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
@@ -346,39 +320,6 @@ a[target="_blank"]::after {
   }
 }
 
-/* Navigation d'une actualité à l'autre : de simples ancres, que le
-   navigateur suit en faisant défiler le conteneur. Aucun script. */
-.actu-pas {
-  display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-
-.actu-pas a {
-  width: 2.1rem;
-  height: 2.1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--bg-card);
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: all var(--transition);
-}
-
-.actu-pas a:hover {
-  border-color: var(--brass);
-  color: var(--brass);
-}
-
-/* :target met en valeur la pastille de l'actualité affichée — encore du CSS
-   seul, le navigateur tenant le fragment d'adresse à jour. */
-.actu-carte:target { outline: none; }
-
 /* Vidéo : le rapport 16/9 est tenu par le conteneur, pas par des marges
    calculées — l'iframe le remplit entièrement. */
 .actu-video {
@@ -405,9 +346,9 @@ a[target="_blank"]::after {
   margin-inline: auto;
 }
 
-/* Dans le défilé, plus étroit encore : la hauteur d'un volet est celle de
-   son média, et les trois doivent rester de même taille. */
-.actu-defile .actu-video--vertical { width: min(100%, 8.5rem); }
+/* En accueil, plus étroit encore : la carte ne doit pas repousser les
+   prestations hors de l'écran. */
+.actu-une .actu-video--vertical { width: min(100%, 8.5rem); }
 
 /* Écran d'attente. Aucune image n'est chargée depuis la plateforme : une
    vignette distante trahirait déjà l'adresse du visiteur, ce que ce
@@ -457,10 +398,9 @@ a[target="_blank"]::after {
   display: block;
 }
 
-/* Dans le défilé, toutes les vignettes occupent le même cadre : sans cela une
-   photo de téléphone en portrait — 622 par 1280 — dicterait à elle seule la
-   hauteur du volet, et donc celle des trois actualités. */
-.actu-defile .actu-photo img {
+/* En accueil, la vignette occupe un cadre fixe : sans cela une photo de
+   téléphone en portrait — 622 par 1280 — étirerait la carte en hauteur. */
+.actu-une .actu-photo img {
   height: 12rem;
   object-fit: cover;
 }
