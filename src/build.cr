@@ -336,7 +336,7 @@ module Mendoro
                    <section class="actu-une" aria-labelledby="actu-une-titre">
                      <div class="actu-une-entete">
                        <h2 id="actu-une-titre">En images</h2>
-                       <a class="actu-lien" href="actualites.html">Toutes les images</a>
+                       <a class="actu-lien" href="actualites.html">Archives des images</a>
                      </div>
                      <!-- Défilement horizontal natif : ni script ni dépendance,
                           et le geste tactile comme la molette fonctionnent. Le
