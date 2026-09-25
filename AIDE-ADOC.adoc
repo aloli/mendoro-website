@@ -1,0 +1,285 @@
+= Écrire les textes du site
+:toc: macro
+:toclevels: 2
+:experimental:
+
+Mémento de la syntaxe *AsciiDoc* telle qu'elle est utilisée sur
+https://mendoro.fr[mendoro.fr]. Il ne couvre que ce dont le site se sert —
+volontairement. Pour le reste, voir <<pour-aller-plus-loin>>.
+
+toc::[]
+
+== Où vivent les textes
+
+Tous les textes sont dans `content/`, un fichier `.adoc` par page.
+
+[cols="2,3a"]
+|===
+| Dossier | Contenu
+
+| `content/site.adoc`
+| Réglages communs à tout le site : votre nom, votre fonction, l'adresse du
+formulaire. À ne toucher qu'en connaissance de cause.
+
+| `content/accueil.adoc`
+| La page d'accueil.
+
+| `content/prestations/`
+| Une prestation par fichier, nommé `NN-nom.adoc`. Le numéro fixe l'ordre
+dans le menu ; il disparaît de l'adresse, si bien que
+`02-bornage-amiable.adoc` devient `bornage-amiable.html`.
+
+| `content/actualites/`
+| Une actualité par fichier, nommé `AAAA-MM-JJ-nom.adoc`. La date vient du
+nom du fichier : elle donne l'ordre d'affichage et s'affiche sur la page,
+vous n'avez pas à l'écrire dans le texte.
+
+| `content/contact.adoc`, `content/mentions-legales.adoc`
+| Les deux pages de service.
+
+| `images/`, `images/actus/`
+| Les photos. Déposez-les ici avant d'y renvoyer depuis un texte.
+|===
+
+== L'en-tête d'un document
+
+Un fichier commence par son titre, précédé d'un `=` et d'une espace, puis
+éventuellement par des *attributs*, une ligne chacun, de la forme
+`:nom: valeur`. Une ligne vide ferme l'en-tête et ouvre le texte.
+
+[source,asciidoc]
+----
+= Bornage amiable
+:page-description: Le bornage amiable par un géomètre-expert à Paray-le-Monial.
+
+Le bornage a pour effet de définir juridiquement…
+----
+
+Tous les attributs sont facultatifs.
+
+[cols="2,3a"]
+|===
+| Attribut | Effet
+
+| `:page-description:`
+| Le résumé affiché par Google sous le titre de la page. Une ou deux phrases.
+En son absence, la place reste vide.
+
+| `:page-title:`
+| Le titre affiché dans l'onglet du navigateur, s'il doit différer du titre
+de la page.
+
+| `:page-robots:`
+| `noindex, nofollow` pour qu'une page ne soit pas référencée. Par défaut,
+les pages sont référencées.
+
+| `:menu: pied`
+| Range la page dans le pied de page plutôt que dans le menu *Prestations*.
+C'est le cas de « Ma carrière » et « En images ».
+
+| `:liste: actualites`
+| Réservé à la page qui rassemble les actualités. Une seule page doit le
+porter.
+|===
+
+== Écrire le texte
+
+=== Titres et paragraphes
+
+Le titre de la page porte un `=`. À l'intérieur, les sous-titres en portent
+deux, puis trois.
+
+[source,asciidoc]
+----
+= Titre de la page
+
+== Un sous-titre
+
+=== Un sous-sous-titre
+----
+
+Un paragraphe est un bloc de lignes ; une ligne vide le termine. Vous pouvez
+donc revenir à la ligne au milieu d'une phrase sans rien casser : à
+l'affichage, les lignes d'un même paragraphe sont recollées.
+
+=== Mise en valeur
+
+[source,asciidoc]
+----
+*bornage*   pour du gras
+_bornage_   pour de l'italique
+`bornage`   pour de la chasse fixe
+----
+
+Ce qui donne, à l'affichage : *bornage*, _bornage_, `bornage`.
+
+=== Listes
+
+[source,asciidoc]
+----
+* Une puce
+* Une autre
+** Une sous-puce
+
+. Une étape numérotée
+. La suivante
+----
+
+=== Liens
+
+Vers une page du site :
+
+[source,asciidoc]
+----
+link:contact.html[le formulaire]
+----
+
+Vers un site extérieur :
+
+[source,asciidoc]
+----
+https://www.geometre-expert.fr[l'Ordre, window="_blank"]
+----
+
+`window="_blank"` ouvre le lien dans un nouvel onglet. Le site y ajoute
+automatiquement le petit picto et la mention lue par les lecteurs d'écran :
+vous n'avez rien à écrire de plus.
+
+=== Images
+
+[source,asciidoc]
+----
+image::images/erik-pain.jpg["Portrait d'Erik Pain",600,970]
+----
+
+Entre crochets, dans cet ordre : le texte de remplacement — décrivez ce que
+montre l'image, pour qui ne la voit pas —, puis la largeur et la hauteur du
+fichier en pixels. Le texte de remplacement se met entre guillemets droits
+dès qu'il contient une virgule.
+
+Ajoutez `,role="portrait"` pour qu'une photo verticale se place à droite du
+texte, qui l'habille :
+
+[source,asciidoc]
+----
+image::images/erik-pain.jpg["Portrait d'Erik Pain",600,970,role="portrait"]
+----
+
+=== Signaler un passage à reprendre
+
+[source,asciidoc]
+----
+[.todo]#À compléter : l'année d'inscription à l'Ordre.#
+----
+
+Le passage s'affiche surligné sur le site. Utile pour ne pas perdre le fil
+d'un texte en cours — mais il est *visible du public* : pensez à les retirer.
+
+== Ajouter une actualité
+
+Créez un fichier dans `content/actualites/`, nommé `AAAA-MM-JJ-sujet.adoc`.
+Trois formes possibles.
+
+=== Un texte
+
+L'attribut `:resume:` donne la phrase affichée sur la page d'accueil ; le
+texte entier n'apparaît que sur la page de l'actualité.
+
+[source,asciidoc]
+----
+= Le site est en ligne
+:resume: Le cabinet dispose désormais de son site.
+
+Le cabinet dispose désormais de son site. On y trouve le détail des
+prestations — bornage, division foncière, urbanisme — et un formulaire
+pour me joindre.
+----
+
+=== Une photo
+
+[source,asciidoc]
+----
+= Alignement
+:resume: Retour en image sur une opération d'alignement.
+:photo: images/actus/alignement.jpg
+:legende: Pose d'une borne.
+----
+
+Déposez d'abord la photo dans `images/actus/`. Si le fichier est introuvable,
+la génération vous le signale plutôt que d'afficher une image cassée.
+
+=== Une vidéo
+
+[source,asciidoc]
+----
+= Le métier de géomètre-expert
+:resume: Une courte vidéo pour comprendre la profession.
+:video: https://www.youtube.com/watch?v=NxPLSqDpono
+----
+
+Collez l'adresse telle que YouTube ou Vimeo vous la donne. Toutes les formes
+sont reconnues, y compris `youtube.com/shorts/…` — une vidéo verticale est
+alors affichée dans un cadre vertical.
+
+La vidéo n'est chargée qu'au clic du visiteur : tant qu'il n'a rien demandé,
+aucune donnée ne part chez YouTube ou Vimeo. C'est ce qui permet aux mentions
+légales d'affirmer que le site ne piste personne. Ne remplacez pas ce
+dispositif par un code d'intégration copié depuis la plateforme.
+
+== Ajouter une prestation
+
+Créez un fichier dans `content/prestations/`, nommé `NN-nom.adoc` où `NN`
+fixe le rang dans le menu. La page apparaît d'elle-même dans le menu
+*Prestations* et dans le rappel en bas de chaque page, avec un bouton
+« Me contacter » qui présélectionne cette prestation dans le formulaire.
+Rien à déclarer ailleurs.
+
+== Ce qui se fait tout seul
+
+* Les textes sont *justifiés* et coupés en fin de ligne selon les règles du
+français : rien à écrire dans les documents.
+* Les apostrophes droites deviennent des apostrophes typographiques, `--`
+devient un tiret cadratin.
+* Les liens externes reçoivent leur picto et leur mention sonore.
+* La date d'une actualité vient du nom de son fichier.
+* Le menu et le pied de page se construisent à partir des fichiers présents.
+
+== Deux pièges connus
+
+Le site n'est pas converti par Asciidoctor mais par *asciicrystal*, son
+portage en Crystal — c'est ce qui permet de compiler l'outil pour Windows.
+Le portage est incomplet : une syntaxe lue dans une documentation générale
+peut ne pas fonctionner ici.
+
+Deux écarts déjà corrigés, pour mémoire :
+
+* le préfixe d'un lien était avalé (corrigé en 2.0.26.14) ;
+* les traits d'union disparaissaient du texte de remplacement des images
+  (corrigé en 2.0.26.16).
+
+Si une syntaxe se comporte bizarrement, signalez-le plutôt que de contourner :
+asciicrystal est notre outil, il se corrige.
+
+== Voir le résultat
+
+Sur votre poste, depuis le dossier du site :
+
+[source,console]
+----
+./bin/build --serve
+----
+
+Le site est alors visible sur http://localhost:8765[localhost:8765]. Arrêtez
+avec kbd:[Ctrl+C]. Relancez après chaque modification : il n'y a pas de
+rechargement automatique.
+
+Depuis GitHub, publier suffit : le site se régénère seul et la mise en ligne
+prend deux à trois minutes. Voir link:INSTALL.adoc[INSTALL.adoc] pour la
+marche à suivre depuis un poste Windows.
+
+[[pour-aller-plus-loin]]
+== Pour aller plus loin
+
+* https://blog.stephane-robert.info/docs/developper/autres-langages/asciidoc/[AsciiDoc : le guide complet, window="_blank"] — en français, le plus complet.
+* https://framagit.org/Siltaar/asciidoctor-docs-fr[Mémento officiel traduit, window="_blank"] — en français, traduction bénévole de 2019.
+* https://docs.asciidoctor.org/asciidoc/latest/[Documentation officielle, window="_blank"] — en anglais, la seule qui fasse foi.

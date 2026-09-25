@@ -7,6 +7,7 @@ statique par un générateur Crystal, lui-même compilable sous Windows, macOS e
 FreeBSD.
 
 Pour installer le poste de travail, voir link:INSTALL.adoc[INSTALL.adoc].
+Pour la syntaxe des textes, voir link:AIDE-ADOC.adoc[AIDE-ADOC.adoc].
 
 == Stack
 

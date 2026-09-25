@@ -180,7 +180,9 @@ Tous les textes du site sont dans le dossier `content\` :
 | Une prestation par fichier, affichée dans l'ordre des noms de fichiers
 |===
 
-La syntaxe AsciiDoc utile ici tient en quelques règles :
+La syntaxe AsciiDoc utile ici tient en quelques règles — le mémento
+complet, actualités et images comprises, est dans
+link:AIDE-ADOC.adoc[AIDE-ADOC.adoc] :
 
 [source,asciidoc]
 ----
