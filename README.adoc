@@ -36,6 +36,8 @@ templates/                # gabarits HTML, marqueurs {{clef}}
   contact.html            #   formulaire
   contact-script.html     #   script du formulaire
   mentions-legales.html   #   corps des mentions légales
+  prestation.html         #   corps d'une prestation ou d'une actualité
+  fragments/*.html        #   morceaux répétés : cartes, menus, pagination…
 
 css/style.css             # toutes les feuilles de style
 images/                   # emblème de l'Ordre et autres visuels

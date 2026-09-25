@@ -102,6 +102,18 @@ module Mendoro
     File.read(GABARITS / "#{nom}.html")
   end
 
+  # Un morceau de page, tiré de templates/fragments/. Tout le balisage vit
+  # dans les gabarits : le générateur ne fait que choisir le fragment et lui
+  # fournir des valeurs, échappées au besoin par l'appelant.
+  #
+  # Les commentaires d'un fragment sont des notes pour qui le maintient : ils
+  # sont retirés avant rendu et ne partent pas dans les pages publiées.
+  COMMENTAIRE = /^[ \t]*<!--.*?-->[ \t]*\n/m
+
+  def self.fragment(nom : String, valeurs = {} of String => String) : String
+    rendre(gabarit("fragments/#{nom}").gsub(COMMENTAIRE, "").chomp, valeurs)
+  end
+
   def self.echapper(texte : String) : String
     texte.gsub('&', "&amp;").gsub('<', "&lt;").gsub('>', "&gt;").gsub('"', "&quot;")
   end
@@ -113,12 +125,12 @@ module Mendoro
   # L'ajout est fait ici plutôt que dans les contenus : compter sur le
   # rédacteur pour l'écrire à chaque lien, c'est accepter qu'il l'oublie.
   LIEN_NOUVEL_ONGLET = /(<a\b[^>]*\btarget="_blank"[^>]*>)(.*?)(<\/a>)/m
-  MENTION_MASQUEE    = %(<span class="visually-hidden"> (nouvelle fenêtre)</span>)
 
   def self.signaler_liens_externes(html : String) : String
+    mention = fragment("mention-nouvel-onglet")
     html.gsub(LIEN_NOUVEL_ONGLET) do |entier, m|
       # Ne pas doubler la mention si le rédacteur l'a déjà écrite lui-même.
-      m[2].includes?("visually-hidden") ? entier : "#{m[1]}#{m[2]}#{MENTION_MASQUEE}#{m[3]}"
+      m[2].includes?("visually-hidden") ? entier : "#{m[1]}#{m[2]}#{mention}#{m[3]}"
     end
   end
 
@@ -196,34 +208,28 @@ module Mendoro
   def self.media_actu(a : Source) : String
     if spec = a.attributs["video"]?
       if video = reconnaitre_video(spec)
-        # Écran d'attente : aucune requête vers la plateforme avant le clic
-        # du visiteur. Le lecteur n'est inséré qu'ensuite.
-        <<-HTML
-            <div class="actu-video#{video.vertical ? " actu-video--vertical" : ""}">
-              <button type="button" class="video-attente" data-src="#{video.url}"
-                      data-titre="#{echapper(a.titre)}">
-                <span class="video-lire" aria-hidden="true"></span>
-                <span class="video-mention">Lire la vidéo<br><small>Chargée depuis #{video.plateforme} à votre clic</small></span>
-              </button>
-            </div>
-        HTML
+        fragment("video", {
+          "format"     => video.vertical ? "vertical" : "paysage",
+          "url"        => video.url,
+          "titre"      => echapper(a.titre),
+          "plateforme" => video.plateforme,
+        })
       else
-        %(        <p class="actu-media-absent"><span class="todo">Adresse de la vidéo à renseigner.</span></p>)
+        fragment("media-absent", {"message" => "Adresse de la vidéo à renseigner."})
       end
     elsif photo = a.attributs["photo"]?
       # Une photo annoncée mais absente donnerait une image cassée : on
       # préfère n'afficher que la légende, et le signaler à la génération.
       if File.exists?(RACINE / photo)
         legende = a.attributs["legende"]?
-        <<-HTML
-            <figure class="actu-photo">
-              <img src="#{photo}" alt="#{echapper(legende || a.titre)}" loading="lazy">
-              #{legende ? %(<figcaption>#{echapper(legende)}</figcaption>) : ""}
-            </figure>
-        HTML
+        fragment("photo", {
+          "src"     => photo,
+          "alt"     => echapper(legende || a.titre),
+          "legende" => legende ? fragment("legende", {"texte" => echapper(legende)}) : "",
+        })
       else
         STDERR.puts "   ! photo absente : #{photo} (#{a.fichier})"
-        %(        <p class="actu-media-absent"><span class="todo">Photo à déposer : #{echapper(photo)}</span></p>)
+        fragment("media-absent", {"message" => "Photo à déposer : #{echapper(photo)}"})
       end
     else
       ""
@@ -243,28 +249,24 @@ module Mendoro
     end
   end
 
-  # La carte de la dernière actualité, en accueil. Le résumé vient de l'attribut `:resume:` : il est
-  # écrit pour être lu seul, ce qu'un extrait tronqué du corps ne serait pas.
+  # La carte de la dernière actualité, en accueil. Le résumé vient de
+  # l'attribut `:resume:` : il est écrit pour être lu seul, ce qu'un extrait
+  # tronqué du corps ne serait pas.
   def self.carte_actu(a : Source) : String
-    resume = a.attributs["resume"]?
     media = media_actu(a)
-    # Une carte portant un média se met sur deux colonnes en écran large :
-    # une vidéo 16/9 pleine largeur ferait près de six cents pixels de haut
-    # et chasserait tout le reste hors de l'écran.
-    classe = media.empty? ? "actu-carte" : "actu-carte actu-carte--media"
-    <<-HTML
-          <article class="#{classe}">
-            <div class="actu-media">
-    #{media}
-            </div>
-            <div class="actu-texte">
-              <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
-              <h3><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h3>
-              #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : ""}
-              <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
-            </div>
-          </article>
-    HTML
+    fragment("carte-actu", {
+      "format" => media.empty? ? "texte" : "media",
+      "media"  => media,
+      "date"   => echapper(date_lisible(a.fichier)),
+      "lien"   => page_actu(a),
+      "titre"  => echapper(a.titre),
+      "resume" => resume_actu(a),
+    })
+  end
+
+  def self.resume_actu(a : Source) : String
+    resume = a.attributs["resume"]?
+    resume ? fragment("resume", {"texte" => echapper(resume)}) : ""
   end
 
   def self.charger_prestations : Array(Source)
@@ -277,10 +279,13 @@ module Mendoro
   # la feuille de style met en évidence.
   def self.menu_prestations(prestations, chemin_courant : String) : String
     prestations_du_menu(prestations).map do |p|
-      courante = p.page == chemin_courant
-      marque = courante ? %( aria-current="page") : ""
-      %(        <li><a href="#{p.page}"#{marque}>#{echapper(p.titre)}</a></li>)
+      lien_menu(p.page, p.titre, chemin_courant)
     end.join('\n')
+  end
+
+  def self.lien_menu(chemin : String, libelle : String, chemin_courant : String) : String
+    nom = chemin == chemin_courant ? "lien-menu-courant" : "lien-menu"
+    fragment(nom, {"lien" => chemin, "libelle" => echapper(libelle)})
   end
 
   # Les entrées du pied de page, suivies des mentions légales.
@@ -291,8 +296,7 @@ module Mendoro
     entrees << {"mentions-legales.html", "Mentions légales"}
 
     entrees.map do |chemin, libelle|
-      marque = chemin == chemin_courant ? %( aria-current="page") : ""
-      %(    <li><a href="#{chemin}"#{marque}>#{echapper(libelle)}</a></li>)
+      lien_menu(chemin, libelle, chemin_courant)
     end.join('\n')
   end
 
@@ -319,29 +323,13 @@ module Mendoro
     # La grille est titrée « Mes prestations » : les pages reléguées au pied
     # — carrière, actualités — n'y ont pas leur place.
     cartes = prestations_du_menu(prestations).map do |p|
-      <<-HTML
-            <a class="card" href="#{p.page}">
-              <span class="card-titre">#{echapper(p.titre)}</span>
-            </a>
-      HTML
+      fragment("carte-prestation", {"lien" => p.page, "titre" => echapper(p.titre)})
     end
 
     # La dernière actualité passe devant les prestations. S'il n'y en a
     # aucune, le bloc disparaît plutôt que d'afficher un cadre vide.
     derniere = actualites.first?
-    encart = if derniere.nil?
-               ""
-             else
-               <<-HTML
-                   <section class="actu-une" aria-labelledby="actu-une-titre">
-                     <div class="actu-une-entete">
-                       <h2 id="actu-une-titre">En images</h2>
-                       <a class="actu-lien" href="actualites.html">Archives des images</a>
-                     </div>
-               #{carte_actu(derniere)}
-                   </section>
-               HTML
-             end
+    encart = derniere ? fragment("actu-une", {"carte" => carte_actu(derniere)}) : ""
 
     valeurs = base(site, page, "")
     valeurs["corps"] = rendre(gabarit("accueil"), {
@@ -425,16 +413,14 @@ module Mendoro
 
   # Un billet, tel qu'il paraît dans la liste.
   def self.billet_actu(a : Source) : String
-    resume = a.attributs["resume"]?
-    <<-HTML
-        <article class="actu">
-          <p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>
-          <h2><a href="#{page_actu(a)}">#{echapper(a.titre)}</a></h2>
-          #{media_actu(a)}
-          #{resume ? %(<p class="actu-resume">#{echapper(resume)}</p>) : a.html}
-          <p><a class="actu-lien" href="#{page_actu(a)}">Lire la suite</a></p>
-        </article>
-    HTML
+    fragment("billet-actu", {
+      "date"  => echapper(date_lisible(a.fichier)),
+      "lien"  => page_actu(a),
+      "titre" => echapper(a.titre),
+      "media" => media_actu(a),
+      # Sans résumé, le billet montre son texte entier.
+      "texte" => a.attributs["resume"]? ? resume_actu(a) : a.html,
+    })
   end
 
   # La pagination ne s'affiche qu'à partir de deux pages : inutile d'encombrer
@@ -442,26 +428,16 @@ module Mendoro
   def self.pagination(base_slug : String, courante : Int32, total : Int32) : String
     return "" if total <= 1
 
-    precedent = courante > 1 ? %(<a class="page-precedente" href="#{page_liste(base_slug, courante - 1)}">Plus récentes</a>) : ""
-    suivant = courante < total ? %(<a class="page-suivante" href="#{page_liste(base_slug, courante + 1)}">Plus anciennes</a>) : ""
-
     numeros = (1..total).map do |n|
-      if n == courante
-        %(<span aria-current="page">#{n}</span>)
-      else
-        %(<a href="#{page_liste(base_slug, n)}">#{n}</a>)
-      end
-    end.join("\n            ")
+      nom = n == courante ? "page-numero-courante" : "page-numero"
+      fragment(nom, {"lien" => page_liste(base_slug, n), "numero" => n.to_s})
+    end
 
-    <<-HTML
-        <nav class="pagination" aria-label="Pages d'actualités">
-          #{precedent}
-          <span class="pagination-numeros">
-            #{numeros}
-          </span>
-          #{suivant}
-        </nav>
-    HTML
+    fragment("pagination", {
+      "precedente" => courante > 1 ? fragment("page-precedente", {"lien" => page_liste(base_slug, courante - 1)}) : "",
+      "suivante"   => courante < total ? fragment("page-suivante", {"lien" => page_liste(base_slug, courante + 1)}) : "",
+      "numeros"    => numeros.join('\n'),
+    })
   end
 
   # La page qui rassemble les actualités, découpée en autant de pages que
@@ -501,8 +477,11 @@ module Mendoro
     valeurs["page-title"] = "#{a.titre} — #{site["nom"]?}, #{site["fonction"]?}"
     valeurs["page-description"] = a.attributs["resume"]? || a.titre
     valeurs["corps"] = rendre(gabarit("prestation"), {
-      "contenu" => %(<p class="actu-date">#{echapper(date_lisible(a.fichier))}</p>\n) +
-                   media_actu(a) + "\n" + a.html,
+      "contenu" => fragment("actualite", {
+        "date"    => echapper(date_lisible(a.fichier)),
+        "media"   => media_actu(a),
+        "contenu" => a.html,
+      }),
       "cta-url"     => "contact.html",
       "cta-libelle" => "Me contacter",
     })
@@ -517,7 +496,7 @@ module Mendoro
 
     # La liste déroulante reprend exactement les prestations publiées.
     options = prestations_demandables(prestations).map do |p|
-      "            <option>#{echapper(p.titre)}</option>"
+      fragment("option-demande", {"libelle" => echapper(p.titre)})
     end
 
     # Bandeau facultatif : présent tant que le fichier existe, disparu dès
@@ -525,12 +504,7 @@ module Mendoro
     fichier_bandeau = CONTENU / "contact-bandeau.adoc"
     bandeau = if File.exists?(fichier_bandeau)
                 avis = Source.lire(fichier_bandeau)
-                <<-HTML
-                    <aside class="bandeau" role="note">
-                      <h2>#{echapper(avis.titre)}</h2>
-                #{avis.html}
-                    </aside>
-                HTML
+                fragment("bandeau", {"titre" => echapper(avis.titre), "contenu" => avis.html})
               else
                 ""
               end

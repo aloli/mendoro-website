@@ -1,0 +1,10 @@
+        <!-- Écran d'attente : aucune requête vers la plateforme avant le clic
+             du visiteur. Le lecteur n'est inséré qu'ensuite. Un « short »
+             porte le format « vertical » et garde ses proportions. -->
+        <div class="actu-video actu-video--{{format}}">
+          <button type="button" class="video-attente" data-src="{{url}}"
+                  data-titre="{{titre}}">
+            <span class="video-lire" aria-hidden="true"></span>
+            <span class="video-mention">Lire la vidéo<br><small>Chargée depuis {{plateforme}} à votre clic</small></span>
+          </button>
+        </div>
