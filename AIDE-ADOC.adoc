@@ -104,14 +104,14 @@ l'affichage, les lignes d'un même paragraphe sont recollées.
 
 === Mise en valeur
 
-[source,asciidoc]
-----
-*bornage*   pour du gras
-_bornage_   pour de l'italique
-`bornage`   pour de la chasse fixe
-----
+[cols="1,1"]
+|===
+| Vous écrivez | Vous obtenez
 
-Ce qui donne, à l'affichage : *bornage*, _bornage_, `bornage`.
+| `+*bornage*+` | *bornage*, en gras
+| `+_bornage_+` | _bornage_, en italique
+| `+`bornage`+` | `bornage`, en chasse fixe
+|===
 
 === Listes
 
@@ -127,19 +127,24 @@ Ce qui donne, à l'affichage : *bornage*, _bornage_, `bornage`.
 
 === Liens
 
-Vers une page du site :
+[cols="1,2a"]
+|===
+| Pour aller | Vous écrivez
 
+| vers une page du site
+|
 [source,asciidoc]
 ----
 link:contact.html[le formulaire]
 ----
 
-Vers un site extérieur :
-
+| vers un site extérieur
+|
 [source,asciidoc]
 ----
 https://www.geometre-expert.fr[l'Ordre, window="_blank"]
 ----
+|===
 
 `window="_blank"` ouvre le lien dans un nouvel onglet. Le site y ajoute
 automatiquement le petit picto et la mention lue par les lecteurs d'écran :
@@ -255,7 +260,9 @@ Deux écarts déjà corrigés, pour mémoire :
 
 * le préfixe d'un lien était avalé (corrigé en 2.0.26.14) ;
 * les traits d'union disparaissaient du texte de remplacement des images
-  (corrigé en 2.0.26.16).
+  (corrigé en 2.0.26.16) ;
+* une cellule de tableau en style `a` recrachait sa source brute, et le
+  passthrough `+texte+` n'était pas reconnu (corrigés en 2.0.26.22).
 
 Si une syntaxe se comporte bizarrement, signalez-le plutôt que de contourner :
 asciicrystal est notre outil, il se corrige.

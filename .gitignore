@@ -3,7 +3,8 @@
 
 # Généré par shards
 /lib/
-/bin/
+/bin/*
+!/bin/serve
 /.shards/
 
 # Généré par bin/build

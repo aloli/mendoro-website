@@ -1,0 +1,14 @@
+      <!-- Le format « media » met la carte sur deux colonnes en écran large :
+           une vidéo 16/9 pleine largeur ferait près de six cents pixels de
+           haut et chasserait tout le reste hors de l'écran. -->
+      <article class="actu-carte actu-carte--{{format}}">
+        <!-- Collé à ses balises : sans média, le bloc reste :empty et la
+             feuille de style le masque. -->
+        <div class="actu-media">{{media}}</div>
+        <div class="actu-texte">
+          <p class="actu-date">{{date}}</p>
+          <h3><a href="{{lien}}">{{titre}}</a></h3>
+{{resume}}
+          <p><a class="actu-lien" href="{{lien}}">Lire la suite</a></p>
+        </div>
+      </article>

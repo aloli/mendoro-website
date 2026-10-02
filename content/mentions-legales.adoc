@@ -34,6 +34,11 @@ géomètres-experts.
 Le site est hébergé par GitHub Pages — GitHub, Inc.,
 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis.
 
+== Conception et réalisation
+
+Site conçu et réalisé par *ALOLI sas*, Laguiole (Aveyron) —
+https://aloli.fr[aloli.fr, window="_blank"].
+
 == Médiation de la consommation
 
 Conformément à l'article L. 612-1 du code de la consommation, tout
