@@ -6,7 +6,7 @@
 [.card-note]
 == Mendoro.fr provient de :
 
-* *du latin : Emendare* : Améliorer
+* du latin : *Emendare* : Améliorer
 * du grec ancien : *Horos* : Limite, Borne
 
 [.card-note]
