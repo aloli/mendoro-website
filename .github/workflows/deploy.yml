@@ -65,6 +65,7 @@ jobs:
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
           SHA: ${{ github.sha }}
           MESSAGE: ${{ github.event.head_commit.message }}
           LIEN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
