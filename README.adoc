@@ -69,19 +69,47 @@ alimentée par les mêmes fichiers : elle reste synchronisée sans intervention.
 
 == Reste à faire
 
-* Déposer l'emblème officiel de l'Ordre des géomètres-experts dans `images/`
-  et remplacer le bloc `.ordre-logo` de `templates/layout.html`.
-* Rédiger `content/prestations/01-ma-carriere.adoc`.
-* Compléter les passages marqués `[.todo]#…#` dans
-  `content/mentions-legales.adoc` (identité, n° d'inscription à l'Ordre,
-  assurance RCP, médiateur, RGPD).
-* Vérifier que le backend `form.aloli.fr` accepte les champs du formulaire
-  (`nom`, `prenom`, `adresse`, `tel`, `email`, `bien_adresse_type`,
-  `bien_adresse`, `cadastre_section`, `cadastre_numero`, `demande`, `contexte`).
-* Faire pointer le DNS de `mendoro.fr` vers GitHub Pages, puis renseigner le
-  domaine personnalisé dans _Settings > Pages_ (impossible tant que le domaine
-  ne résout pas : GitHub ne peut pas émettre le certificat).
-+
+Mettre le formulaire de contact en service::
+Le site poste vers `https://form.mendoro.fr/submit` — l'attribut
+`:form-action:` de `content/site.adoc` —, adresse qui ne résout pas encore.
+Le service est `aloli/crystal-forms` (dépôt privé), à déployer sur
+`qwerty.aloli.net` avec `SITE_NAME=mendoro.fr`,
+`SMTP_TO=contact@mendoro.fr` et `ALLOWED_ORIGINS=https://mendoro.fr`. Faire
+ensuite pointer `form.mendoro.fr` sur cet hôte, puis supprimer
+`content/contact-bandeau.adoc` : c'est le bandeau qui invite à téléphoner en
+attendant.
+
+Signer le contrat de sous-traitance::
+Les mentions légales désignent ALOLI comme sous-traitant au sens de
+l'article 28 du RGPD, puisque le service de formulaire achemine les
+messages. Un contrat écrit avec Erik est requis, et le restera tant que ce
+service tournera.
+
+== Déploiement
+
+À chaque push sur la branche `production`, GitHub Actions installe Crystal,
+compile `bin/build`, génère `_site/` et le publie sur GitHub Pages
+(`.github/workflows/deploy.yml`).
+
+Un échec ouvre une issue assignée à `papilip`, portant le label `ci` — GitHub
+n'avertissant par courriel que l'auteur du push. Les échecs suivants
+s'ajoutent en commentaire plutôt que d'ouvrir une issue chacun. Un
+déploiement qui échoue ne retire rien : le site reste en ligne dans sa
+version précédente.
+
+=== Domaine et certificat
+
+Le domaine personnalisé tient au seul réglage _Settings > Pages_ du dépôt.
+La publication passant par un workflow Actions, un éventuel fichier `CNAME`
+livré dans l'artefact serait ignoré — ne pas en recréer un en croyant y
+fixer le domaine.
+
+Le certificat, émis par GitHub, couvre `mendoro.fr` et `www.mendoro.fr`.
+GitHub ne le réémet pas de lui-même si le DNS change : il faut retirer puis
+remettre le domaine personnalisé.
+
+Enregistrements en place :
+
 [source]
 ----
 mendoro.fr.      A     185.199.108.153
@@ -94,9 +122,3 @@ mendoro.fr.      AAAA  2606:50c0:8002::153
 mendoro.fr.      AAAA  2606:50c0:8003::153
 www.mendoro.fr.  CNAME aloli.github.io.
 ----
-
-== Déploiement
-
-À chaque push sur la branche `production`, GitHub Actions installe Crystal,
-compile `bin/build`, génère `_site/` et le publie sur GitHub Pages
-(`.github/workflows/deploy.yml`).
