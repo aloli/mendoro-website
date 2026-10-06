@@ -9,6 +9,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: pages
@@ -22,6 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # L'image du runner fige son index apt au moment de sa construction.
+      # Quand le miroir Ubuntu publie une révision des dépendances de
+      # Crystal — libevent, libgmp, libssl… —, les versions que l'index
+      # réclame ont disparu et l'installation échoue en 404. Rafraîchir
+      # l'index avant remet les deux en phase.
+      - name: Rafraîchir l'index apt
+        run: sudo apt-get update
 
       - uses: crystal-lang/install-crystal@v1
         with:
@@ -43,3 +52,35 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      # GitHub n'avertit que l'auteur du push. Quand Erik publie, lui seul
+      # reçoit le courriel d'échec — qu'il n'a pas les moyens d'interpréter.
+      # Une issue laisse une trace datée, visible de tous, qui ne dépend
+      # d'aucun réglage de notification individuel.
+      #
+      # Le message de commit transite par l'environnement et non par
+      # interpolation directe : un `${{ }}` dans un script shell exécute
+      # ce que le message contient.
+      - name: Signaler l'échec
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ github.sha }}
+          MESSAGE: ${{ github.event.head_commit.message }}
+          LIEN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          gh label create ci --color d73a4a \
+            --description "Intégration continue" --force
+          corps=$(printf '%s\n\n%s\n\n%s\n\n%s\n' \
+            "Le déploiement a échoué : **le site reste en ligne dans sa version précédente**, les modifications publiées depuis ne sont pas visibles." \
+            "Commit : \`$SHA\` — $MESSAGE" \
+            "Journal complet : $LIEN" \
+            "_Ouvert automatiquement par le workflow de déploiement._")
+          ouverte=$(gh issue list --label ci --state open --limit 1 \
+            --json number --jq '.[0].number // empty')
+          if [ -n "$ouverte" ]; then
+            gh issue comment "$ouverte" --body "$corps"
+          else
+            gh issue create --title "Le déploiement du site échoue" \
+              --label ci --assignee papilip --body "$corps"
+          fi
