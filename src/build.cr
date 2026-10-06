@@ -29,7 +29,7 @@ module Mendoro
 
   # ESSAI — à retirer : vérifie que l'échec du déploiement ouvre bien
   # une issue. Erreur de syntaxe volontaire, fatale dès l'analyse.
-  def self.casse_volontaire
+  def self.casse_volontaire_second_essai
 
   # Un fichier .adoc découpé en trois : son titre (`= Titre`), ses attributs
   # d'en-tête (`:clef: valeur`) et le corps du document.
