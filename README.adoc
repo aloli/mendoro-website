@@ -79,11 +79,35 @@ ensuite pointer `form.mendoro.fr` sur cet hôte, puis supprimer
 `content/contact-bandeau.adoc` : c'est le bandeau qui invite à téléphoner en
 attendant.
 
+Mesurer l'audience, pour Erik seul::
+Savoir quelles prestations sont lues oriente son activité. GitHub Pages ne
+donnant aucun accès aux journaux, chaque page devra émettre une requête vers
+un service porté par `qwerty.aloli.net`, aux côtés du formulaire. Rien ne
+s'affiche sur le site public : le relevé est consulté par Erik.
++
+--
+Pour rester dans le cadre d'exemption de consentement prévu par la CNIL — et
+donc sans bandeau cookies —, la collecte doit se limiter strictement à la
+mesure d'audience de ce seul site : aucun cookie ni stockage navigateur,
+adresse IP non conservée, aucun recoupement avec d'autres sites, aucune
+transmission à des tiers, durées de conservation bornées — de l'ordre de
+treize mois pour les traceurs et vingt-cinq pour les statistiques, à recaler
+sur la recommandation en vigueur le jour de la mise en place.
+
+Compter aussi que les robots pèsent souvent la moitié du trafic : un relevé
+qui ne les écarte pas raconte surtout l'activité des moissonneurs.
+
+*La section « Cookies » des mentions légales affirme aujourd'hui que le site
+« n'utilise aucun outil de mesure d'audience ».* Elle devra être réécrite
+dans le même mouvement, pas après.
+--
+
 Signer le contrat de sous-traitance::
 Les mentions légales désignent ALOLI comme sous-traitant au sens de
 l'article 28 du RGPD, puisque le service de formulaire achemine les
-messages. Un contrat écrit avec Erik est requis, et le restera tant que ce
-service tournera.
+messages. La mesure d'audience, portée par le même hôte, élargira cette
+sous-traitance : le contrat écrit avec Erik devra couvrir les deux
+traitements, et le restera tant qu'ils tourneront.
 
 == Déploiement
 
